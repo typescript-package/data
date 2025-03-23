@@ -1,11 +1,11 @@
 // Abstract.
 import { Immutability } from './immutability.abstract';
 /**
- * @description The base abstraction for data-related classes.
+ * @description The base abstraction with immutability for handling data-related classes.
  * @export
  * @abstract
  * @class DataCore
- * @template Type 
+ * @template Type Represents the type of data value.
  * @extends {Immutability}
  */
 export abstract class DataCore<Type> extends Immutability {
@@ -20,7 +20,7 @@ export abstract class DataCore<Type> extends Immutability {
   }
 
   /**
-   * @description
+   * @description Returns the value of generic type variable `Type`.
    * @public
    * @abstract
    * @readonly
@@ -29,10 +29,10 @@ export abstract class DataCore<Type> extends Immutability {
   public abstract get value(): Type;
 
   /**
-   * @description
+   * @description Abstract method to clear or remove the stored data value.
    * @public
    * @abstract
-   * @returns {this} 
+   * @returns {this} Returns current instance.
    */
   public abstract destroy(): this;
 
@@ -48,11 +48,11 @@ export abstract class DataCore<Type> extends Immutability {
   }
 
   /**
-   * @description Sets the data value. Use the `validate()` before `set()`.
+   * @description Sets the data value. Ensure `super.validate()` is called before invoking this method.
    * @public
    * @abstract
    * @param {Type} value The data of `Type` to set.
-   * @returns {this}
+   * @returns {this} Returns current instance.
    */  
   public abstract set(value: Type): this;
 }

@@ -20,9 +20,9 @@ export abstract class Data<Type> extends DataCore<Type> {
   public override get [Symbol.toStringTag](): string {
     return Data.name;
   }
-
+  
   /**
-   * @description
+   * @description Returns the privately stored value of generic type variable `Type`.
    * @public
    * @readonly
    * @type {Type}
@@ -32,7 +32,7 @@ export abstract class Data<Type> extends DataCore<Type> {
   }
 
   /**
-   * @description 
+   * @description Privately stored value of class `Value`.
    * @type {Value<Type>}
    */
   #value;
@@ -40,7 +40,7 @@ export abstract class Data<Type> extends DataCore<Type> {
   /**
    * Creates an instance of `Data` child class.
    * @constructor
-   * @param {Type} value Initial data value of `Type`.
+   * @param {Type} value Initial data value of generic type variable `Type`.
    */
   constructor(value: Type) {
     super();
@@ -50,7 +50,7 @@ export abstract class Data<Type> extends DataCore<Type> {
   /**
    * @description Destroys the `Value` object by setting it to `null`.
    * @public
-   * @returns {this} 
+   * @returns {this} Returns the current instance.
    */
   public destroy(): this {
     this.#value = null as any;
@@ -61,7 +61,7 @@ export abstract class Data<Type> extends DataCore<Type> {
    * @description Sets the data value.
    * @public
    * @param {Type} value The data of `Type` to set.
-   * @returns {this}
+   * @returns {this} Returns the current instance.
    */
   public set(value: Type) {
     super.validate();

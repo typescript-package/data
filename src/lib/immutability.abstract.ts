@@ -26,9 +26,9 @@ export abstract class Immutability {
   #locked = false;
 
   /**
-   * @description
+   * @description Deeply freezes current `this` instance.
    * @public
-   * @returns {this} 
+   * @returns {this} Returns current instance.
    */
   public deepFreeze(): this {
     if (this.isLocked()) {
@@ -41,7 +41,7 @@ export abstract class Immutability {
   /**
    * @description "Prevents the modification of existing property attributes and values, and prevents the addition of new properties."
    * @public
-   * @returns {this}
+   * @returns {this} Returns current instance.
    */
   public freeze(): this {
     if (this.isLocked()) {
@@ -63,7 +63,7 @@ export abstract class Immutability {
   /**
    * @description Checks whether the current instance is locked.
    * @public
-   * @returns {boolean}
+   * @returns {boolean} Returns a `boolean` indicating whether current instance is locked.
    */
   public isLocked() {
     return this.#locked === true;
@@ -81,7 +81,7 @@ export abstract class Immutability {
   /**
    * @description Checks whether `this` current instance is sealed.
    * @public
-   * @returns {boolean} 
+   * @returns {boolean} Returns a `boolean` indicating whether current instance is sealed.
    */
   public isSealed(): boolean {
     return Object.isSealed(this);
@@ -91,7 +91,7 @@ export abstract class Immutability {
    * @description Locks the object, means deeply freezes and blocks the `set()`, ensuring deep immutability.
    * It combines the features of `Object.freeze`, but extends immutability to nested structures (deep immutability).
    * @public
-   * @returns {this} 
+   * @returns {this} Returns current instance.
    */
   public lock(): this {
     Immutability.deepFreeze(this);
@@ -102,7 +102,7 @@ export abstract class Immutability {
   /**
    * @description "Prevents the modification of attributes of existing properties, and prevents the addition of new properties."
    * @public
-   * @returns {this}
+   * @returns {this} Returns current instance.
    */
   public seal(): this {
     if (this.isLocked()) {
@@ -113,9 +113,9 @@ export abstract class Immutability {
   }
 
   /**
-   * @description
+   * @description Validates the ability to set the value.
    * @protected
-   * @returns {this} 
+   * @returns {this} Returns current instance.
    */
   protected validate(): this {
     if (this.isLocked()) {

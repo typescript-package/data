@@ -61,7 +61,7 @@ export abstract class WeakData<Type> extends DataCore<Type> {
   /**
    * @description Destroys the value in a static `WeakMap`.
    * @public
-   * @returns {this} 
+   * @returns {this} Returns current instance.
    */
   public destroy(): this {
     WeakData.#value.delete(this);
@@ -72,8 +72,8 @@ export abstract class WeakData<Type> extends DataCore<Type> {
    * @description Sets the data value in a static `WeakMap`.
    * @public
    * @param {Type} value The data of `Type` to set.
-   * @returns {this}
-   */
+   * @returns {this} Returns current instance.
+   */ 
   public set(value: Type): this {
     super.validate();
     WeakData.#value.set(this, value);

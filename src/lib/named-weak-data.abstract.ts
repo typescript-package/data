@@ -1,7 +1,7 @@
 // Abstract.
 import { DataCore } from './data-core.abstract';
 /**
- * @description
+ * @description The `NamedWeakData` class is an abstract base class that manages data in a static `Map` where data is associated with a specified name.
  * @export
  * @abstract
  * @class NamedWeakData
@@ -34,8 +34,9 @@ export abstract class NamedWeakData<Type = any, Name extends string = 'default'>
     return NamedWeakData.name;
   }
 
+
   /**
-   * @description
+   * @description A private static `Map` stores under specified `string` type name the data value instance in `WeakMap`.
    * @static
    * @readonly
    * @type {Map<string, WeakMap<any, any>>}
@@ -43,7 +44,7 @@ export abstract class NamedWeakData<Type = any, Name extends string = 'default'>
   static readonly #value: Map<string, WeakMap<any, any>> = new Map();
 
   /**
-   * @description
+   * @description Returns the privately stored data value from the specified name of static `Map`.
    * @public
    * @readonly
    * @type {Type}
@@ -65,9 +66,9 @@ export abstract class NamedWeakData<Type = any, Name extends string = 'default'>
   }
 
   /**
-   * @description
+   * @description 
    * @public
-   * @returns {this} 
+   * @returns {this} Returns `this` current instance.
    */
   public clear(): this {
     NamedWeakData.#value.clear();    
@@ -75,9 +76,9 @@ export abstract class NamedWeakData<Type = any, Name extends string = 'default'>
   }
 
   /**
-   * @description
+   * @description 
    * @public
-   * @returns {this} 
+   * @returns {this} Returns `this` current instance.
    */
   public destroy(): this {
     NamedWeakData.#value.get(this.name)?.delete(this);
@@ -89,7 +90,7 @@ export abstract class NamedWeakData<Type = any, Name extends string = 'default'>
    * @description Sets the data value.
    * @public
    * @param {Type} value The data of `Type` to set.
-   * @returns {this}
+   * @returns {this} Returns `this` current instance.
    */
   public set(value: Type): this {
     super.validate();
