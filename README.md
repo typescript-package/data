@@ -176,7 +176,7 @@ Freezing an object prevents changes to the object’s properties at the top leve
 ### Locked
 
 Combines the features of `freeze`, but extends immutability to nested structures(deep immutability).
-Locking(deep freeze) an object prevents changing any properties at any level, including properties within nested objects.
+Locking(deep) an object prevents changing any properties at any level, including properties within nested objects.
 
 ## Contributing
 
@@ -243,21 +243,21 @@ MIT © typescript-package ([license][typescript-package-license])
 
 <!-- This package: typescript-package  -->
   <!-- GitHub: badges -->
-  [typescript-package-badge-issues]: https://img.shields.io/github/issues/typescript-package/history
-  [isscript-package-badge-forks]: https://img.shields.io/github/forks/typescript-package/history
-  [typescript-package-badge-stars]: https://img.shields.io/github/stars/typescript-package/history
-  [typescript-package-badge-license]: https://img.shields.io/github/license/typescript-package/history
+  [typescript-package-badge-issues]: https://img.shields.io/github/issues/typescript-package/data
+  [isscript-package-badge-forks]: https://img.shields.io/github/forks/typescript-package/data
+  [typescript-package-badge-stars]: https://img.shields.io/github/stars/typescript-package/data
+  [typescript-package-badge-license]: https://img.shields.io/github/license/typescript-package/data
   <!-- GitHub: badges links -->
-  [typescript-package-issues]: https://github.com/typescript-package/history/issues
-  [typescript-package-forks]: https://github.com/typescript-package/history/network
-  [typescript-package-license]: https://github.com/typescript-package/history/blob/master/LICENSE
-  [typescript-package-stars]: https://github.com/typescript-package/history/stargazers
+  [typescript-package-issues]: https://github.com/typescript-package/data/issues
+  [typescript-package-forks]: https://github.com/typescript-package/data/network
+  [typescript-package-license]: https://github.com/typescript-package/data/blob/master/LICENSE
+  [typescript-package-stars]: https://github.com/typescript-package/data/stargazers
 <!-- This package -->
 
 <!-- Package: typescript-package -->
   <!-- npm -->
-  [typescript-package-npm-badge-svg]: https://badge.fury.io/js/@typescript-package%2Fhistory.svg
-  [typescript-package-npm-badge]: https://badge.fury.io/js/@typescript-package%2Fhistory
+  [typescript-package-npm-badge-svg]: https://badge.fury.io/js/@typescript-package%2Fdata.svg
+  [typescript-package-npm-badge]: https://badge.fury.io/js/@typescript-package%2Fdata
 
 <!-- GIT -->
 [git-semver]: http://semver.org/
