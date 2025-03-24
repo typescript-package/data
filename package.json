@@ -2,7 +2,7 @@
   "name": "@typescript-package/data",
   "version": "0.0.1",
   "author": "wwwdev.io <dev@wwwdev.io>",
-  "description": "A lightweight TypeScript library for simple data management.",
+  "description": "A lightweight TypeScript library for basic data management.",
   "license": "MIT",
   "publishConfig": {
     "access": "public",
