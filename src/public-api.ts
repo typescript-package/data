@@ -3,12 +3,12 @@
  */
 export {
   // Abstract.
-  Data,
   DataCore,
   Immutability,
-  NamedWeakData,
-  WeakData,
 
   // Class.
+  Data,
+  NamedWeakData,
+  WeakData,
   Value
 } from './lib';

@@ -1,14 +1,13 @@
 // Abstract.
 import { DataCore } from './data-core.abstract';
 /**
- * @description The `WeakData` class is an abstract base class that stores data in a static `WeakMap`.
+ * @description The `WeakData` class is a concrete class that stores data in a static `WeakMap`.
  * @export
- * @abstract
  * @class WeakData
  * @template Type 
  * @extends {DataCore<Type>}
  */
-export abstract class WeakData<Type> extends DataCore<Type> {
+export class WeakData<Type> extends DataCore<Type> {
   /**
    * @description Gets the data value from another instance.
    * @public
