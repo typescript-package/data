@@ -13,7 +13,7 @@
 [![GitHub issues][typescript-package-badge-issues]][typescript-package-issues]
 [![GitHub license][typescript-package-badge-license]][typescript-package-license]
 
-A **TypeScript** library for simple managing data.
+A lightweight **TypeScript** library for basic data management.
 
 ## Table of contents
 
@@ -48,20 +48,20 @@ npm install @typescript-package/data --save-peer
 ```typescript
 import {
   // Abstract.
-  Data,
   DataCore,
   Immutability,
-  NamedWeakData,
-  WeakData,
 
   // Class.
+  Data,
+  NamedWeakData,
+  WeakData,
   Value
 } from '@typescript-package/data';
 ```
 
 ### `Data`
 
-The `Data` class is an abstract base class that wraps a value and provides methods for setting, retrieving, and destroying the value.
+The `Data` class is a concrete class that wraps a value and provides methods for setting, retrieving, and destroying the value.
 
 ```typescript
 import { Data } from '@typescript-package/data';
@@ -89,7 +89,7 @@ console.log(data.value); // Throws error or undefined (based on how it's handled
 
 ### `DataCore`
 
-The base abstraction for data-related classes.
+The base abstraction with immutability for handling data-related classes.
 
 ### `Immutability`
 
@@ -131,7 +131,7 @@ console.log(NamedWeakData.getFrom(scoreData, 'score')); // Outputs: undefined
 
 ### `WeakData`
 
-The `WeakData` class is an abstract base class that stores data in a static `WeakMap`.
+The `WeakData` class is a concrete class that stores data in a static `WeakMap`.
 
 ```typescript
 import { WeakData } from '@typescript-package/data';
