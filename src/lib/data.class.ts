@@ -3,14 +3,13 @@ import { DataCore } from './data-core.abstract';
 // Class.
 import { Value } from './value.class';
 /**
- * @description The `Data` class is an abstract base class that wraps a value and provides methods for setting, retrieving, and destroying the value.
+ * @description The `Data` class is a concrete class that wraps a value and provides methods for setting, retrieving, and destroying the value.
  * @export
- * @abstract
  * @class Data
  * @template Type 
  * @extends {DataCore<Type>}
  */
-export abstract class Data<Type> extends DataCore<Type> {
+export class Data<Type> extends DataCore<Type> {
   /**
    * @description Returns the `string` tag representation of the `Data` class when used in `Object.prototype.toString.call(instance)`.
    * @public
