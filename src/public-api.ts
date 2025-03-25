@@ -8,7 +8,9 @@ export {
 
   // Class.
   Data,
+  IndexedNamedWeakData,
+  IndexedWeakData,
   NamedWeakData,
+  Value,
   WeakData,
-  Value
 } from './lib';
