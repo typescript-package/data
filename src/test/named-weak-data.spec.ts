@@ -1,4 +1,4 @@
-import { NamedWeakData } from "../lib";
+import { Data, NamedWeakData } from "../lib";
 
 // Define a class that extends NamedWeakData
 export class ProfileData extends NamedWeakData<number, 'age' | 'score'> {}
@@ -26,3 +26,35 @@ console.log(NamedWeakData.getFrom(ageData, 'age')); // Outputs: undefined
 // Clear all stored values from the map
 scoreData.clear();
 console.log(NamedWeakData.getFrom(scoreData, 'score')); // Outputs: undefined
+
+
+
+// Profile
+// export class UserData<Profile> extends Data<Data<Profile>> {}
+
+export interface Profile {
+  id: number,
+  age: number;
+  score: number;
+}
+
+
+const someone = new NamedWeakData<Profile, 'profile'>({} as any, 'profile');
+
+someone.set({
+  id: 27,
+  age: 25,
+  score: 1200
+});
+
+console.log(someone.value); // { id: 27, age: 25, score: 1200 }
+
+
+// 
+console.log(NamedWeakData.getFrom(someone, 'profile').age);
+
+// NamedWeakData.getFrom(profiles, 'profile')?.set(user1, { age: 25, score: 1200 });
+// NamedWeakData.getFrom(profiles, 'profile')?.set(user2, { age: 30, score: 1500 });
+
+
+
