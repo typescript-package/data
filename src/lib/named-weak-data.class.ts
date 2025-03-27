@@ -53,7 +53,7 @@ export class NamedWeakData<Type = any, Name extends string = 'default'> extends 
   }
 
   /**
-   * Creates an instance of `NamedWeakData` child class.
+   * Creates an instance of `NamedWeakData`.
    * @constructor
    * @param {Type} value Initial data value of `Type`.
    * @param {string} [name='default'] The name under which the value is stored, defaults to `default`.
@@ -65,12 +65,22 @@ export class NamedWeakData<Type = any, Name extends string = 'default'> extends 
   }
 
   /**
-   * @description 
+   * @description Clears the value to `null`.
    * @public
    * @returns {this} Returns `this` current instance.
    */
   public clear(): this {
-    NamedWeakData.#value.clear();    
+    NamedWeakData.#value.get(this.name)?.set(this, null as unknown as Type);
+    return this;
+  }
+
+  /**
+   * @description 
+   * @public
+   * @returns {this} Returns `this` current instance.
+   */
+  public delete(): this {
+    NamedWeakData.#value.get(this.name)?.delete(this);
     return this;
   }
 
@@ -80,8 +90,7 @@ export class NamedWeakData<Type = any, Name extends string = 'default'> extends 
    * @returns {this} Returns `this` current instance.
    */
   public destroy(): this {
-    NamedWeakData.#value.get(this.name)?.delete(this);
-    this.clear();
+    this.clear().delete();
     return this;
   }
 
