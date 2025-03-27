@@ -1,19 +1,17 @@
 // Class.
-import { NamedWeakData } from "./named-weak-data.class";
+import { WeakData } from "./weak-data.class";
 /**
  * @description
  * @export
- * @class IndexedNamedWeakData
+ * @class IndexedWeakData
  * @template {object} [Obj=object] 
  * @template {keyof Obj} [Key=keyof Obj] 
- * @template {string} [Name='default'] 
- * @extends {NamedWeakData<Obj, Name>}
+ * @extends {WeakData<Obj>}
  */
-export class IndexedNamedWeakData<
+export class IndexedWeakData<
   Obj extends object = object,
   Key extends keyof Obj = keyof Obj,
-  Name extends string = 'default'
-> extends NamedWeakData<Obj, Name> {
+> extends WeakData<Obj> {
   /**
    * @description
    * @public
@@ -23,7 +21,7 @@ export class IndexedNamedWeakData<
    * @returns {(Obj | undefined)} 
    */
   public static getByIndex<Obj extends object = object>(index: number): Obj | undefined {
-    return IndexedNamedWeakData.#registry.get(index)?.deref()?.value
+    return IndexedWeakData.#registry.get(index)?.deref()?.value;
   }
 
   /**
@@ -31,14 +29,14 @@ export class IndexedNamedWeakData<
    * @static
    * @type {Map}
    */
-  static #registry = new Map<number, WeakRef<IndexedNamedWeakData<any, any, any>>>();
+  static #registry = new Map<number, WeakRef<IndexedWeakData<any, any>>>();
 
   /**
    * @description
    * @static
    * @type {FinalizationRegistry}
    */
-  static #finalizationRegistry = new FinalizationRegistry((id: number) => IndexedNamedWeakData.#registry.delete(id));
+  static #finalizationRegistry = new FinalizationRegistry((id: number) => IndexedWeakData.#registry.delete(id));
 
   /**
    * @description
@@ -71,16 +69,17 @@ export class IndexedNamedWeakData<
    * @constructor
    * @param {Obj} object 
    * @param {Key} key 
-   * @param {Name} [name='default' as Name] 
    */
-  constructor(object: Obj, key: Key, name: Name = 'default' as Name) {
-    super(object, name);
+  constructor(object: Obj, key: Key) {
+    super(object);
     if (typeof object[key] === 'number') {
       this.#key = key;
       if (this.index) {
-        IndexedNamedWeakData.#registry.set(this.index, new WeakRef(this));
-        IndexedNamedWeakData.#finalizationRegistry.register(this, this.index);
+        IndexedWeakData.#registry.set(this.index, new WeakRef(this));
+        IndexedWeakData.#finalizationRegistry.register(this, this.index);
       }
+    } else {
+      throw Error(`Key must be associated with \`number\` type value in \`object\`.`);
     }
   }
 
@@ -90,7 +89,7 @@ export class IndexedNamedWeakData<
    * @returns {this} 
    */
   public override destroy(): this {
-    this.index && IndexedNamedWeakData.#registry.delete(this.index);
+    typeof this.index === 'number' && IndexedWeakData.#registry.delete(this.index);
     return super.destroy();
   }
 
@@ -101,18 +100,6 @@ export class IndexedNamedWeakData<
    * @returns {(Obj | undefined)} 
    */
   public getByIndex(index: number): Obj | undefined {
-    return IndexedNamedWeakData.getByIndex<Obj>(index);
-  }
-
-  /**
-   * @description
-   * @public
-   * @param {number} index 
-   * @param {Obj} object 
-   * @returns {this} 
-   */
-  public update(index: number, object: Obj): this {
-    super.set({...this.getByIndex(index) || {}, ...object});
-    return this;
+    return IndexedWeakData.getByIndex<Obj>(index);
   }
 }

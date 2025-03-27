@@ -1,5 +1,5 @@
 // Abstract.
-import { DataCore } from './data-core.abstract';
+import { DataCore } from '../data-core.abstract';
 /**
  * @description The `NamedWeakData` class is a concrete class that manages data in a static `Map` where data is associated with a specified name.
  * @export
@@ -8,7 +8,10 @@ import { DataCore } from './data-core.abstract';
  * @template {string} [Name='default'] 
  * @extends {DataCore<Type>}
  */
-export class NamedWeakData<Type = any, Name extends string = 'default'> extends DataCore<Type> {
+export class NamedWeakData<
+  Type = any,
+  Name extends string = 'default'
+> extends DataCore<Type> {
   /**
    * @description Gets the data from another instance.
    * @public

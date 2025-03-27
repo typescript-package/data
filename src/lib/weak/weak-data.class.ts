@@ -1,5 +1,5 @@
 // Abstract.
-import { DataCore } from './data-core.abstract';
+import { DataCore } from '../data-core.abstract';
 /**
  * @description The `WeakData` class is a concrete class that stores data in a static `WeakMap`.
  * @export
