@@ -19,12 +19,31 @@ A lightweight **TypeScript** library for basic data management.
 
 - [Installation](#installation)
 - [Api](#api)
-  - [`Data`](#data)
-  - [`DataCore`](#datacore)
   - [`Immutability`](#immutability)
-  - [`NamedWeakData`](#namedweakdata)
+  - [`DataCore`](#datacore)
+
+  - Base
+    - [`Data`](#data)
+
+  - `Set`
+    - [`DataSet](#dataset)
+
+  - `Map`
+    - [`DataMap](#datamap)
+    - [`WeakDataMap](#weakdatamap)
+
+  - Typed `WeakData`
+    - [`ArrayWeakData`](#arrayweakdata)
+    - [`MapWeakData](#mapweakdata)
+    - [`ObjectWeakData](#objectweakdata)
+
+  - `WeakData`
+    - [`IndexedNamedWeakData`](#indexednamedweakdata)
+    - [`NamedWeakData`](#namedweakdata)
+    - [`IndexeddWeakData`](#indexeddweakdata)
+    - [`WeakData`](#weakdata)
+
   - [`Value`](#value)
-  - [`WeakData`](#weakdata)
 - [Immutability](#immutability)
   - [Sealed](#sealed)
   - [Frozen](#frozen)
@@ -53,9 +72,28 @@ import {
 
   // Class.
   Data,
+
+  // Set.
+  DataSet,
+
+  // Map.
+  DataMap,
+  WeakDataMap,
+  
+  // Typed `WeakData`.
+  ArrayWeakData,
+  MapWeakData,
+  ObjectWeakData,
+
+  // Named.
+  IndexedNamedWeakData,
   NamedWeakData,
+
+  // `WeakData`.
+  IndexedWeakData,
   WeakData,
-  Value
+
+  Value,
 } from '@typescript-package/data';
 ```
 
