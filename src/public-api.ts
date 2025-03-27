@@ -8,9 +8,26 @@ export {
 
   // Class.
   Data,
+
+  // Set.
+  DataSet,
+
+  // Map.
+  DataMap,
+  WeakDataMap,
+  
+  // Typed `WeakData`.
+  ArrayWeakData,
+  MapWeakData,
+  ObjectWeakData,
+
+  // Named.
   IndexedNamedWeakData,
-  IndexedWeakData,
   NamedWeakData,
-  Value,
+
+  // `WeakData`.
+  IndexedWeakData,
   WeakData,
+
+  Value,
 } from './lib';
