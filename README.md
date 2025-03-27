@@ -19,19 +19,20 @@ A lightweight **TypeScript** library for basic data management.
 
 - [Installation](#installation)
 - [Api](#api)
-  - [`Immutability`](#immutability)
-  - [`DataCore`](#datacore)
+  - `abstract`
+    - [`Immutability`](#immutability)
+    - [`DataCore`](#datacore)
   - Base
     - [`Data`](#data)
   - `Set`
-    - [`DataSet](#dataset)
+    - [`DataSet`](#dataset)
   - `Map`
-    - [`DataMap](#datamap)
-    - [`WeakDataMap](#weakdatamap)
+    - [`DataMap`](#datamap)
+    - [`WeakDataMap`](#weakdatamap)
   - Typed `WeakData`
     - [`ArrayWeakData`](#arrayweakdata)
-    - [`MapWeakData](#mapweakdata)
-    - [`ObjectWeakData](#objectweakdata)
+    - [`MapWeakData`](#mapweakdata)
+    - [`ObjectWeakData`](#objectweakdata)
   - `WeakData`
     - [`IndexedNamedWeakData`](#indexednamedweakdata)
     - [`NamedWeakData`](#namedweakdata)
