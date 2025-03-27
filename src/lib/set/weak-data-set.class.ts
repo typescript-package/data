@@ -1,6 +1,6 @@
 // Class.
 import { DataSet } from './data-set.class';
-import { WeakData } from './weak-data.class';
+import { WeakData } from '../weak/weak-data.class';
 /**
  * @description
  * @export
