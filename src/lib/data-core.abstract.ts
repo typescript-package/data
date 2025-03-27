@@ -29,10 +29,18 @@ export abstract class DataCore<Type> extends Immutability {
   public abstract get value(): Type;
 
   /**
+   * @description Clears the value by setting to `undefined` or `null`.
+   * @public
+   * @abstract
+   * @returns {this} Returns `this` current instance.
+   */
+  public abstract clear(): this;
+
+  /**
    * @description Abstract method to clear or remove the stored data value.
    * @public
    * @abstract
-   * @returns {this} Returns current instance.
+   * @returns {this} Returns `this` current instance.
    */
   public abstract destroy(): this;
 
@@ -43,7 +51,7 @@ export abstract class DataCore<Type> extends Immutability {
    */
   public override lock(): this {
     Immutability.deepFreeze(this.value);
-    super.lock();
+    super.lock(); 
     return this;
   }
 
@@ -52,7 +60,7 @@ export abstract class DataCore<Type> extends Immutability {
    * @public
    * @abstract
    * @param {Type} value The data of `Type` to set.
-   * @returns {this} Returns current instance.
+   * @returns {this} Returns `this` current instance.
    */  
   public abstract set(value: Type): this;
 }
