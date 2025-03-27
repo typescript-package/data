@@ -1,7 +1,7 @@
 // Class.
-import { Data } from './data.class';
+import { Data } from '../data.class';
 // Abstract.
-import { DataCore } from './data-core.abstract';
+import { DataCore } from '../data-core.abstract';
 /**
  * @description
  * @export

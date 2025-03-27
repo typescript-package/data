@@ -1,6 +1,6 @@
 // Class.
 import { DataMap } from './data-map.class';
-import { WeakData } from './weak-data.class';
+import { WeakData } from '../weak/weak-data.class';
 /**
  * @description
  * @export
