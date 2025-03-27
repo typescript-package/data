@@ -103,4 +103,16 @@ export class IndexedNamedWeakData<
   public getByIndex(index: number): Obj | undefined {
     return IndexedNamedWeakData.getByIndex<Obj>(index);
   }
+
+  /**
+   * @description
+   * @public
+   * @param {number} index 
+   * @param {Obj} object 
+   * @returns {this} 
+   */
+  public update(index: number, object: Obj): this {
+    super.set({...this.getByIndex(index) || {}, ...object});
+    return this;
+  }
 }
