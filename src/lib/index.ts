@@ -5,24 +5,18 @@ export { Immutability } from './immutability.abstract';
 export { Data } from './data.class';
 
 // `Set`.
-export { DataSet } from './data-set.class';
+export { DataSet, WeakDataSet } from './set';
 
 // `Map` of `Data` `WeakData`.
-export { DataMap } from './data-map.class';
-export { WeakDataMap } from './weak-data-map.class';
-
-// Indexed `WeakData`.
-export { IndexedNamedWeakData } from './indexed-named-weak-data.class';
-export { IndexedWeakData } from './indexed-weak-data.class';
-
-// `WeakData` of `Array` `Map` `Object`.
-export { ArrayWeakData } from './array-weak-data.class';
-export { MapWeakData } from './map-weak-data.class';
-export { ObjectWeakData } from './object-weak-data.class';
+export { DataMap, WeakDataMap} from './map';
 
 // `WeakData`.
-export { NamedWeakData } from './named-weak-data.class';
-export { WeakData } from './weak-data.class';
+export {
+  IndexedNamedWeakData,
+  IndexedWeakData,
+  NamedWeakData,
+  WeakData,
+} from './weak';
 
 // `Value`.
 export { Value } from './value.class';
