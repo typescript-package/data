@@ -78,6 +78,8 @@ export class IndexedWeakData<
         IndexedWeakData.#registry.set(this.index, new WeakRef(this));
         IndexedWeakData.#finalizationRegistry.register(this, this.index);
       }
+    } else {
+      throw Error(`Key must be associated with \`number\` type value in \`object\`.`);
     }
   }
 
