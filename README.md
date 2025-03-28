@@ -22,23 +22,23 @@ A lightweight **TypeScript** library for basic data management.
   - `abstract`
     - [`Immutability`](#immutability)
     - [`DataCore`](#datacore)
-  - Base
+  - **Base**
     - [`Data`](#data)
-  - `Set`
-    - [`DataSet`](#dataset)
+    - [`Value`](#value)
+  - `Array`
+    - [`DataArray`](#dataarray)
+    - [`WeakDataArray`](#weakdataarray)
   - `Map`
     - [`DataMap`](#datamap)
     - [`WeakDataMap`](#weakdatamap)
-  - Typed `WeakData`
-    - [`ArrayWeakData`](#arrayweakdata)
-    - [`MapWeakData`](#mapweakdata)
-    - [`ObjectWeakData`](#objectweakdata)
+  - `Set`
+    - [`DataSet`](#dataset)
+    - [`WeakDataSet`](#weakdataset)
   - `WeakData`
     - [`IndexedNamedWeakData`](#indexednamedweakdata)
+    - [`IndexedWeakData`](#indexedweakdata)
     - [`NamedWeakData`](#namedweakdata)
-    - [`IndexeddWeakData`](#indexeddweakdata)
     - [`WeakData`](#weakdata)
-  - [`Value`](#value)
 - [Immutability](#immutability)
   - [Sealed](#sealed)
   - [Frozen](#frozen)
@@ -66,31 +66,37 @@ import {
   Immutability,
 
   // Class.
+  // Base.
   Data,
+  Value,
+
+  // Array.
+  DataArray,
+  WeakDataArray,
 
   // Set.
   DataSet,
+  WeakDataSet,
 
   // Map.
   DataMap,
   WeakDataMap,
   
-  // Typed `WeakData`.
-  ArrayWeakData,
-  MapWeakData,
-  ObjectWeakData,
-
-  // Named.
-  IndexedNamedWeakData,
-  NamedWeakData,
-
   // `WeakData`.
+  // Index + Named.
+  IndexedNamedWeakData,
+  // Indexed.
   IndexedWeakData,
+  // Named.
+  NamedWeakData,
+  // Basic.
   WeakData,
-
-  Value,
 } from '@typescript-package/data';
 ```
+
+### `DataCore`
+
+The base abstraction with immutability for handling data-related classes.
 
 ### `Data`
 
@@ -120,13 +126,69 @@ data.destroy();
 console.log(data.value); // Throws error or undefined (based on how it's handled)
 ```
 
-### `DataCore`
+### `Value`
 
-The base abstraction with immutability for handling data-related classes.
+The class to manage the value of generic type variable `Type`.
 
 ### `Immutability`
 
 Manages the immutability states of `this` current instance.
+
+### Array
+
+### `DataArray`
+
+```typescript
+import { DataArray } from '@typescript-package/data';
+```
+
+### `WeakDataArray`
+
+```typescript
+import { WeakDataArray } from '@typescript-package/data';
+```
+
+### Map
+
+### `DataMap`
+
+```typescript
+import { DataMap } from '@typescript-package/data';
+```
+
+### `WeakDataMap`
+
+```typescript
+import { WeakDataMap } from '@typescript-package/data';
+```
+
+### Set
+
+### `DataSet`
+
+```typescript
+import { DataSet } from '@typescript-package/data';
+```
+
+### `WeakDataSet`
+
+```typescript
+import { WeakDataSet } from '@typescript-package/data';
+```
+
+### WeakData
+
+### `IndexedNamedWeakData`
+
+```typescript
+import { IndexedNamedWeakData } from '@typescript-package/data';
+```
+
+### `IndexedWeakData`
+
+```typescript
+import { IndexedWeakData } from '@typescript-package/data';
+```
 
 ### `NamedWeakData`
 
@@ -189,10 +251,6 @@ console.log(data1.value); // Output: New value
 // Destroy the value
 data1.destroy();
 ```
-
-### `Value`
-
-The class to manage the value of generic type variable `Type`.
 
 ## Immutability
 
