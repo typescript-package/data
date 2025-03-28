@@ -11,6 +11,10 @@ export {
   Data,
   Value,
 
+  // Array.
+  DataArray,
+  WeakDataArray,
+
   // Set.
   DataSet,
   WeakDataSet,

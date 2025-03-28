@@ -4,11 +4,14 @@ export { Immutability } from './immutability.abstract';
 // Class.
 export { Data } from './data.class';
 
-// `Set`.
-export { DataSet, WeakDataSet } from './set';
+// `Array`.
+export { DataArray, WeakDataArray } from './array';
 
 // `Map` of `Data` `WeakData`.
 export { DataMap, WeakDataMap} from './map';
+
+// `Set`.
+export { DataSet, WeakDataSet } from './set';
 
 // `WeakData`.
 export {
