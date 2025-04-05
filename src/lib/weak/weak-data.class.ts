@@ -9,12 +9,12 @@ import { DataCore } from '../data-core.abstract';
  */
 export class WeakData<Type> extends DataCore<Type> {
   /**
-   * @description 
+   * @description Returns a new `WeakData` instance with a given value.
    * @public
    * @static
    * @template Type 
-   * @param {Type} value 
-   * @returns {WeakData<Type>} 
+   * @param {Type} value The value of `Type`.
+   * @returns {WeakData<Type>} Returns a new `WeakData` instance.
    */
   public static create<Type>(value: Type): WeakData<Type> {
     return new WeakData(value);
@@ -30,6 +30,18 @@ export class WeakData<Type> extends DataCore<Type> {
    */
   public static get<Type>(instance: WeakData<Type>): Type {
     return WeakData.#value.get(instance);
+  }
+
+  /**
+   * @description Checks whether the instance exists in the data.
+   * @public
+   * @static
+   * @template Type 
+   * @param {WeakData<Type>} instance The instance to check.
+   * @returns {boolean} "a boolean indicating whether an element with the specified key exists or not."
+   */
+  public static has<Type>(instance: WeakData<Type>): boolean {
+    return WeakData.#value.has(instance);
   }
 
   /**
@@ -50,10 +62,10 @@ export class WeakData<Type> extends DataCore<Type> {
   static readonly #value = new WeakMap<any, any>();
 
   /**
-   * @description
+   * @description Returns the value of `Type` from static `WeakMap`.
    * @public
    * @readonly
-   * @type {Type}
+   * @type {Type} 
    */
   public get value(): Type {
     return WeakData.#value.get(this) as Type;
@@ -137,10 +149,10 @@ export class WeakData<Type> extends DataCore<Type> {
   }
 
   /**
-   * @description
+   * @description Creates a new instance with a new value of `Type`.
    * @public
-   * @param {Type} value 
-   * @returns {WeakData<Type>} 
+   * @param {Type} value The value of `Type`.
+   * @returns {WeakData<Type>} Returns a `WeakData` instance with value of `Type`.
    */
   public with(value: Type): WeakData<Type> {
     return WeakData.create(value);
