@@ -1,6 +1,7 @@
 // Abstract.
-import { DataCore } from '../data-core.abstract';
+import { DataCore } from '../';
 /**
+ * @deprecated In favor of `WeakStorage` in `typescript-package/storage`.
  * @description The `NamedWeakData` class is a concrete class that manages data in a static `Map` where data is associated with a specified name.
  * @export
  * @class NamedWeakData
@@ -8,10 +9,7 @@ import { DataCore } from '../data-core.abstract';
  * @template {string} [Name='default'] 
  * @extends {DataCore<Type>}
  */
-export class NamedWeakData<
-  Type = any,
-  Name extends string = 'default'
-> extends DataCore<Type> {
+export class NamedWeakData<Type = any, Name extends string = 'default'> extends DataCore<Type> {
   /**
    * @description Gets the data from another instance.
    * @public
@@ -46,6 +44,16 @@ export class NamedWeakData<
   static readonly #value: Map<string, WeakMap<any, any>> = new Map();
 
   /**
+   * @description
+   * @public
+   * @readonly
+   * @type {Name}
+   */
+  public get name(): Name {
+    return this.#name;
+  }
+
+  /**
    * @description Returns the privately stored data value from the specified name of static `Map`.
    * @public
    * @readonly
@@ -56,34 +64,31 @@ export class NamedWeakData<
   }
 
   /**
-   * Creates an instance of `NamedWeakData`.
+   * @description
+   * @type {Name}
+   */
+  #name: Name;
+
+  /**
+   * Creates an instance of `NamedWeakData` child class.
    * @constructor
    * @param {Type} value Initial data value of `Type`.
    * @param {string} [name='default'] The name under which the value is stored, defaults to `default`.
    */  
-  constructor(value: Type, private name: Name = 'default' as Name) {
+  constructor(value: Type, name: Name = 'default' as Name) {
     super();
-    NamedWeakData.#value.get(name) === undefined && NamedWeakData.#value.set(name, new WeakMap<any, any>());
-    NamedWeakData.#value.get(name)!.set(this, value);
+    this.#name = name;
+    NamedWeakData.#value.has(name) || NamedWeakData.#value.set(name, new WeakMap<any, any>());
+    NamedWeakData.#value.get(name)?.set(this, value);
   }
 
   /**
-   * @description Clears the value to `null`.
+   * @description Clears the value in the `WeakMap`.
    * @public
    * @returns {this} Returns `this` current instance.
    */
   public clear(): this {
-    NamedWeakData.#value.get(this.name)?.set(this, null as unknown as Type);
-    return this;
-  }
-
-  /**
-   * @description 
-   * @public
-   * @returns {this} Returns `this` current instance.
-   */
-  public delete(): this {
-    NamedWeakData.#value.get(this.name)?.delete(this);
+    this.set(null as any);
     return this;
   }
 
@@ -93,7 +98,7 @@ export class NamedWeakData<
    * @returns {this} Returns `this` current instance.
    */
   public destroy(): this {
-    this.clear().delete();
+    NamedWeakData.#value.clear();
     return this;
   }
 
