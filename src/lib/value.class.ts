@@ -53,7 +53,7 @@ export class Value<Type> {
 
   /**
    * @description Sets the value of generic type variable `Type`.
-   * @protected
+   * @public
    * @returns {this} Returns `this` current instance.
    */
   public set(value: Type) {
