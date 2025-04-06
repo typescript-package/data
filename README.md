@@ -25,19 +25,8 @@ A lightweight **TypeScript** library for basic data management.
   - **Base**
     - [`Data`](#data)
     - [`Value`](#value)
-  - `Array`
-    - [`DataArray`](#dataarray)
-    - [`WeakDataArray`](#weakdataarray)
-  - `Map`
-    - [`DataMap`](#datamap)
-    - [`WeakDataMap`](#weakdatamap)
-  - `Set`
-    - [`DataSet`](#dataset)
-    - [`WeakDataSet`](#weakdataset)
-  - `WeakData`
-    - [`IndexedNamedWeakData`](#indexednamedweakdata)
+  - **`WeakData`**
     - [`IndexedWeakData`](#indexedweakdata)
-    - [`NamedWeakData`](#namedweakdata)
     - [`WeakData`](#weakdata)
 - [Immutability](#immutability)
   - [Sealed](#sealed)
@@ -70,25 +59,10 @@ import {
   Data,
   Value,
 
-  // Array.
-  DataArray,
-  WeakDataArray,
-
-  // Set.
-  DataSet,
-  WeakDataSet,
-
-  // Map.
-  DataMap,
-  WeakDataMap,
-  
   // `WeakData`.
-  // Index + Named.
-  IndexedNamedWeakData,
+  NamedWeakData,
   // Indexed.
   IndexedWeakData,
-  // Named.
-  NamedWeakData,
   // Basic.
   WeakData,
 } from '@typescript-package/data';
@@ -130,98 +104,41 @@ console.log(data.value); // Throws error or undefined (based on how it's handled
 
 The class to manage the value of generic type variable `Type`.
 
+```typescript
+import { Value } from '@typescript-package/data';
+```
+
 ### `Immutability`
 
 Manages the immutability states of `this` current instance.
 
-### Array
-
-### `DataArray`
-
 ```typescript
-import { DataArray } from '@typescript-package/data';
-```
-
-### `WeakDataArray`
-
-```typescript
-import { WeakDataArray } from '@typescript-package/data';
-```
-
-### Map
-
-### `DataMap`
-
-```typescript
-import { DataMap } from '@typescript-package/data';
-```
-
-### `WeakDataMap`
-
-```typescript
-import { WeakDataMap } from '@typescript-package/data';
-```
-
-### Set
-
-### `DataSet`
-
-```typescript
-import { DataSet } from '@typescript-package/data';
-```
-
-### `WeakDataSet`
-
-```typescript
-import { WeakDataSet } from '@typescript-package/data';
+import { Immutability } from '@typescript-package/data';
 ```
 
 ### WeakData
-
-### `IndexedNamedWeakData`
-
-```typescript
-import { IndexedNamedWeakData } from '@typescript-package/data';
-```
 
 ### `IndexedWeakData`
 
 ```typescript
 import { IndexedWeakData } from '@typescript-package/data';
-```
 
-### `NamedWeakData`
+// Create an interface.
+export interface Profile {
+  id: number,
+  age: number;
+  score: number;
+}
 
-```typescript
-import { NamedWeakData } from '@typescript-package/data';
+// Initialize multiple instances of `IndexedWeakData`.
+export const profileData1 = new IndexedWeakData({ id: 1, age: 27, score: 1100 } as Profile, 'id');
+export const profileData2 = new IndexedWeakData({ id: 2, age: 127, score: 1200 } as Profile, 'id');
+export const profileData3 = new IndexedWeakData({ id: 3, age: 227, score: 1300 } as Profile, 'id');
+export const profileData4 = new IndexedWeakData({ id: 4, age: 327, score: 1400 } as Profile, 'id');
 
-// Define a class that extends NamedWeakData
-export class ProfileData extends NamedWeakData<number, 'age' | 'score'> {}
-
-// Create two instances with different names
-const ageData = new ProfileData(25, 'age');
-const scoreData = new ProfileData(90, 'score');
-
-// Access the values stored in each instance using their respective names
-console.log(ageData.value); // Outputs: 25
-console.log(scoreData.value); // Outputs: 90
-
-// You can also retrieve the data from another instance using the static method `getFrom`
-console.log(NamedWeakData.getFrom(ageData, 'age')); // Outputs: 25
-console.log(NamedWeakData.getFrom(scoreData, 'score')); // Outputs: 90
-
-// Setting new values
-ageData.set(30);
-console.log(ageData.value); // Outputs: 30
-
-// Destroy an instance and clear its stored data
-ageData.destroy();
-console.log(NamedWeakData.getFrom(ageData, 'age')); // Outputs: undefined
-
-// Clear all stored values from the map
-scoreData.clear();
-console.log(NamedWeakData.getFrom(scoreData, 'score')); // Outputs: undefined
-
+// Get the value by using index.
+console.log(`profileData1: `, profileData1.getByIndex(1)); // Output: {id: 1, age: 27, score: 1100}
+console.log(`profileData3: `, profileData3.getByIndex(3)); // Output: {id: 3, age: 227, score: 1300}
 ```
 
 ### `WeakData`
@@ -232,24 +149,24 @@ The `WeakData` class is a concrete class that stores data in a static `WeakMap`.
 import { WeakData } from '@typescript-package/data';
 
 // Example subclass of WeakData
-class StringWeakData extends WeakData<string> {
+export class StringWeakData extends WeakData<string> {
   constructor(value: string) {
     super(value);
   }
 }
 
 // Create a new instance of StringWeakData
-const data1 = new StringWeakData("Hello, world!");
+export const data = new StringWeakData("Hello, world!");
 
 // Access the current value
-console.log(data1.value); // Output: Hello, world!
+console.log(data.value); // Output: Hello, world!
 
 // Update the value
-data1.set("New value");
-console.log(data1.value); // Output: New value
+data.set("New value");
+console.log(data.value); // Output: New value
 
 // Destroy the value
-data1.destroy();
+data.destroy();
 ```
 
 ## Immutability
