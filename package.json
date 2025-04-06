@@ -27,9 +27,7 @@
     "@typescript-package/data",
     "Data",
     "Immutability",
-    "IndexedNamedWeakData",
     "IndexedWeakData",
-    "NamedWeakData",
     "Value",
     "WeakData"
   ],
