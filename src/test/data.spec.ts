@@ -1,13 +1,13 @@
 import { Data } from "../lib";
 
 // Example subclass of Data
-class StringData extends Data<string> {
+export class StringData extends Data<string> {
   constructor(value: string) {
     super(value);
   }
 }
 
-const data = new StringData("Hello, world!");
+export const data = new StringData("Hello, world!");
 
 // Access the current value
 console.log(data.value); // Output: Hello, world!
@@ -23,4 +23,3 @@ try {
 } catch(e) {
   console.log(e);
 }
-
