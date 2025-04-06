@@ -7,8 +7,14 @@ export {
   Immutability,
 
   // Class.
+  // Base.
   Data,
+  Value,
+
+  // `WeakData`.
   NamedWeakData,
+  // Indexed.
+  IndexedWeakData,
+  // Basic.
   WeakData,
-  Value
 } from './lib';

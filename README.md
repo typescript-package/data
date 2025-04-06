@@ -19,12 +19,15 @@ A lightweight **TypeScript** library for basic data management.
 
 - [Installation](#installation)
 - [Api](#api)
-  - [`Data`](#data)
-  - [`DataCore`](#datacore)
-  - [`Immutability`](#immutability)
-  - [`NamedWeakData`](#namedweakdata)
-  - [`Value`](#value)
-  - [`WeakData`](#weakdata)
+  - `abstract`
+    - [`Immutability`](#immutability)
+    - [`DataCore`](#datacore)
+  - **Base**
+    - [`Data`](#data)
+    - [`Value`](#value)
+  - **`WeakData`**
+    - [`IndexedWeakData`](#indexedweakdata)
+    - [`WeakData`](#weakdata)
 - [Immutability](#immutability)
   - [Sealed](#sealed)
   - [Frozen](#frozen)
@@ -52,12 +55,22 @@ import {
   Immutability,
 
   // Class.
+  // Base.
   Data,
+  Value,
+
+  // `WeakData`.
   NamedWeakData,
+  // Indexed.
+  IndexedWeakData,
+  // Basic.
   WeakData,
-  Value
 } from '@typescript-package/data';
 ```
+
+### `DataCore`
+
+The base abstraction with immutability for handling data-related classes.
 
 ### `Data`
 
@@ -87,46 +100,45 @@ data.destroy();
 console.log(data.value); // Throws error or undefined (based on how it's handled)
 ```
 
-### `DataCore`
+### `Value`
 
-The base abstraction with immutability for handling data-related classes.
+The class to manage the value of generic type variable `Type`.
+
+```typescript
+import { Value } from '@typescript-package/data';
+```
 
 ### `Immutability`
 
 Manages the immutability states of `this` current instance.
 
-### `NamedWeakData`
+```typescript
+import { Immutability } from '@typescript-package/data';
+```
+
+### WeakData
+
+### `IndexedWeakData`
 
 ```typescript
-import { NamedWeakData } from '@typescript-package/data';
+import { IndexedWeakData } from '@typescript-package/data';
 
-// Define a class that extends NamedWeakData
-export class ProfileData extends NamedWeakData<number, 'age' | 'score'> {}
+// Create an interface.
+export interface Profile {
+  id: number,
+  age: number;
+  score: number;
+}
 
-// Create two instances with different names
-const ageData = new ProfileData(25, 'age');
-const scoreData = new ProfileData(90, 'score');
+// Initialize multiple instances of `IndexedWeakData`.
+export const profileData1 = new IndexedWeakData({ id: 1, age: 27, score: 1100 } as Profile, 'id');
+export const profileData2 = new IndexedWeakData({ id: 2, age: 127, score: 1200 } as Profile, 'id');
+export const profileData3 = new IndexedWeakData({ id: 3, age: 227, score: 1300 } as Profile, 'id');
+export const profileData4 = new IndexedWeakData({ id: 4, age: 327, score: 1400 } as Profile, 'id');
 
-// Access the values stored in each instance using their respective names
-console.log(ageData.value); // Outputs: 25
-console.log(scoreData.value); // Outputs: 90
-
-// You can also retrieve the data from another instance using the static method `getFrom`
-console.log(NamedWeakData.getFrom(ageData, 'age')); // Outputs: 25
-console.log(NamedWeakData.getFrom(scoreData, 'score')); // Outputs: 90
-
-// Setting new values
-ageData.set(30);
-console.log(ageData.value); // Outputs: 30
-
-// Destroy an instance and clear its stored data
-ageData.destroy();
-console.log(NamedWeakData.getFrom(ageData, 'age')); // Outputs: undefined
-
-// Clear all stored values from the map
-scoreData.clear();
-console.log(NamedWeakData.getFrom(scoreData, 'score')); // Outputs: undefined
-
+// Get the value by using index.
+console.log(`profileData1: `, profileData1.getByIndex(1)); // Output: {id: 1, age: 27, score: 1100}
+console.log(`profileData3: `, profileData3.getByIndex(3)); // Output: {id: 3, age: 227, score: 1300}
 ```
 
 ### `WeakData`
@@ -137,29 +149,25 @@ The `WeakData` class is a concrete class that stores data in a static `WeakMap`.
 import { WeakData } from '@typescript-package/data';
 
 // Example subclass of WeakData
-class StringWeakData extends WeakData<string> {
+export class StringWeakData extends WeakData<string> {
   constructor(value: string) {
     super(value);
   }
 }
 
 // Create a new instance of StringWeakData
-const data1 = new StringWeakData("Hello, world!");
+export const data = new StringWeakData("Hello, world!");
 
 // Access the current value
-console.log(data1.value); // Output: Hello, world!
+console.log(data.value); // Output: Hello, world!
 
 // Update the value
-data1.set("New value");
-console.log(data1.value); // Output: New value
+data.set("New value");
+console.log(data.value); // Output: New value
 
 // Destroy the value
-data1.destroy();
+data.destroy();
 ```
-
-### `Value`
-
-The class to manage the value of generic type variable `Type`.
 
 ## Immutability
 

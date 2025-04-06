@@ -1,21 +1,35 @@
 import { WeakData } from '../lib';
 
 // Example subclass of WeakData
-class StringWeakData extends WeakData<string> {
+export class StringWeakData extends WeakData<string> {
   constructor(value: string) {
     super(value);
   }
 }
 
 // Create a new instance of StringWeakData
-const data1 = new StringWeakData("Hello, world!");
+export const data = new StringWeakData("Hello, world!");
 
 // Access the current value
-console.log(data1.value); // Output: Hello, world!
+console.log(data.value); // Output: Hello, world!
 
 // Update the value
-data1.set("New value");
-console.log(data1.value); // Output: New value
+data.set("New value");
+console.log(data.value); // Output: New value
 
 // Destroy the value
-data1.destroy();
+data.destroy();
+
+export class ObjectWeakData<Type> extends WeakData<Type> {
+  constructor(value: Type) {
+    super(value);
+  }
+}
+
+export const objectWeakData = new ObjectWeakData({
+  name: 'Someone',
+  surname: 'Surname'
+});
+
+
+objectWeakData.update((value => value));

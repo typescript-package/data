@@ -37,7 +37,7 @@ export class Data<Type> extends DataCore<Type> {
   #value;
 
   /**
-   * Creates an instance of `Data` child class.
+   * Creates an instance of `Data`.
    * @constructor
    * @param {Type} value Initial data value of generic type variable `Type`.
    */
@@ -47,9 +47,19 @@ export class Data<Type> extends DataCore<Type> {
   }
 
   /**
+   * @description Clears the value to `null`.
+   * @public
+   * @returns {this} Returns `this` current instance.
+   */
+  public clear(): this {
+    this.#value.set(null as unknown as Type);
+    return this;
+  }
+
+  /**
    * @description Destroys the `Value` object by setting it to `null`.
    * @public
-   * @returns {this} Returns the current instance.
+   * @returns {this} Returns `this` current instance.
    */
   public destroy(): this {
     this.#value = null as any;
@@ -60,7 +70,7 @@ export class Data<Type> extends DataCore<Type> {
    * @description Sets the data value.
    * @public
    * @param {Type} value The data of `Type` to set.
-   * @returns {this} Returns the current instance.
+   * @returns {this} Returns `this` current instance.
    */
   public set(value: Type) {
     super.validate();
