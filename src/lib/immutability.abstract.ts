@@ -20,6 +20,46 @@ export abstract class Immutability {
   }
 
   /**
+   * @description
+   * @public
+   * @readonly
+   * @type {boolean}
+   */
+  public get frozen() {
+    return this.isFrozen();
+  }
+
+  /**
+   * @description
+   * @public
+   * @readonly
+   * @type {boolean}
+   */
+  public get locked() {
+    return this.#locked;
+  }
+
+  /**
+   * @description
+   * @public
+   * @readonly
+   * @type {boolean}
+   */
+  public get mutable() {
+    return this.isMutable();
+  }
+
+  /**
+   * @description
+   * @public
+   * @readonly
+   * @type {boolean}
+   */
+  public get sealed() {
+    return this.isSealed();
+  }
+
+  /**
    * @description Privately stored locked state as `true` if locked, otherwise `false`.
    * @type {boolean}
    */
