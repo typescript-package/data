@@ -19,13 +19,13 @@ A lightweight **TypeScript** library for basic data management.
 
 - [Installation](#installation)
 - [Api](#api)
-  - `abstract`
+  - Abstract
     - [`Immutability`](#immutability)
     - [`DataCore`](#datacore)
-  - **Base**
+  - Base
     - [`Data`](#data)
     - [`Value`](#value)
-  - **`WeakData`**
+  - WeakData
     - [`IndexedWeakData`](#indexedweakdata)
     - [`WeakData`](#weakdata)
 - [Immutability](#immutability)
