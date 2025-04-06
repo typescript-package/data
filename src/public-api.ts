@@ -11,25 +11,10 @@ export {
   Data,
   Value,
 
-  // Array.
-  DataArray,
-  WeakDataArray,
-
-  // Set.
-  DataSet,
-  WeakDataSet,
-
-  // Map.
-  DataMap,
-  WeakDataMap,
-  
   // `WeakData`.
-  // Index + Named.
-  IndexedNamedWeakData,
+  NamedWeakData,
   // Indexed.
   IndexedWeakData,
-  // Named.
-  NamedWeakData,
   // Basic.
   WeakData,
 } from './lib';
