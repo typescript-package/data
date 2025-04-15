@@ -18,3 +18,8 @@ export {
   // Basic.
   WeakData,
 } from './lib';
+// Map related.
+export {
+  DataMap,
+  WeakDataMap,
+} from './map';
