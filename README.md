@@ -25,6 +25,9 @@ A lightweight **TypeScript** library for basic data management.
   - Base
     - [`Data`](#data)
     - [`Value`](#value)
+  - Map
+    - [`DataMap`](#datamap)
+    - [`WeakDataMap`](#weakdatamap)
   - WeakData
     - [`IndexedWeakData`](#indexedweakdata)
     - [`WeakData`](#weakdata)
@@ -58,6 +61,10 @@ import {
   // Base.
   Data,
   Value,
+
+  // `Map`.
+  DataMap,
+  WeakDataMap,
 
   // `WeakData`.
   NamedWeakData,
@@ -106,6 +113,109 @@ The class to manage the value of generic type variable `Type`.
 
 ```typescript
 import { Value } from '@typescript-package/data';
+```
+
+### `DataMap`
+
+The `DataMap` is a concrete class that extends `Map` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
+
+```typescript
+import { DataMap } from '@typescript-package/data';
+
+// Define a `DataCore` implementation for holding a data in `DataMap`.
+export class CustomMapData<Key, Value> extends Data<Map<Key, Value>> {
+  constructor(initialValue?: Map<Key, Value>) {
+    super(initialValue ?? new Map());
+  }
+}
+
+// Create a new `DataMap` instance with predefined entries and customized data holder.
+export const dataMap = new DataMap<string, number, CustomMapData<string, number>>(
+  [
+    ["one", 1],
+    ["two", 2],
+    ["three", 3],
+  ],
+  new CustomMapData()
+);
+
+// Check the `CustomMapData`.
+console.log(`Data holder of \`CustomMapData\`:`, dataMap.data); // Output: CustomMapData {#locked: false, #value: Value}
+
+// Get the `CustomMapData` value.
+console.log(`Data holder of \`CustomMapData\` value:`, dataMap.data.value); // Output: Map(3) {'one' => 1, 'two' => 2, 'three' => 3}
+
+// Log the size of the map
+console.log("Size:", dataMap.size); // Output: Size: 3
+
+// Get a value from the map
+console.log("Value for 'two':", dataMap.get("two")); // Output: Value for 'two': 2
+
+// Check if a key exists
+console.log("Has 'three'?", dataMap.has("three")); // Output: Has 'three'? true
+
+// Set a new key-value pair
+dataMap.set("four", 4);
+console.log("Size after set:", dataMap.size); // Output: Size after set: 4
+
+// Iterate over entries
+dataMap.forEach((value, key) => console.log(`${key}: ${value}`));
+// Output:
+// one: 1
+// two: 2
+// three: 3
+// four: 4
+
+// Delete an entry
+dataMap.delete("one");
+console.log("Size after delete:", dataMap.size); // Output: Size after delete: 3
+
+// Clear the map
+dataMap.clear();
+console.log("Size after clear:", dataMap.size); // Output: Size after clear: 0
+
+```
+
+### `WeakDataMap`
+
+The `WeakDataMap` class is a concrete class that stores data in a static `WeakMap`.
+
+```typescript
+import { WeakDataMap } from '@typescript-package/data';
+
+// Create an instance of `WeakDataMap`.
+const weakDataMap = new WeakDataMap<string, number>([
+  ['one', 1],
+  ['two', 2],
+  ['three', 3],
+]);
+
+
+// Get the value from `WeakData` static.
+console.log(`data: `, WeakData.get(weakDataMap.data)); // Output: Map(3) {'one' => 1, 'two' => 2, 'three' => 3}
+
+// Get a value by key
+console.log(weakDataMap.get('two')); // Output: 2
+
+// Add a new key-value pair
+weakDataMap.set('four', 4);
+
+// Check if a key exists
+console.log(weakDataMap.has('four')); // Output: true
+
+// Delete a key
+weakDataMap.delete('one');
+
+// Iterate over entries
+for (const [key, value] of weakDataMap.entries()) {
+  console.log(key, value);
+}
+
+// Output:
+// two 2
+// three 3
+// four 4
+
 ```
 
 ### `Immutability`
