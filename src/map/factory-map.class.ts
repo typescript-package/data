@@ -109,6 +109,20 @@ export class FactoryMap<
   #cloner?: (value: Value) => Value;
 
   /**
+   * @description Privately stored comparator for sorting.
+   * @param {[Key, Value]} a 
+   * @param {[Key, Value]} b 
+   * @returns {(a: [Key, Value], b: [Key, Value]) => number} 
+   */
+  #comparator: (a: [Key, Value], b: [Key, Value]) => number = (a, b) => `${a}`.localeCompare(`${b}`);
+
+  /**
+   * @description Whether the map is ordered.
+   * @type {boolean}
+   */
+  #ordered;
+
+  /**
    * Creates an instance of `FactoryMap`.
    * @constructor
    * @param {?[Key, Value][]} [entries] 
@@ -116,27 +130,32 @@ export class FactoryMap<
    * @param {?DataConstructor<MapType, DataType>} [data] 
    * @param {{
    *       cloner?: (value: Value) => Value,
+   *       comparator?: ((a: [Key, Value], b: [Key, Value]) => number),
    *       defaultValue?: () => Value,
+   *       ordered?: boolean;
    *     }} [param0={}] 
    * @param {(value: Value) => Value} param0.cloner 
+   * @param {(a: [Key, Value], b: [Key, Value]) => number} param0.comparator 
    * @param {() => Value} param0.defaultValue 
+   * @param {boolean} param0.ordered 
    */
   constructor(
     entries?: [Key, Value][],
     map?: MapTypeConstructor<Key, Value, MapType>,
     data?: DataConstructor<MapType, DataType>,
-    {cloner, defaultValue}: {
+    {cloner, comparator, defaultValue, ordered}: {
       cloner?: (value: Value) => Value,
+      comparator?: ((a: [Key, Value], b: [Key, Value]) => number),
       defaultValue?: () => Value,
+      ordered?: boolean;
     } = {}
   ) {
-    super(
-      entries,
-      map,
-      data
-    );
-    this.#defaultValue = defaultValue;
+    super(entries, map, data);
     this.#cloner = cloner;
+    this.#defaultValue = defaultValue;
+    this.#ordered = ordered;
+    typeof comparator === 'function' && (this.#comparator = comparator);
+    (Array.isArray(entries) && entries.length > 0 && ordered) && this.sort();
   }
 
   /**
@@ -150,7 +169,6 @@ export class FactoryMap<
     const value = super.get(key);
     return typeof this.#cloner === 'function' && value ? this.#cloner(value) : value;
   }
-
 
   /**
    * @description Gets the cloner function, to use for e.g. `structuredClone`.
@@ -171,6 +189,19 @@ export class FactoryMap<
   }
 
   /**
+   * @inheritdoc
+   * @public
+   * @param {Key} key 
+   * @param {Value} value 
+   * @returns {this} 
+   */
+  public override set(key: Key, value: Value) {
+    super.set(key, value);
+    this.#ordered === true && this.sort();
+    return this;
+  }
+
+  /**
    * @description Sets the cloner function, to use for e.g. `structuredClone`.
    * @public
    * @param {(value: Value) => Value} clonerFn
@@ -187,7 +218,18 @@ export class FactoryMap<
    * ```
    */
   public setCloner(clonerFn: (value: Value) => Value): this {
-    this.#cloner = clonerFn;
+    typeof clonerFn === 'function' && (this.#cloner = clonerFn);
+    return this;
+  }
+
+  /**
+   * @description Sets the compare function used in sorting.
+   * @public
+   * @param {(a: [Key, Value], b: [Key, Value]) => number} compareFn
+   * @returns {this}
+   */
+  public setComparator(compareFn: (a: [Key, Value], b: [Key, Value]) => number): this {
+    typeof compareFn === 'function' && (this.#comparator = compareFn);
     return this;
   }
 
@@ -207,6 +249,32 @@ export class FactoryMap<
    */
   public setDefaultValue(valueFn: () => Value): this {
     this.#defaultValue = valueFn;
+    return this;
+  }
+
+  /**
+   * @description Sets whether the map should sort automatically after each `set`.
+   * @public
+   * @param {boolean} ordered
+   * @returns {this}
+   */
+  public setOrdered(ordered: boolean): this {
+    this.#ordered = ordered;
+    return this;
+  }
+
+  /**
+   * @description Sorts the map with a stored or given comparator.
+   * @public
+   * @param {(a: [Key, Value], b: [Key, Value]) => number} [compareFn=this.#comparator] 
+   * @returns {this} 
+   */
+  public sort(compareFn: (a: [Key, Value], b: [Key, Value]) => number = this.#comparator): this {
+    const entries = [...super.entries()];
+    entries.length > 0 && (
+      super.clear(),
+      entries.sort((a, b) => compareFn(a, b)).forEach(([k, v]) => this.set(k, v))
+    );
     return this;
   }
 }
