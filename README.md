@@ -96,6 +96,10 @@ import { Immutability } from '@typescript-package/data';
 
 The base abstraction with immutability for handling data-related classes.
 
+```typescript
+import { DataCore } from '@typescript-package/data';
+```
+
 ### Base
 
 ### `Data`
@@ -138,7 +142,7 @@ import { Value } from '@typescript-package/data';
 
 ### `CoreMap`
 
-The abstract core class for building customizable `Map` and `DataCore` related classes.
+The abstract core class is designed for building `Map` and `DataCore` related classes.
 
 ```typescript
 import { CoreMap } from '@typescript-package/data';
