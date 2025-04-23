@@ -19,16 +19,18 @@ A lightweight **TypeScript** library for basic data management.
 
 - [Installation](#installation)
 - [Api](#api)
-  - Abstract
+  - **Abstract**
     - [`Immutability`](#immutability)
     - [`DataCore`](#datacore)
-  - Base
+  - **Base**
     - [`Data`](#data)
     - [`Value`](#value)
-  - Map
+  - **Map**
+    - [`CoreMap`](#coremap)
     - [`DataMap`](#datamap)
+    - [`FactoryMap`](#factorymap)
     - [`WeakDataMap`](#weakdatamap)
-  - WeakData
+  - **WeakData**
     - [`IndexedWeakData`](#indexedweakdata)
     - [`WeakData`](#weakdata)
 - [Immutability](#immutability)
@@ -53,18 +55,25 @@ npm install @typescript-package/data --save-peer
 
 ```typescript
 import {
+  // Base.
   // Abstract.
   DataCore,
   Immutability,
 
   // Class.
-  // Base.
   Data,
   Value,
 
   // `Map`.
+  // Abstract.
+  CoreMap,
+
+  // Class.
   DataMap,
+  FactoryMap,
   WeakDataMap,
+
+  // `Set`
 
   // `WeakData`.
   NamedWeakData,
@@ -75,9 +84,21 @@ import {
 } from '@typescript-package/data';
 ```
 
+### Abstract
+
+### `Immutability`
+
+Manages the immutability states of `this` current instance.
+
+```typescript
+import { Immutability } from '@typescript-package/data';
+```
+
 ### `DataCore`
 
 The base abstraction with immutability for handling data-related classes.
+
+### Base
 
 ### `Data`
 
@@ -115,6 +136,16 @@ The class to manage the value of generic type variable `Type`.
 import { Value } from '@typescript-package/data';
 ```
 
+## Map
+
+### `CoreMap`
+
+The abstract core class for building customizable `Map` and `DataCore` related classes.
+
+```typescript
+import { CoreMap } from '@typescript-package/data';
+```
+
 ### `DataMap`
 
 The `DataMap` is a concrete class that extends `Map` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
@@ -130,14 +161,17 @@ export class CustomMapData<Key, Value> extends Data<Map<Key, Value>> {
 }
 
 // Create a new `DataMap` instance with predefined entries and customized data holder.
-export const dataMap = new DataMap<string, number, CustomMapData<string, number>>(
+export const dataMap = new DataMap
+// <string, number, CustomMapData<string, number>> previous approach, now captured.
+(
   [
     ["one", 1],
     ["two", 2],
     ["three", 3],
   ],
-  new CustomMapData()
-);
+  // new CustomMapData() // previous approach
+  CustomMapData // new approach
+); // const dataMap: DataMap<string, number, CustomMapData<string, number>>
 
 // Check the `CustomMapData`.
 console.log(`Data holder of \`CustomMapData\`:`, dataMap.data); // Output: CustomMapData {#locked: false, #value: Value}
@@ -176,6 +210,13 @@ console.log("Size after clear:", dataMap.size); // Output: Size after clear: 0
 
 ```
 
+### `FactoryMap`
+
+```typescript
+import { FactoryMap } from '@typescript-package/data';
+
+```
+
 ### `WeakDataMap`
 
 The `WeakDataMap` class is a concrete class that stores data in a static `WeakMap`.
@@ -184,7 +225,7 @@ The `WeakDataMap` class is a concrete class that stores data in a static `WeakMa
 import { WeakDataMap } from '@typescript-package/data';
 
 // Create an instance of `WeakDataMap`.
-const weakDataMap = new WeakDataMap<string, number>([
+const weakDataMap = new WeakDataMap([
   ['one', 1],
   ['two', 2],
   ['three', 3],
@@ -216,14 +257,6 @@ for (const [key, value] of weakDataMap.entries()) {
 // three 3
 // four 4
 
-```
-
-### `Immutability`
-
-Manages the immutability states of `this` current instance.
-
-```typescript
-import { Immutability } from '@typescript-package/data';
 ```
 
 ### WeakData
@@ -362,6 +395,7 @@ MIT © typescript-package ([license][typescript-package-license])
 - **[@typescript-package/range](https://github.com/typescript-package/range)**: A **lightweight TypeScript** library for managing various types of ranges.
 - **[@typescript-package/regexp](https://github.com/typescript-package/regexp)**: A **lightweight TypeScript** library for **RegExp**.
 - **[@typescript-package/state](https://github.com/typescript-package/state)**: Simple state management for different types in **TypeScript**.
+- **[@typescript-package/storage](https://github.com/typescript-package/storage)**: The storage of data under allowed names.
 - **[@typescript-package/type](https://github.com/typescript-package/type)**: Utility types to enhance and simplify **TypeScript** development.
 - **[@typescript-package/wrapper](https://github.com/typescript-package/wrapper)**: A **lightweight TypeScript** library to wrap the text with the opening and closing chars.
 
