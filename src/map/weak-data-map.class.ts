@@ -26,6 +26,6 @@ export class WeakDataMap<Key, Value> extends DataMap<Key, Value, WeakData<Map<Ke
    * @param {?[Key, Value][]} [entries] 
    */
   constructor(entries?: [Key, Value][]) {
-    super(entries, new WeakData(new Map(entries)));
+    super(entries, WeakData);
   }
 }

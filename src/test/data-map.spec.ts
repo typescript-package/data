@@ -1,65 +1,5 @@
 import { Data, DataMap } from "../public-api";
 
-// // Create custom `Map`.
-// export class CustomMap<Key, Value> extends Map<Key, Value> {
-//   public onSet(callbackFn: (key: Key, value: Value) => void) {
-//     this.onSetFn = callbackFn;
-//     return this;
-//   }
-//   public override set(key: Key, value: Value): this {
-//     this.onSetFn?.(key, value), super.set(key, value);
-//     return this;
-//   }
-//   private onSetFn?: (key: Key, value: Value) => void;
-// }
-
-// // Use the custom `Map` with the `Data`.
-// export class CustomMapData<Key, Value> extends Data<CustomMap<Key, Value>> {
-//   constructor(value: CustomMap<Key, Value>) {
-//     super(value);
-//   }
-//   public onSet(callbackFn: (key: Key, value: Value) => void) {
-//     super.value.onSet(callbackFn);
-//     return this;
-//   }
-// };
-
-// // Create the class with the use of `DataMap` and `CustomMapData` to store the customized `Map`.
-// export class CustomDataMap<Key, Value> extends DataMap<Key, Value, CustomMapData<Key, Value>> {
-//   constructor(entries?: [Key, Value][]) {
-//     super(entries, new CustomMapData(new CustomMap(entries)));
-//   }
-//   public onSet(callbackFn: (key: Key, value: Value) => void) {
-//     this.data.onSet(callbackFn);
-//     return this;
-//   }
-// }
-
-// // Initialize.
-// export const customDataMap = new CustomDataMap([['a', 'b']]);
-
-// // Set the callback.
-// customDataMap.onSet((key, value) => console.log(`key`, key, `value`, value));
-
-// // Set the value to check the `onSet` callback.
-// customDataMap.set('a', 'c');
-
-
-// // export const dataMap = new DataMap([['a', 'b']]);
-
-// // console.group(`DataMap`);
-
-// // console.debug(`dataMap`, dataMap);
-// // console.debug(``, dataMap.);
-
-
-// // console.groupEnd();
-
-
-
-
-
-
 // Define a `DataCore` implementation for holding a data in `DataMap`.
 export class CustomMapData<Key, Value> extends Data<Map<Key, Value>> {
   constructor(initialValue?: Map<Key, Value>) {
@@ -68,16 +8,17 @@ export class CustomMapData<Key, Value> extends Data<Map<Key, Value>> {
 }
 
 // Create a new `DataMap` instance with predefined entries and customized data holder.
-export const dataMap = new DataMap<string, number, CustomMapData<string, number>>(
+export const dataMap = new DataMap
+// <string, number, CustomMapData<string, number>> previous approach, now captured.
+(
   [
     ["one", 1],
     ["two", 2],
     ["three", 3],
   ],
-  new CustomMapData()
-);
-
-console.group(`DataMap`);
+  // new CustomMapData() // previous approach
+  CustomMapData // new approach
+); // const dataMap: DataMap<string, number, CustomMapData<string, number>>
 
 // Check the `CustomMapData`.
 console.log(`Data holder of \`CustomMapData\`:`, dataMap.data); // Output: CustomMapData {#locked: false, #value: Value}

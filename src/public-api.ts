@@ -20,6 +20,11 @@ export {
 } from './lib';
 // Map related.
 export {
+  // Abstract.
+  CoreMap,
+
+  // Class.
   DataMap,
+  FactoryMap,
   WeakDataMap,
 } from './map';

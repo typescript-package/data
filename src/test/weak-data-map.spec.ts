@@ -3,7 +3,7 @@ import { WeakData, WeakDataMap } from "../public-api";
 console.group(`WeakDataMap`);
 
 // Create an instance of `WeakDataMap`.
-const weakDataMap = new WeakDataMap<string, number>([
+const weakDataMap = new WeakDataMap([
   ['one', 1],
   ['two', 2],
   ['three', 3],
