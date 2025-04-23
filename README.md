@@ -19,18 +19,18 @@ A lightweight **TypeScript** library for basic data management.
 
 - [Installation](#installation)
 - [Api](#api)
-  - **Abstract**
+  - Abstract
     - [`Immutability`](#immutability)
     - [`DataCore`](#datacore)
-  - **Base**
+  - Base
     - [`Data`](#data)
     - [`Value`](#value)
-  - **Map**
+  - Map
     - [`CoreMap`](#coremap)
     - [`DataMap`](#datamap)
     - [`FactoryMap`](#factorymap)
     - [`WeakDataMap`](#weakdatamap)
-  - **WeakData**
+  - WeakData
     - [`IndexedWeakData`](#indexedweakdata)
     - [`WeakData`](#weakdata)
 - [Immutability](#immutability)
@@ -72,8 +72,6 @@ import {
   DataMap,
   FactoryMap,
   WeakDataMap,
-
-  // `Set`
 
   // `WeakData`.
   NamedWeakData,
@@ -214,6 +212,44 @@ console.log("Size after clear:", dataMap.size); // Output: Size after clear: 0
 
 ```typescript
 import { FactoryMap } from '@typescript-package/data';
+
+// Define custom `Map`.
+export class CustomMap<Key, Value> extends Map<Key, Value> {
+  public newMethod() {}
+  constructor(entries?: [Key, Value][]) {
+    super(entries);
+  }
+}
+
+// Define data storage to store custom map.
+export class TestCustomMapData<Key, Value> extends Data<CustomMap<Key, Value>> {
+  constructor(initialValue?: CustomMap<Key, Value>) {
+    super(initialValue ?? new CustomMap());
+  }
+}
+
+// Initialize the factory map with custom map and data.
+const factoryMap = new FactoryMap(
+  [['a', {x: 1}], ['b', {x: 2}]],
+
+  // Use custom `Map`
+  CustomMap,
+
+  // Use custom storage for custom map.
+  TestCustomMapData,
+  {
+    // Define function for the default value.
+    defaultValue: () => ({x: 0}),
+
+    // Define cloner by using the `structuredClone`.
+    cloner: (value) => structuredClone(value),
+  }
+); // const factoryMap: FactoryMap<string, { x: number; }, CustomMap<string, { x: number }>, TestCustomMapData<string, { x: number; }>>
+
+console.log(factoryMap.get('c')); // { x: 0 }
+console.log(factoryMap.get('b')); // { x: 2 }
+console.log(factoryMap.get('a')); // { x: 1 }
+console.debug(factoryMap.sort()); // sort.
 
 ```
 
