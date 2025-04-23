@@ -56,14 +56,7 @@ export abstract class CoreMap<
   #data: DataType;
 
   /**
-   * Creates an instance of `DataMap`.
-   * @constructor
-   * @param {?[Key, Value][]} [entries] 
-   * @param {?DataType} [data] 
-   */
-
-  /**
-   * Creates an instance of `CoreMap`.
+   * Creates an instance of `CoreMap` child class.
    * @constructor
    * @param {?[Key, Value][]} [entries] Initial value for `Map`.
    * @param {?MapTypeConstructor<Key, Value, MapType>} [map] The map of generic type variable `MapType` for `Map` value.
