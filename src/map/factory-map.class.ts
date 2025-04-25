@@ -4,7 +4,9 @@ import { Data } from '../lib/data.class';
 import { CoreMap } from './core-map.abstract';
 import { DataCore } from '../lib/data-core.abstract';
 // Type.
-import { DataConstructor, MapTypeConstructor } from '../interface';
+import { DataConstructorInput } from '../type';
+// Interface.
+import { MapTypeConstructor } from '../interface';
 /**
  * @description
  * @export
@@ -31,7 +33,7 @@ export class FactoryMap<
    * @template {DataCore<MapType>} [DataType=Data<MapType>] 
    * @param {Record<Key, Value>} obj 
    * @param {?MapTypeConstructor<Key, Value, MapType>} [map] 
-   * @param {?DataConstructor<MapType, DataType>} [data] 
+   * @param {?DataConstructorInput<MapType, DataType>} [data] 
    * @param {{
    *       defaultValue?: () => Value;
    *       cloner?: (value: Value) => Value;
@@ -48,7 +50,7 @@ export class FactoryMap<
   >(
     obj: Record<Key, Value>,
     map?: MapTypeConstructor<Key, Value, MapType>,
-    data?: DataConstructor<MapType, DataType>,
+    data?: DataConstructorInput<MapType, DataType>,
     { defaultValue, cloner }:
     {
       defaultValue?: () => Value;
@@ -127,7 +129,7 @@ export class FactoryMap<
    * @constructor
    * @param {?[Key, Value][]} [entries] 
    * @param {?MapTypeConstructor<Key, Value, MapType>} [map] 
-   * @param {?DataConstructor<MapType, DataType>} [data] 
+   * @param {?DataConstructorInput<MapType, DataType>} [data] 
    * @param {{
    *       cloner?: (value: Value) => Value,
    *       comparator?: ((a: [Key, Value], b: [Key, Value]) => number),
@@ -142,7 +144,7 @@ export class FactoryMap<
   constructor(
     entries?: [Key, Value][],
     map?: MapTypeConstructor<Key, Value, MapType>,
-    data?: DataConstructor<MapType, DataType>,
+    data?: DataConstructorInput<MapType, DataType>,
     {cloner, comparator, defaultValue, ordered}: {
       cloner?: (value: Value) => Value,
       comparator?: ((a: [Key, Value], b: [Key, Value]) => number),
