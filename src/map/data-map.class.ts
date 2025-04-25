@@ -4,7 +4,7 @@ import { Data } from '../lib/data.class';
 import { CoreMap } from './core-map.abstract';
 import { DataCore } from '../lib/data-core.abstract';
 // Type.
-import { DataConstructor } from '../interface';
+import { DataConstructorInput } from '../type';
 /**
  * @description The `DataMap` is a concrete class that extends `CoreMap` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
  * @export
@@ -27,7 +27,7 @@ export class DataMap<
    * @template Value 
    * @template {DataCore<Map<Key, Value>>} [DataType=Data<Map<Key, Value>>] 
    * @param {Record<Key, Value>} obj 
-   * @param {?DataConstructor<Map<Key, Value>, DataType>} [data] 
+   * @param {?DataConstructorInput<Map<Key, Value>, DataType>} [data] 
    * @returns {DataMap<Key, Value, DataType>} 
    */
   public static fromObject<
@@ -36,7 +36,7 @@ export class DataMap<
     DataType extends DataCore<Map<Key, Value>> = Data<Map<Key, Value>>
   >(
     obj: Record<Key, Value>,
-    data?: DataConstructor<Map<Key, Value>, DataType>
+    data?: DataConstructorInput<Map<Key, Value>, DataType>
   ): DataMap<Key, Value, DataType> {
     return new DataMap(Object.entries(obj) as [Key, Value][], data);
   }
@@ -54,11 +54,11 @@ export class DataMap<
    * Creates an instance of `DataMap`.
    * @constructor
    * @param {?[Key, Value][]} [entries] Initial value for `Map`.
-   * @param {?DataConstructor<Map<Key, Value>, DataType>} [data] The data store of generic type variable `DataType` for `Map` value.
+   * @param {?DataConstructorInput<Map<Key, Value>, DataType>} [data] The data store of `DataType` for `Map` value, also with params.
    */
   constructor(
     entries?: [Key, Value][],
-    data?: DataConstructor<Map<Key, Value>, DataType>
+    data?: DataConstructorInput<Map<Key, Value>, DataType>
   ) {
     super(entries, Map, data);
   }
