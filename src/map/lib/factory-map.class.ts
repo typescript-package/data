@@ -1,12 +1,12 @@
 // Class.
-import { Data } from '../lib/data.class';
+import { Data } from '../../lib/data.class';
 // Abstract.
 import { CoreMap } from './core-map.abstract';
-import { DataCore } from '../lib/data-core.abstract';
+import { DataCore } from '../../lib/data-core.abstract';
 // Type.
-import { DataConstructorInput } from '../type';
+import { DataConstructorInput } from '../../type';
 // Interface.
-import { MapTypeConstructor } from '../interface';
+import { MapTypeConstructor } from '../../interface';
 /**
  * @description
  * @export

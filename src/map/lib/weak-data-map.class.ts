@@ -1,6 +1,6 @@
 // Class.
 import { DataMap } from './data-map.class';
-import { WeakData } from '../lib';
+import { WeakData } from '../../lib';
 /**
  * @description The `WeakDataMap` class is a concrete class that stores data in a static `WeakMap`.
  * @export

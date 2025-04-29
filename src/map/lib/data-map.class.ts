@@ -1,10 +1,10 @@
 // Class.
-import { Data } from '../lib/data.class';
+import { Data } from '../../lib/data.class';
 // Abstract.
 import { CoreMap } from './core-map.abstract';
-import { DataCore } from '../lib/data-core.abstract';
+import { DataCore } from '../../lib/data-core.abstract';
 // Type.
-import { DataConstructorInput } from '../type';
+import { DataConstructorInput } from '../../type';
 /**
  * @description The `DataMap` is a concrete class that extends `CoreMap` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
  * @export

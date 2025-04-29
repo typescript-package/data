@@ -1,12 +1,12 @@
 // Class.
-import { Data } from '../lib/data.class';
+import { Data } from '../../lib/data.class';
 // Abstract.
-import { DataCore } from '../lib/data-core.abstract';
-import { OnHook } from '../lib/on-hook.abstract';
+import { DataCore } from '../../lib/data-core.abstract';
+import { OnHook } from '../../lib/on-hook.abstract';
 // Type.
-import { DataConstructorInput } from '../type';
+import { DataConstructorInput } from '../../type';
 // Interface.
-import { MapTypeConstructor } from '../interface';
+import { MapTypeConstructor } from '../../interface';
 /**
  * @description The abstract core class for building customizable `Map` and `DataCore` related classes.
  * @export
