@@ -1,10 +1,10 @@
 // Class.
-import { Data } from '../lib/data.class';
+import { Data } from '../../lib/data.class';
 import { ImmutableSet } from './immutable-set.class';
 // Abstract.
-import { DataCore } from '../lib/data-core.abstract';
+import { DataCore } from '../../lib/data-core.abstract';
 // Interface.
-import { DataConstructor, SetTypeConstructor } from '../interface';
+import { DataConstructor, SetTypeConstructor } from '../../interface';
 /**
  * @description The abstract core class for building customizable `Set` and `DataCore` related classes.
  * @export

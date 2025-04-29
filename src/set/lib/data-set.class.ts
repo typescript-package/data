@@ -1,10 +1,10 @@
 // Class.
-import { Data } from '../lib/data.class';
+import { Data } from '../../lib/data.class';
 // Abstract.
 import { CoreSet } from './core-set.abstract';
-import { DataCore } from '../lib/data-core.abstract';
+import { DataCore } from '../../lib/data-core.abstract';
 // Interface.
-import { DataConstructor } from '../interface';
+import { DataConstructor } from '../../interface';
 /**
  * @description The `DataSet` is a concrete class that extends `CoreSet` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
  * @export
