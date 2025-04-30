@@ -30,9 +30,9 @@ export class Value<Type> {
    * @description Returns the privately stored value of generic type variable `Type`.
    * @public
    * @readonly
-   * @type {Type} 
+   * @type {Readonly<Type>} 
    */
-  public get value() {
+  public get value(): Readonly<Type> {
     return this.#value;
   }
 
@@ -50,13 +50,14 @@ export class Value<Type> {
   constructor(value: Type) {
     this.#value = value;
   }
-
+  
   /**
    * @description Sets the value of generic type variable `Type`.
    * @public
-   * @returns {this} Returns `this` current instance.
+   * @param {Type} value The value of `Type` to set.
+   * @returns {this} The `this` current instance.
    */
-  public set(value: Type) {
+  public set(value: Type): this {
     this.#value = value;
     return this;
   }
