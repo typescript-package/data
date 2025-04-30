@@ -11,6 +11,7 @@ import { DataConstructor } from '../../interface';
  * @class DataSet
  * @template Type 
  * @template {DataCore<Set<Type>>} [DataType=Data<Set<Type>>] 
+ * @extends {CoreSet<Type, Set<Type>, DataType>}
  */
 export class DataSet<
   Type,
@@ -28,8 +29,8 @@ export class DataSet<
   /**
    * Creates an instance of `DataSet`.
    * @constructor
-   * @param {?(Iterable<Type>)} [iterable] Initial value for `Set`.
-   * @param {?DataType} [data] Optional data instance of generic type variable `DataType` to store the `Set`.
+   * @param {?Iterable<Type>} [iterable] Initial value for `Set`.
+   * @param {?DataConstructor<Set<Type>, DataType>} [data] Optional data instance of generic type variable `DataType` to store the `Set`.
    */
   constructor(
     iterable?: Iterable<Type>,
