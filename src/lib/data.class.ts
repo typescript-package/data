@@ -24,14 +24,14 @@ export class Data<Type> extends DataCore<Type> {
    * @description Returns the privately stored value of generic type variable `Type`.
    * @public
    * @readonly
-   * @type {Type}
+   * @type {Readonly<Type>}
    */
-  public get value(): Type {
+  public get value(): Readonly<Type> {
     return this.#value.value;
   }
 
   /**
-   * @description Privately stored value of class `Value`.
+   * @description Privately stored value of class `Type`.
    * @type {Value<Type>}
    */
   #value;
@@ -49,7 +49,7 @@ export class Data<Type> extends DataCore<Type> {
   /**
    * @description Clears the value to `null`.
    * @public
-   * @returns {this} Returns `this` current instance.
+   * @returns {this} The `this` current instance.
    */
   public clear(): this {
     this.#value.set(null as unknown as Type);
@@ -59,7 +59,7 @@ export class Data<Type> extends DataCore<Type> {
   /**
    * @description Destroys the `Value` object by setting it to `null`.
    * @public
-   * @returns {this} Returns `this` current instance.
+   * @returns {this} The `this` current instance.
    */
   public destroy(): this {
     this.#value = null as any;
@@ -69,12 +69,11 @@ export class Data<Type> extends DataCore<Type> {
   /**
    * @description Sets the data value.
    * @public
-   * @param {Type} value The data of `Type` to set.
-   * @returns {this} Returns `this` current instance.
+   * @param {Type} value The data value of `Type` to set.
+   * @returns {this} The `this` current instance.
    */
-  public set(value: Type) {
-    super.validate();
-    this.#value!.set(value);
+  public set(value: Type): this {
+    super.validate(), this.#value!.set(value);
     return this;
   }
 }
