@@ -1,5 +1,5 @@
 // Abstract.
-import { DataCore } from "./data-core.abstract";
+import { DataCore } from "../../lib/data-core.abstract";
 /**
  * @description
  * @export
@@ -9,7 +9,7 @@ import { DataCore } from "./data-core.abstract";
  * @template Value 
  * @template {DataCore<any>} DataType 
  */
-export abstract class OnHook<
+export abstract class MapOnHook<
   Key,
   Value,
   DataType extends DataCore<any>
