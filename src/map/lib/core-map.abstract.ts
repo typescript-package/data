@@ -2,7 +2,7 @@
 import { Data } from '../../lib/data.class';
 // Abstract.
 import { DataCore } from '../../lib/data-core.abstract';
-import { OnHook } from '../../lib/on-hook.abstract';
+import { MapOnHook } from './map-on-hook.abstract';
 // Type.
 import { DataConstructorInput } from '../../type';
 // Interface.
@@ -16,14 +16,14 @@ import { MapTypeConstructor } from '../../interface';
  * @template Value 
  * @template {Map<Key, Value>} [MapType=Map<Key, Value>] The type of `Map`.
  * @template {DataCore<MapType>} [DataType=Data<MapType>] The `Data` storage type of `Map` type.
- * @extends {OnHook<Key, Value, DataType>}
+ * @extends {MapOnHook<Key, Value, DataType>}
  */
 export abstract class CoreMap<
   Key,
   Value,
   MapType extends Map<Key, Value> = Map<Key, Value>,
   DataType extends DataCore<MapType> = Data<MapType>,
-> extends OnHook<Key, Value, DataType> {
+> extends MapOnHook<Key, Value, DataType> {
   /**
    * @description Returns the `string` tag representation of the `CoreMap` class when used in `Object.prototype.toString.call(instance)`.
    * @public
