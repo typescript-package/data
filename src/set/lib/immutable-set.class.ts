@@ -3,9 +3,9 @@
  * @export
  * @class ImmutableSet
  * @template Type 
- * @extends {Set<Type>}
+ * @extends {Set<Readonly<Type>>}
  */
-export class ImmutableSet<Type> extends Set<Type> {
+export class ImmutableSet<Type> extends Set<Readonly<Type>> {
   constructor(iterable?: Iterable<Type> | null) {
     super(iterable);
     this.add = (value: Type) => this;
