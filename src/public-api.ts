@@ -18,7 +18,8 @@ export {
   // Basic.
   WeakData,
 } from './lib';
-// Map related.
+
+// `Map`.
 export {
   // Abstract.
   CoreMap,
@@ -28,3 +29,13 @@ export {
   FactoryMap,
   WeakDataMap,
 } from './map';
+
+// `Set`.
+export {
+  // Abstract.
+  CoreSet,
+
+  // Class.
+  DataSet,
+  ImmutableSet,
+} from './set';
