@@ -1,5 +1,5 @@
-import { Data } from "../lib";
-import { FactoryMap } from "../map";
+import { Data } from "../../lib";
+import { FactoryMap } from "../lib";
 
 export class CustomMap<Key, Value> extends Map<Key, Value> {
   public newMethod() {}
@@ -21,7 +21,7 @@ const factoryMap = new FactoryMap(
   CustomMap,
 
   // Use custom storage for custom map.
-  TestCustomMapData,
+  [TestCustomMapData, 'a', 'b'],
   {
     // Define function for the default value.
     defaultValue: () => ({x: 0}),
