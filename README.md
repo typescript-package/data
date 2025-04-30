@@ -30,6 +30,9 @@ A lightweight **TypeScript** library for basic data management.
     - [`DataMap`](#datamap)
     - [`FactoryMap`](#factorymap)
     - [`WeakDataMap`](#weakdatamap)
+  - Set
+    - [`CoreSet`](#coreset)
+    - [`DataSet`](#dataset)
   - WeakData
     - [`IndexedWeakData`](#indexedweakdata)
     - [`WeakData`](#weakdata)
@@ -53,9 +56,10 @@ npm install @typescript-package/data --save-peer
 
 ## Api
 
+Base.
+
 ```typescript
 import {
-  // Base.
   // Abstract.
   DataCore,
   Immutability,
@@ -64,7 +68,19 @@ import {
   Data,
   Value,
 
-  // `Map`.
+  // `WeakData`.
+  NamedWeakData,
+  // Indexed.
+  IndexedWeakData,
+  // Basic.
+  WeakData,
+} from '@typescript-package/data';
+```
+
+`Map`.
+
+```typescript
+import {
   // Abstract.
   CoreMap,
 
@@ -72,13 +88,19 @@ import {
   DataMap,
   FactoryMap,
   WeakDataMap,
+} from '@typescript-package/data';
+```
 
-  // `WeakData`.
-  NamedWeakData,
-  // Indexed.
-  IndexedWeakData,
-  // Basic.
-  WeakData,
+`Set`.
+
+```typescript
+import {
+  // Abstract.
+  CoreSet,
+
+  // Class.
+  DataSet,
+  ImmutableSet,
 } from '@typescript-package/data';
 ```
 
@@ -297,6 +319,22 @@ for (const [key, value] of weakDataMap.entries()) {
 // three 3
 // four 4
 
+```
+
+### `CoreSet`
+
+The abstract core class for building customizable `Set` and `DataCore` related classes.
+
+```typescript
+import { CoreSet } from '@typescript-package/data';
+```
+
+### `DataSet`
+
+The `DataSet` is a concrete class that extends `CoreSet` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
+
+```typescript
+import { DataSet } from '@typescript-package/data';
 ```
 
 ### WeakData
