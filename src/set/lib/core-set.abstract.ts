@@ -3,21 +3,24 @@ import { Data } from '../../lib/data.class';
 import { ImmutableSet } from './immutable-set.class';
 // Abstract.
 import { DataCore } from '../../lib/data-core.abstract';
+import { SetOnHook } from './set-on-hook.abstract';
 // Interface.
 import { DataConstructor, SetTypeConstructor } from '../../interface';
 /**
  * @description The abstract core class for building customizable `Set` and `DataCore` related classes.
  * @export
+ * @abstract
  * @class CoreSet
  * @template Type 
  * @template {Set<Type>} [SetType=Set<Type>] 
  * @template {DataCore<SetType>} [DataType=Data<SetType>] 
+ * @extends {SetOnHook<Type, DataType>}
  */
 export abstract class CoreSet<
   Type,
   SetType extends Set<Type> = Set<Type>,
   DataType extends DataCore<SetType> = Data<SetType>
-> {
+> extends SetOnHook<Type, DataType> {
   /**
    * @description Returns the `string` tag representation of the `CoreSet` class when used in `Object.prototype.toString.call(instance)`.
    * @public
@@ -38,7 +41,7 @@ export abstract class CoreSet<
   }
 
   /**
-   * @description
+   * @description Returns the readonly `ImmutableSet` of `Type`.
    * @public
    * @readonly
    * @type {ReadonlySet<Type>}
@@ -67,19 +70,29 @@ export abstract class CoreSet<
    * Creates an instance of `CoreSet` child class.
    * @constructor
    * @param {?Iterable<Type>} [iterable] Initial value for `Set`.
-   * @param {?SetTypeConstructor<Type, SetType>} [set] 
-   * @param {?DataConstructor<SetType, DataType>} [data] Optional data instance of generic type variable `DataType` to store the `Set`.
+   * @param {?SetTypeConstructor<Type, SetType>} [set] Custom `Set`.
+   * @param {?DataConstructor<SetType, DataType>} [data] Custom data holder of generic type variable `DataType` to store the `Set`.
    */
   constructor(
     iterable?: Iterable<Type>,
     set?: SetTypeConstructor<Type, SetType>,
     data?: DataConstructor<SetType, DataType>,
   ) {
+    super();
     this.#data = new (data || Data)(new (set || Set)(iterable) as SetType) as unknown as DataType;
   }
 
   /**
-   * @inheritdoc
+   * @description Access to the readonly set by using a symbol.
+   * @public
+   * @returns {Readonly<SetType>} 
+   */
+  public [Symbol.for('value')](): Readonly<SetType> {
+    return this.#data.value;
+  }
+
+  /**
+   * @description "Appends a new element with a specified value to the end of the `Set`."
    * @public
    * @param {Type} value 
    * @returns {this} 
@@ -101,34 +114,35 @@ export abstract class CoreSet<
     this.onClear(this.#data);
     return this;
   }
-  
+
   /**
-   * Deletes a value of `Type`.
-   * @inheritdoc
+   * "Removes a specified value from the Set."
    * @public
    * @param {Type} value The value to delete.
+   * @returns {boolean} "Returns true if an element in the Set existed and has been removed, or false if the element does not exist."
    */
-  public delete(value: Type) {
-    return this.onDelete(value, this.#data.value.delete(value), this.#data) ;
+  public delete(value: Type): boolean {
+    const result = this.#data.value.delete(value);
+    return this.onDelete(value, result, this.#data), result;
   }
 
   /**
-   * @inheritdoc
+   * @description "Returns an iterable of [v,v] pairs for every value v in the set."
    * @public
-   * @returns {SetIterator<[Type, Type]>} 
+   * @returns {SetIterator<[Readonly<Type>, Readonly<Type>]>} 
    */
-  public entries(): SetIterator<[Type, Type]> {
+  public entries(): SetIterator<[Readonly<Type>, Readonly<Type>]> {
     return this.#data.value.entries();
   }
 
   /**
-   * @inheritdoc
+   * @description
    * @public
-   * @param {(value: Type, value2: Type, set: Set<Type>) => void} callbackfn 
+   * @param {(value: Readonly<Type>, value2: Readonly<Type>, set: Set<Readonly<Type>>) => void} callbackfn 
    * @param {?*} [thisArg] 
    * @returns {this} 
    */
-  public forEach(callbackfn: (value: Type, value2: Type, set: Set<Type>) => void, thisArg?: any): this {
+  public forEach(callbackfn: (value: Readonly<Type>, value2: Readonly<Type>, set: Set<Readonly<Type>>) => void, thisArg?: any): this {
     this.#data.value.forEach(callbackfn, thisArg);
     return this;
   }
@@ -138,51 +152,29 @@ export abstract class CoreSet<
    * @inheritdoc
    * @public
    * @param {Type} value The value to check.
-   * @returns {boolean} 
+   * @returns {boolean} "a boolean indicating whether an element with the specified value exists in the Set or not."
    */
   public has(value: Type): boolean {
     return this.#data.value.has(value);
   }
 
   /**
+   * "Despite its name, returns an iterable of the values in the set."
    * @inheritdoc
    * @public
-   * @returns {SetIterator<Type>} 
+   * @returns {SetIterator<Readonly<Type>>} 
    */
-  public keys(): SetIterator<Type> {
+  public keys(): SetIterator<Readonly<Type>> {
     return this.#data.value.keys();
   }
 
   /**
+   * "Returns an iterable of values in the set."
    * @inheritdoc
    * @public
-   * @returns {SetIterator<Type>} 
+   * @returns {SetIterator<Readonly<Type>>} 
    */
-  public values(): SetIterator<Type> {
+  public values(): SetIterator<Readonly<Type>> {
     return this.#data.value.values();
   }
-
-  /**
-   * @description Hook called when a value is added.
-   * @protected
-   * @param {Type} value The added value.
-   * @param {DataType} data The data holder.
-   */
-  protected onAdd(value: Type, data: DataType): void {}
-
-  /**
-   * @description Hook called when the `Set` is cleared.
-   * @protected
-   * @param {DataType} data The data holder.
-   */
-  protected onClear(data: DataType): void {}
-
-  /**
-   * @description Hook called when a value is deleted.
-   * @protected
-   * @param {Type} value The deleted value.
-   * @param {boolean} success Whether the deletion was successful.
-   * @param {DataType} data The data holder.
-   */
-  protected onDelete(value: Type, success: boolean, data: DataType): void {}
 }
