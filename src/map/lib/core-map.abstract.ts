@@ -3,6 +3,8 @@ import { Data } from '../../lib/data.class';
 // Abstract.
 import { DataCore } from '../../lib/data-core.abstract';
 import { MapOnHook } from './map-on-hook.abstract';
+// Constant.
+import { SymbolValue } from '../../lib';
 // Type.
 import { DataConstructorInput } from '../../type';
 // Interface.
@@ -76,6 +78,15 @@ export abstract class CoreMap<
       new (map ?? Map<Key, Value> as unknown as MapTypeConstructor<Key, Value, MapType>)(entries),
       ...Array.isArray(data) ? data.slice(1) : []
     ) as unknown as DataType;
+  }
+
+  /**
+   * @description Access to the readonly map by using a symbol.
+   * @public
+   * @returns {Readonly<MapType>} 
+   */
+  public [SymbolValue](): Readonly<MapType> {
+    return this.#data.value;
   }
 
   /**
