@@ -1,0 +1,1 @@
+export const SymbolValue = Symbol.for('value');

@@ -9,3 +9,5 @@ export { NamedWeakData } from './named-weak-data.class';
 export { WeakData } from './weak-data.class';
 // `Value`.
 export { Value } from './value.class';
+// Constant.
+export { SymbolValue } from './value.symbol';
