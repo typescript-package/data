@@ -102,10 +102,18 @@ import {
   DataSet,
   ImmutableSet,
 } from '@typescript-package/data';
+```
 
+Constant
+
+```typescript
 // Constant.
 import { SymbolValue  } from '@typescript-package/data';
+```
 
+Interface
+
+```typescript
 // Interface.
 import {
   DataConstructor,
@@ -113,7 +121,11 @@ import {
   SetTypeConstructor,
   WeakMapTypeConstructor
 } from '@typescript-package/data';
+```
 
+Type
+
+```typescript
 // Type.
 import {
   DataConstructorInput,
