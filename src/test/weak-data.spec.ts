@@ -33,3 +33,11 @@ export const objectWeakData = new ObjectWeakData({
 
 
 objectWeakData.update((value => value));
+
+
+describe(`WeakData`, () => {
+  let data = new StringWeakData("Hello, world!");
+  beforeEach(() => data = new StringWeakData("Hello, world!"));
+
+  it(`Initial value`, () => expect(data.value).toEqual("Hello, world!"));
+});

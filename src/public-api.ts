@@ -18,7 +18,8 @@ export {
   // Basic.
   WeakData,
 } from './lib';
-// Map related.
+
+// `Map`.
 export {
   // Abstract.
   CoreMap,
@@ -28,3 +29,30 @@ export {
   FactoryMap,
   WeakDataMap,
 } from './map';
+
+// `Set`.
+export {
+  // Abstract.
+  CoreSet,
+
+  // Class.
+  DataSet,
+  ImmutableSet,
+} from './set';
+
+// Constant.
+export { SymbolValue  } from './lib';
+
+// Interface.
+export type {
+  DataConstructor,
+  MapTypeConstructor,
+  SetTypeConstructor,
+  WeakMapTypeConstructor
+} from './interface';
+
+// Type.
+export type {
+  DataConstructorInput,
+  ImmutableArray,
+} from './type';

@@ -24,9 +24,9 @@ export abstract class DataCore<Type> extends Immutability {
    * @public
    * @abstract
    * @readonly
-   * @type {Type}
+   * @type {Readonly<Type>}
    */
-  public abstract get value(): Type;
+  public abstract get value(): Readonly<Type>;
 
   /**
    * @description Clears the value by setting to `undefined` or `null`.
@@ -59,7 +59,7 @@ export abstract class DataCore<Type> extends Immutability {
    * @description Sets the data value. Ensure `super.validate()` is called before invoking this method.
    * @public
    * @abstract
-   * @param {Type} value The data of `Type` to set.
+   * @param {Type} value The data value of `Type` to set.
    * @returns {this} Returns `this` current instance.
    */  
   public abstract set(value: Type): this;

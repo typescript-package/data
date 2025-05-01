@@ -1,9 +1,14 @@
 // Class.
-import { Data } from '../lib/data.class';
+import { Data } from '../../lib/data.class';
 // Abstract.
-import { DataCore } from '../lib/data-core.abstract';
+import { DataCore } from '../../lib/data-core.abstract';
+import { MapOnHook } from './map-on-hook.abstract';
+// Constant.
+import { SymbolValue } from '../../lib';
 // Type.
-import { DataConstructor, MapTypeConstructor } from '../interface';
+import { DataConstructorInput } from '../../type';
+// Interface.
+import { MapTypeConstructor } from '../../interface';
 /**
  * @description The abstract core class for building customizable `Map` and `DataCore` related classes.
  * @export
@@ -13,15 +18,16 @@ import { DataConstructor, MapTypeConstructor } from '../interface';
  * @template Value 
  * @template {Map<Key, Value>} [MapType=Map<Key, Value>] The type of `Map`.
  * @template {DataCore<MapType>} [DataType=Data<MapType>] The `Data` storage type of `Map` type.
+ * @extends {MapOnHook<Key, Value, DataType>}
  */
 export abstract class CoreMap<
   Key,
   Value,
   MapType extends Map<Key, Value> = Map<Key, Value>,
   DataType extends DataCore<MapType> = Data<MapType>,
-> {
+> extends MapOnHook<Key, Value, DataType> {
   /**
-   * @description Returns the `string` tag representation of the `DataMap` class when used in `Object.prototype.toString.call(instance)`.
+   * @description Returns the `string` tag representation of the `CoreMap` class when used in `Object.prototype.toString.call(instance)`.
    * @public
    * @readonly
    */
@@ -54,20 +60,33 @@ export abstract class CoreMap<
    * @type {DataType}
    */
   #data: DataType;
-
+  
   /**
    * Creates an instance of `CoreMap` child class.
    * @constructor
    * @param {?[Key, Value][]} [entries] Initial value for `Map`.
    * @param {?MapTypeConstructor<Key, Value, MapType>} [map] The map of generic type variable `MapType` for `Map` value.
-   * @param {?DataConstructor<MapType, DataType>} [data] The data store of generic type variable `DataType` for `Map` value.
+   * @param {?DataConstructorInput<MapType, DataType>} [data] The data store of generic type variable `DataType` for `Map` value.
    */
   constructor(
     entries?: [Key, Value][],
     map?: MapTypeConstructor<Key, Value, MapType>,
-    data?: DataConstructor<MapType, DataType>
+    data?: DataConstructorInput<MapType, DataType>
   ) {
-    this.#data = new (data ?? Data)(new (map ?? Map<Key, Value> as unknown as MapTypeConstructor<Key, Value, MapType>)(entries)) as unknown as DataType;
+    super();
+    this.#data = new (Array.isArray(data) ? data[0] : data ?? Data)(
+      new (map ?? Map<Key, Value> as unknown as MapTypeConstructor<Key, Value, MapType>)(entries),
+      ...Array.isArray(data) ? data.slice(1) : []
+    ) as unknown as DataType;
+  }
+
+  /**
+   * @description Access to the readonly map by using a symbol.
+   * @public
+   * @returns {Readonly<MapType>} 
+   */
+  public [SymbolValue](): Readonly<MapType> {
+    return this.#data.value;
   }
 
   /**
@@ -146,7 +165,7 @@ export abstract class CoreMap<
    * @returns {this} The `this` current instance for chaining.
    */
   public set(key: Key, value: Value): this {
-    this.onSet?.(key, value, this.get(key)!, this.#data);
+    this.onSet?.(key, value, this.#data.value.get(key)!, this.#data);
     this.#data.value.set(key, value);
     return this;
   }
@@ -157,36 +176,4 @@ export abstract class CoreMap<
   public values(): MapIterator<Value> {
     return this.#data.value.values();
   }
-
-  /**
-   * @description Hook called when the `Map` is cleared.
-   * @protected
-   * @param {DataType} data The data holder.
-   */
-  protected onClear(data: DataType): void { }
-
-  /**
-   * @description Hook called when a value is deleted.
-   * @protected
-   * @param {DataType} data The data holder.
-   */
-  protected onDelete(key: Key, data: DataType): void { }
-
-  /**
-   * @description Hook called before the `get` being invoked.
-   * @protected
-   * @param {Key} key The key to get the value.
-   * @param {DataType} data The data holder.
-   */
-  protected onGet(key: Key, data: DataType): void { }
-
-  /**
-   * @description Hook called when a value is added.
-   * @protected
-   * @param {key} key The key under which set the `value`.
-   * @param {Type} value The value to set.
-   * @param {Type} previousValue The previous value.
-   * @param {DataType} data The data holder.
-   */
-  protected onSet(key: Key, value: Value, previousValue: Value, data: DataType): void { }
 }

@@ -25,7 +25,7 @@ export class WeakData<Type> extends DataCore<Type> {
    * @public
    * @static
    * @template Type 
-   * @param {DataStore<Type>} instance Another instance from which to get the data.
+   * @param {WeakData<Type>} instance Another instance from which to get the data.
    * @returns {Type} The value of the data stored in the given instance.
    */
   public static get<Type>(instance: WeakData<Type>): Type {
@@ -53,22 +53,22 @@ export class WeakData<Type> extends DataCore<Type> {
   public override get [Symbol.toStringTag](): string {
     return WeakData.name;
   }
-
+  
   /**
    * @description A static, privately stored `WeakMap` used for associating each instance with its value.
    * @readonly
    * @type {WeakMap}
    */
-  static readonly #value = new WeakMap<any, any>();
+  static readonly #value: WeakMap<object, any> = new WeakMap();
 
   /**
-   * @description Returns the value of `Type` from static `WeakMap`.
+   * @description Returns the readonly value of `Type` from static `WeakMap`.
    * @public
    * @readonly
    * @type {Type} 
    */
-  public get value(): Type {
-    return WeakData.#value.get(this) as Type;
+  public get value(): Readonly<Type> {
+    return WeakData.#value.get(this);
   }
 
   /**
@@ -82,9 +82,18 @@ export class WeakData<Type> extends DataCore<Type> {
   }
 
   /**
+   * @description
+   * @public
+   * @returns {Type} 
+   */
+  public [Symbol.for('value')](): Readonly<Type> {
+    return this.value;
+  }
+
+  /**
    * @description Clears the value to `null`.
    * @public
-   * @returns {this} Returns `this` current instance.
+   * @returns {this} The `this` current instance.
    */
   public clear(): this {
     WeakData.#value.set(this, null as unknown as Type);
@@ -94,7 +103,7 @@ export class WeakData<Type> extends DataCore<Type> {
   /**
    * @description Removes the data value in a static `WeakMap`.
    * @public
-   * @returns {this} Returns `this` current instance.
+   * @returns {this} The `this` current instance.
    */
   public delete(): this {
     WeakData.#value.delete(this);
@@ -104,7 +113,7 @@ export class WeakData<Type> extends DataCore<Type> {
   /**
    * @description Destroys the value in a static `WeakMap`.
    * @public
-   * @returns {this} Returns `this` current instance.
+   * @returns {this} The `this` current instance.
    */
   public destroy(): this {
     this.clear().delete();
@@ -112,20 +121,10 @@ export class WeakData<Type> extends DataCore<Type> {
   }
 
   /**
-   * @description Checks whether the static `WeakMap` has the instance.
-   * @public
-   * @param {Type} key The instance of `Type`.
-   * @returns {boolean} Returns the `boolean` indicating the.
-   */
-  public has(key: Type = this.value): boolean {
-    return WeakData.#value.has(key);
-  }
-
-  /**
    * @description Sets the data value in a static `WeakMap`.
    * @public
    * @param {Type} value The data of `Type` to set.
-   * @returns {this} Returns `this` current instance.
+   * @returns {this} The `this` current instance.
    */ 
   public set(value: Type): this {
     super.validate();
@@ -137,7 +136,7 @@ export class WeakData<Type> extends DataCore<Type> {
    * @description Applies the callback to the current value and updates it.
    * @public
    * @param {(value: Type) => Type} callbackFn The callback to apply to the value.
-   * @returns {this} Returns `this` current instance.
+   * @returns {this} The `this` current instance.
    */
   public update(callbackFn: (value: Type) => Type): this {
     if (typeof callbackFn === 'function') {

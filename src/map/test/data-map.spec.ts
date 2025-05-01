@@ -1,9 +1,11 @@
-import { Data, DataMap } from "../public-api";
+import { Data } from '../../lib';
+import { DataMap } from "../";
 
 // Define a `DataCore` implementation for holding a data in `DataMap`.
 export class CustomMapData<Key, Value> extends Data<Map<Key, Value>> {
-  constructor(initialValue?: Map<Key, Value>) {
+  constructor(initialValue?: Map<Key, Value>, ...args: any[]) {
     super(initialValue ?? new Map());
+    console.log(`...args: any[]`, args);
   }
 }
 
@@ -17,7 +19,7 @@ export const dataMap = new DataMap
     ["three", 3],
   ],
   // new CustomMapData() // previous approach
-  CustomMapData // new approach
+  [CustomMapData, 'a', 'b', 1] // new approach
 ); // const dataMap: DataMap<string, number, CustomMapData<string, number>>
 
 // Check the `CustomMapData`.
