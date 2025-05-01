@@ -8,6 +8,8 @@ import { SetOnHook } from './set-on-hook.abstract';
 import { SetTypeConstructor } from '../../interface';
 // Type.
 import { DataConstructorInput } from '../../type';
+// Constant: Symbol.
+import { SymbolValue } from '../../lib/value.symbol';
 /**
  * @description The abstract core class for building customizable `Set` and `DataCore` related classes.
  * @export
@@ -89,7 +91,7 @@ export abstract class CoreSet<
    * @public
    * @returns {Readonly<SetType>} 
    */
-  public [Symbol.for('value')](): Readonly<SetType> {
+  public [SymbolValue](): Readonly<SetType> {
     return this.#data.value;
   }
 
