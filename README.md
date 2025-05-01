@@ -102,6 +102,23 @@ import {
   DataSet,
   ImmutableSet,
 } from '@typescript-package/data';
+
+// Constant.
+import { SymbolValue  } from '@typescript-package/data';
+
+// Interface.
+import {
+  DataConstructor,
+  MapTypeConstructor,
+  SetTypeConstructor,
+  WeakMapTypeConstructor
+} from '@typescript-package/data';
+
+// Type.
+import {
+  DataConstructorInput,
+  ImmutableArray,
+} from '@typescript-package/data';
 ```
 
 ### Abstract
@@ -160,7 +177,7 @@ The class to manage the value of generic type variable `Type`.
 import { Value } from '@typescript-package/data';
 ```
 
-## Map
+### Map
 
 ### `CoreMap`
 
@@ -321,6 +338,8 @@ for (const [key, value] of weakDataMap.entries()) {
 
 ```
 
+### Set
+
 ### `CoreSet`
 
 The abstract core class for building customizable `Set` and `DataCore` related classes.
@@ -335,6 +354,8 @@ The `DataSet` is a concrete class that extends `CoreSet` and encapsulates its da
 
 ```typescript
 import { DataSet } from '@typescript-package/data';
+
+
 ```
 
 ### WeakData
