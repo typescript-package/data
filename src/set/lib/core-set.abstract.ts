@@ -5,7 +5,9 @@ import { ImmutableSet } from './immutable-set.class';
 import { DataCore } from '../../lib/data-core.abstract';
 import { SetOnHook } from './set-on-hook.abstract';
 // Interface.
-import { DataConstructor, SetTypeConstructor } from '../../interface';
+import { SetTypeConstructor } from '../../interface';
+// Type.
+import { DataConstructorInput } from '../../type';
 /**
  * @description The abstract core class for building customizable `Set` and `DataCore` related classes.
  * @export
@@ -71,15 +73,15 @@ export abstract class CoreSet<
    * @constructor
    * @param {?Iterable<Type>} [iterable] Initial value for `Set`.
    * @param {?SetTypeConstructor<Type, SetType>} [set] Custom `Set`.
-   * @param {?DataConstructor<SetType, DataType>} [data] Custom data holder of generic type variable `DataType` to store the `Set`.
+   * @param {?DataConstructorInput<SetType, DataType>} [data] Custom data holder of generic type variable `DataType` to store the `Set`.
    */
   constructor(
     iterable?: Iterable<Type>,
     set?: SetTypeConstructor<Type, SetType>,
-    data?: DataConstructor<SetType, DataType>,
+    data?: DataConstructorInput<Set<Type>, DataType>
   ) {
     super();
-    this.#data = new (data || Data)(new (set || Set)(iterable) as SetType) as unknown as DataType;
+    this.#data = new (Array.isArray(data) ? data[0] : data ?? Data)(new (set || Set)(iterable) as SetType) as unknown as DataType;
   }
 
   /**
