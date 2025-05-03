@@ -24,9 +24,9 @@ export abstract class DataCore<Type> extends Immutability {
    * @public
    * @abstract
    * @readonly
-   * @type {Readonly<Type>}
+   * @type {Type}
    */
-  public abstract get value(): Readonly<Type>;
+  public abstract get value(): Type;
 
   /**
    * @description Clears the value by setting to `undefined` or `null`.
