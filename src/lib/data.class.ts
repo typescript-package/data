@@ -24,17 +24,17 @@ export class Data<Type> extends DataCore<Type> {
    * @description Returns the privately stored value of generic type variable `Type`.
    * @public
    * @readonly
-   * @type {Readonly<Type>}
+   * @type {Type}
    */
-  public get value(): Readonly<Type> {
+  public get value(): Type {
     return this.#value.value;
   }
 
   /**
-   * @description Privately stored value of class `Type`.
+   * @description Privately stored value of class `Value<Type>`.
    * @type {Value<Type>}
    */
-  #value;
+  #value: Value<Type>;
 
   /**
    * Creates an instance of `Data`.
