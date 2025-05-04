@@ -47,6 +47,15 @@ export class Data<Type> extends DataCore<Type> {
   }
 
   /**
+   * @description 
+   * @public
+   * @returns {Type} 
+   */
+  public [Symbol.for('value')](): Type {
+    return this.value;
+  }
+
+  /**
    * @description Clears the value to `null`.
    * @public
    * @returns {this} The `this` current instance.
