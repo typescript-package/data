@@ -9,8 +9,16 @@ export class StringData extends Data<string> {
 
 export const data = new StringData("Hello, world!");
 
+console.group(`Value`);
+
+// Data
+console.debug(`data: `, data);
+
 // Access the current value
-console.log(data.value); // Output: Hello, world!
+console.debug(`data.value: `, data.value); // Output: Hello, world!
+
+// The tag
+console.debug(`data.tag:`, data.tag); // Output: Data
 
 // Update the value
 data.set("New value");
@@ -23,6 +31,9 @@ try {
 } catch(e) {
   console.log(e);
 }
+
+console.groupEnd();
+
 
 describe('Data', () => {
   let instance: Data<any>;

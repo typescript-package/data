@@ -6,6 +6,8 @@ console.group(`ImmutableData`);
 
 console.debug(`immutableData: `, immutableData);
 
+console.debug(`immutableData.tag: `, immutableData.tag); // ImmutableData
+
 console.groupEnd();
 
 
