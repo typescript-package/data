@@ -9,6 +9,8 @@ export {
   // Class.
   // Base.
   Data,
+  ImmutableData,
+  ReadonlyData,
   Value,
 
   // `WeakData`.
@@ -18,27 +20,6 @@ export {
   // Basic.
   WeakData,
 } from './lib';
-
-// `Map`.
-export {
-  // Abstract.
-  CoreMap,
-
-  // Class.
-  DataMap,
-  FactoryMap,
-  WeakDataMap,
-} from './map';
-
-// `Set`.
-export {
-  // Abstract.
-  CoreSet,
-
-  // Class.
-  DataSet,
-  ImmutableSet,
-} from './set';
 
 // Constant.
 export { SymbolValue  } from './lib';

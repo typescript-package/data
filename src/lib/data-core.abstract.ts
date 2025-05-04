@@ -20,13 +20,23 @@ export abstract class DataCore<Type> extends Immutability {
   }
 
   /**
+   * @description Returns the string tag of the current instance defined by the `Symbol.toStringTag`.
+   * @public
+   * @returns {string | undefined} The extracted class name, such as `'DataCore'`, or `undefined` if extraction fails.
+   */
+  public get tag(): string | undefined {
+    const tag = Object.prototype.toString.call(this).slice(8, -1);
+    return tag !== 'Object' ? tag : undefined;
+  }
+
+  /**
    * @description Returns the value of generic type variable `Type`.
    * @public
    * @abstract
    * @readonly
-   * @type {Readonly<Type>}
+   * @type {Type}
    */
-  public abstract get value(): Readonly<Type>;
+  public abstract get value(): Type;
 
   /**
    * @description Clears the value by setting to `undefined` or `null`.

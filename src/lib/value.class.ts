@@ -30,9 +30,9 @@ export class Value<Type> {
    * @description Returns the privately stored value of generic type variable `Type`.
    * @public
    * @readonly
-   * @type {Readonly<Type>} 
+   * @type {Type} 
    */
-  public get value(): Readonly<Type> {
+  public get value(): Type {
     return this.#value;
   }
 

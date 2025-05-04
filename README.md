@@ -25,14 +25,8 @@ A lightweight **TypeScript** library for basic data management.
   - Base
     - [`Data`](#data)
     - [`Value`](#value)
-  - Map
-    - [`CoreMap`](#coremap)
-    - [`DataMap`](#datamap)
-    - [`FactoryMap`](#factorymap)
-    - [`WeakDataMap`](#weakdatamap)
-  - Set
-    - [`CoreSet`](#coreset)
-    - [`DataSet`](#dataset)
+    - [`ImmutableData`](#immutabledata)
+    - [`ReadonlyData`](#readonlydata)
   - WeakData
     - [`IndexedWeakData`](#indexedweakdata)
     - [`WeakData`](#weakdata)
@@ -47,6 +41,13 @@ A lightweight **TypeScript** library for basic data management.
   - [Commit](#commit)
   - [Versioning](#versioning)
 - [License](#license)
+
+## 📦 Related Packages
+
+| Package                   | Description                                       |
+|---------------------------|---------------------------------------------------|
+| [`@typescript-package/map`](https://github.com/typescript-package/map) | A lightweight **TypeScript** library for enhanced `map` management. |
+| [`@typescript-package/set`](https://github.com/typescript-package/set) | A lightweight **TypeScript** library for enhanced `set` management. |
 
 ## Installation
 
@@ -66,6 +67,8 @@ import {
 
   // Class.
   Data,
+  ImmutableData,
+  ReadonlyData,
   Value,
 
   // `WeakData`.
@@ -74,33 +77,6 @@ import {
   IndexedWeakData,
   // Basic.
   WeakData,
-} from '@typescript-package/data';
-```
-
-`Map`.
-
-```typescript
-import {
-  // Abstract.
-  CoreMap,
-
-  // Class.
-  DataMap,
-  FactoryMap,
-  WeakDataMap,
-} from '@typescript-package/data';
-```
-
-`Set`.
-
-```typescript
-import {
-  // Abstract.
-  CoreSet,
-
-  // Class.
-  DataSet,
-  ImmutableSet,
 } from '@typescript-package/data';
 ```
 
@@ -170,11 +146,11 @@ class StringData extends Data<string> {
 const data = new StringData("Hello, world!");
 
 // Access the current value
-console.log(data.value); // Output: Hello, world!
+console.log(data.value); // ➝ Hello, world!
 
 // Update the value
 data.set("New value");
-console.log(data.value); // Output: New value
+console.log(data.value); // ➝ New value
 
 // Destroy the value
 data.destroy();
@@ -187,234 +163,47 @@ The class to manage the value of generic type variable `Type`.
 
 ```typescript
 import { Value } from '@typescript-package/data';
+
+// Create a Value instance to hold a number
+const numValue = new Value<number>(10);
+
+console.log(numValue.value); // ➝ 10
+console.log(numValue.tag);   // ➝ "Value"
+
+// Update the stored number
+numValue.set(42);
+
+console.log(numValue.value); // ➝ 42
 ```
 
-### Map
-
-### `CoreMap`
-
-The abstract core class is designed for building `Map` and `DataCore` related classes.
+### `ImmutableData`
 
 ```typescript
-import { CoreMap } from '@typescript-package/data';
+import { ImmutableData } from '@typescript-package/data';
+
+const immutableData = new ImmutableData(['string', 27, false]);
+
+// immutableData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
+try {
+  (immutableData.value[0] as any) = 'new string' // Cannot assign to read only property '0' of object '[object Array]'
+} catch(e) {}
+
+console.debug(`immutableData.value: `, immutableData.value); // ➝ ['string', 27, false]
 ```
 
-### `DataMap`
-
-The `DataMap` is a concrete class that extends `Map` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
+### `ReadonlyData`
 
 ```typescript
-import { DataMap } from '@typescript-package/data';
+import { ReadonlyData } from '@typescript-package/data';
 
-// Define a `DataCore` implementation for holding a data in `DataMap`.
-export class CustomMapData<Key, Value> extends Data<Map<Key, Value>> {
-  constructor(initialValue?: Map<Key, Value>) {
-    super(initialValue ?? new Map());
-  }
-}
+let readonlyData = new ReadonlyData(['string', 27, false]);
 
-// Create a new `DataMap` instance with predefined entries and customized data holder.
-export const dataMap = new DataMap
-// <string, number, CustomMapData<string, number>> previous approach, now captured.
-(
-  [
-    ["one", 1],
-    ["two", 2],
-    ["three", 3],
-  ],
-  // new CustomMapData() // previous approach
-  CustomMapData // new approach
-); // const dataMap: DataMap<string, number, CustomMapData<string, number>>
+console.log(`readonlyData: `, readonlyData);
 
-// Check the `CustomMapData`.
-console.log(`Data holder of \`CustomMapData\`:`, dataMap.data); // Output: CustomMapData {#locked: false, #value: Value}
+// readonlyData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
+(readonlyData.value[0] as any) = 'new string' // Can assign with using `any`.
 
-// Get the `CustomMapData` value.
-console.log(`Data holder of \`CustomMapData\` value:`, dataMap.data.value); // Output: Map(3) {'one' => 1, 'two' => 2, 'three' => 3}
-
-// Log the size of the map
-console.log("Size:", dataMap.size); // Output: Size: 3
-
-// Get a value from the map
-console.log("Value for 'two':", dataMap.get("two")); // Output: Value for 'two': 2
-
-// Check if a key exists
-console.log("Has 'three'?", dataMap.has("three")); // Output: Has 'three'? true
-
-// Set a new key-value pair
-dataMap.set("four", 4);
-console.log("Size after set:", dataMap.size); // Output: Size after set: 4
-
-// Iterate over entries
-dataMap.forEach((value, key) => console.log(`${key}: ${value}`));
-// Output:
-// one: 1
-// two: 2
-// three: 3
-// four: 4
-
-// Delete an entry
-dataMap.delete("one");
-console.log("Size after delete:", dataMap.size); // Output: Size after delete: 3
-
-// Clear the map
-dataMap.clear();
-console.log("Size after clear:", dataMap.size); // Output: Size after clear: 0
-
-```
-
-### `FactoryMap`
-
-```typescript
-import { FactoryMap } from '@typescript-package/data';
-
-// Define custom `Map`.
-export class CustomMap<Key, Value> extends Map<Key, Value> {
-  public newMethod() {}
-  constructor(entries?: [Key, Value][]) {
-    super(entries);
-  }
-}
-
-// Define data storage to store custom map.
-export class TestCustomMapData<Key, Value> extends Data<CustomMap<Key, Value>> {
-  constructor(initialValue?: CustomMap<Key, Value>) {
-    super(initialValue ?? new CustomMap());
-  }
-}
-
-// Initialize the factory map with custom map and data.
-const factoryMap = new FactoryMap(
-  [['a', {x: 1}], ['b', {x: 2}]],
-
-  // Use custom `Map`
-  CustomMap,
-
-  // Use custom storage for custom map.
-  TestCustomMapData,
-  {
-    // Define function for the default value.
-    defaultValue: () => ({x: 0}),
-
-    // Define cloner by using the `structuredClone`.
-    cloner: (value) => structuredClone(value),
-  }
-); // const factoryMap: FactoryMap<string, { x: number; }, CustomMap<string, { x: number }>, TestCustomMapData<string, { x: number; }>>
-
-console.log(factoryMap.get('c')); // { x: 0 }
-console.log(factoryMap.get('b')); // { x: 2 }
-console.log(factoryMap.get('a')); // { x: 1 }
-console.debug(factoryMap.sort()); // sort.
-
-```
-
-### `WeakDataMap`
-
-The `WeakDataMap` class is a concrete class that stores data in a static `WeakMap`.
-
-```typescript
-import { WeakDataMap } from '@typescript-package/data';
-
-// Create an instance of `WeakDataMap`.
-const weakDataMap = new WeakDataMap([
-  ['one', 1],
-  ['two', 2],
-  ['three', 3],
-]);
-
-
-// Get the value from `WeakData` static.
-console.log(`data: `, WeakData.get(weakDataMap.data)); // Output: Map(3) {'one' => 1, 'two' => 2, 'three' => 3}
-
-// Get a value by key
-console.log(weakDataMap.get('two')); // Output: 2
-
-// Add a new key-value pair
-weakDataMap.set('four', 4);
-
-// Check if a key exists
-console.log(weakDataMap.has('four')); // Output: true
-
-// Delete a key
-weakDataMap.delete('one');
-
-// Iterate over entries
-for (const [key, value] of weakDataMap.entries()) {
-  console.log(key, value);
-}
-
-// Output:
-// two 2
-// three 3
-// four 4
-
-```
-
-### Set
-
-### `CoreSet`
-
-The abstract core class for building customizable `Set` and `DataCore` related classes.
-
-```typescript
-import { CoreSet } from '@typescript-package/data';
-```
-
-### `DataSet`
-
-The `DataSet` is a concrete class that extends `CoreSet` and encapsulates its data within a `DataCore` store, providing additional data management capabilities.
-
-```typescript
-import { DataSet } from '@typescript-package/data';
-
-// Define a `DataCore` implementation for holding a data in `DataSet`.
-export class CustomSetData<Type> extends Data<Set<Type>> {
-  constructor(initialValue?: Set<Type>, ...args: any[]) {
-    super(initialValue ?? new Set());
-    console.log(`...args: any[]`, args);
-  }
-}
-
-// Create a new `DataSet` instance with predefined entries and customized data holder.
-export const dataSet = new DataSet
-(
-  [0, 27, 37, 47],
-  [CustomSetData, 'a', 'b', 1]
-);
-
-console.debug(`dataSet`, dataSet);
-
-// Check the `CustomSetData`.
-console.log(`Data holder of \`CustomSetData\`:`, dataSet.data); // Output: CustomSetData {#locked: false, #value: Value}
-
-// Log the size of the set
-console.log("Size:", dataSet.size); // Output: Size: 4
-
-// Check if a value exists
-console.log("Has 27?", dataSet.has(27)); // Output: Has '27'? true
-
-// Add a new value
-dataSet.add(57);
-console.log("Size after add:", dataSet.size); // Output: Size after add: 5
-
-// Iterate over entries
-dataSet.forEach(value => console.log(`${value}`));
-// Output:
-// 0
-// 27
-// 37
-// 47
-// 57
-
-console.debug(`SymbolValue`, dataSet[SymbolValue]());
-
-// Delete an entry
-dataSet.delete(0);
-console.log("Size after delete:", dataSet.size); // Output: Size after delete: 4
-
-// Clear the set
-dataSet.clear();
-console.log("Size after clear:", dataSet.size); // Output: Size after clear: 0
+console.log(`readonlyData.value: `, readonlyData.value); // ➝ ['new string', 27, false]
 ```
 
 ### WeakData
@@ -438,8 +227,8 @@ export const profileData3 = new IndexedWeakData({ id: 3, age: 227, score: 1300 }
 export const profileData4 = new IndexedWeakData({ id: 4, age: 327, score: 1400 } as Profile, 'id');
 
 // Get the value by using index.
-console.log(`profileData1: `, profileData1.getByIndex(1)); // Output: {id: 1, age: 27, score: 1100}
-console.log(`profileData3: `, profileData3.getByIndex(3)); // Output: {id: 3, age: 227, score: 1300}
+console.log(`profileData1: `, profileData1.getByIndex(1)); // ➝ {id: 1, age: 27, score: 1100}
+console.log(`profileData3: `, profileData3.getByIndex(3)); // ➝ {id: 3, age: 227, score: 1300}
 ```
 
 ### `WeakData`
@@ -460,11 +249,11 @@ export class StringWeakData extends WeakData<string> {
 export const data = new StringWeakData("Hello, world!");
 
 // Access the current value
-console.log(data.value); // Output: Hello, world!
+console.log(data.value); // ➝ Hello, world!
 
 // Update the value
 data.set("New value");
-console.log(data.value); // Output: New value
+console.log(data.value); // ➝ New value
 
 // Destroy the value
 data.destroy();
@@ -543,6 +332,8 @@ MIT © typescript-package ([license][typescript-package-license])
 
 - **[@typescript-package/affix](https://github.com/typescript-package/affix)**: A **lightweight TypeScript** library for the affix - prefix and suffix.
 - **[@typescript-package/are](https://github.com/typescript-package/are)**: Type-safe `are` checkers for validating value types in TypeScript.
+
+
 - **[@typescript-package/descriptor](https://github.com/typescript-package/descriptor)**: A **lightweight TypeScript** library for property descriptor.
 - **[@typescript-package/guard](https://github.com/typescript-package/guard)**: Type-safe guards for guarding the value types in TypeScript.c
 - **[@typescript-package/history](https://github.com/typescript-package/history)**: A **TypeScript** package for tracking history of values.
