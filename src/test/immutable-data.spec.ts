@@ -1,15 +1,16 @@
 import { ImmutableData } from "../lib/immutable-data.class";
 
-const immutableData = new ImmutableData(['a', 1, false]);
+const immutableData = new ImmutableData(['string', 27, false]);
 
 console.group(`ImmutableData`);
-
 console.debug(`immutableData: `, immutableData);
-
 console.debug(`immutableData.tag: `, immutableData.tag); // ImmutableData
-
+// immutableData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
+try {
+  (immutableData.value[0] as any) = 'new string' // Cannot assign to read only property '0' of object '[object Array]'
+} catch(e) {}
+console.debug(`immutableData.value: `, immutableData.value); // ➝ ['string', 27, false]
 console.groupEnd();
-
 
 describe('ImmutableData', () => {
   let instance: ImmutableData<any>;

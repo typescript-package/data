@@ -1,6 +1,17 @@
 import { Value } from "../lib";
 
-const value = new Value(['a', 1, false]);
+// Create a Value instance to hold a number
+const numValue = new Value<number>(10);
+
+console.group(`Value`);
+console.log(numValue.value); // ➝ 10
+console.log(numValue.tag);   // ➝ "Value"
+
+// Update the stored number
+numValue.set(42);
+
+console.log(numValue.value); // ➝ 42
+console.groupEnd();
 
 describe('Value', () => {
   let instance: Value<any>;

@@ -1,5 +1,15 @@
 import { ReadonlyData } from "../lib";
 
+const readonlyData = new ReadonlyData(['string', 27, false]);
+
+console.group(`ReadonlyData`);
+console.debug(`readonlyData: `, readonlyData);
+console.debug(`readonlyData.tag: `, readonlyData.tag); // ReadonlyData
+// readonlyData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
+(readonlyData.value[0] as any) = 'new string' // Cannot assign to '0' because it is a read-only property.
+console.debug(`readonlyData.value: `, readonlyData.value); // ➝ ['new string', 27, false]
+console.groupEnd();
+
 describe('ReadonlyData', () => {
   let instance: ReadonlyData<any>;
 
