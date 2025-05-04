@@ -109,8 +109,6 @@ import {
 } from '@typescript-package/data';
 ```
 
-
-
 ### Abstract
 
 ### `Immutability`
@@ -148,11 +146,11 @@ class StringData extends Data<string> {
 const data = new StringData("Hello, world!");
 
 // Access the current value
-console.log(data.value); // Output: Hello, world!
+console.log(data.value); // ➝ Hello, world!
 
 // Update the value
 data.set("New value");
-console.log(data.value); // Output: New value
+console.log(data.value); // ➝ New value
 
 // Destroy the value
 data.destroy();
@@ -165,18 +163,47 @@ The class to manage the value of generic type variable `Type`.
 
 ```typescript
 import { Value } from '@typescript-package/data';
+
+// Create a Value instance to hold a number
+const numValue = new Value<number>(10);
+
+console.log(numValue.value); // ➝ 10
+console.log(numValue.tag);   // ➝ "Value"
+
+// Update the stored number
+numValue.set(42);
+
+console.log(numValue.value); // ➝ 42
 ```
 
 ### `ImmutableData`
 
 ```typescript
 import { ImmutableData } from '@typescript-package/data';
+
+const immutableData = new ImmutableData(['string', 27, false]);
+
+// immutableData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
+try {
+  (immutableData.value[0] as any) = 'new string' // Cannot assign to read only property '0' of object '[object Array]'
+} catch(e) {}
+
+console.debug(`immutableData.value: `, immutableData.value); // ➝ ['string', 27, false]
 ```
 
 ### `ReadonlyData`
 
 ```typescript
 import { ReadonlyData } from '@typescript-package/data';
+
+let readonlyData = new ReadonlyData(['string', 27, false]);
+
+console.log(`readonlyData: `, readonlyData);
+
+// readonlyData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
+(readonlyData.value[0] as any) = 'new string' // Can assign with using `any`.
+
+console.log(`readonlyData.value: `, readonlyData.value); // ➝ ['new string', 27, false]
 ```
 
 ### WeakData
@@ -200,8 +227,8 @@ export const profileData3 = new IndexedWeakData({ id: 3, age: 227, score: 1300 }
 export const profileData4 = new IndexedWeakData({ id: 4, age: 327, score: 1400 } as Profile, 'id');
 
 // Get the value by using index.
-console.log(`profileData1: `, profileData1.getByIndex(1)); // Output: {id: 1, age: 27, score: 1100}
-console.log(`profileData3: `, profileData3.getByIndex(3)); // Output: {id: 3, age: 227, score: 1300}
+console.log(`profileData1: `, profileData1.getByIndex(1)); // ➝ {id: 1, age: 27, score: 1100}
+console.log(`profileData3: `, profileData3.getByIndex(3)); // ➝ {id: 3, age: 227, score: 1300}
 ```
 
 ### `WeakData`
@@ -222,11 +249,11 @@ export class StringWeakData extends WeakData<string> {
 export const data = new StringWeakData("Hello, world!");
 
 // Access the current value
-console.log(data.value); // Output: Hello, world!
+console.log(data.value); // ➝ Hello, world!
 
 // Update the value
 data.set("New value");
-console.log(data.value); // Output: New value
+console.log(data.value); // ➝ New value
 
 // Destroy the value
 data.destroy();
