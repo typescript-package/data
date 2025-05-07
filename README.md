@@ -93,9 +93,6 @@ Interface
 // Interface.
 import {
   DataConstructor,
-  MapTypeConstructor,
-  SetTypeConstructor,
-  WeakMapTypeConstructor
 } from '@typescript-package/data';
 ```
 
@@ -105,7 +102,6 @@ Type
 // Type.
 import {
   DataConstructorInput,
-  ImmutableArray,
 } from '@typescript-package/data';
 ```
 
