@@ -1,1 +1,0 @@
-export type ImmutableArray<T> = readonly Readonly<T>[];

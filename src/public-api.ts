@@ -27,13 +27,9 @@ export { SymbolValue  } from './lib';
 // Interface.
 export type {
   DataConstructor,
-  MapTypeConstructor,
-  SetTypeConstructor,
-  WeakMapTypeConstructor
 } from './interface';
 
 // Type.
 export type {
   DataConstructorInput,
-  ImmutableArray,
 } from './type';
