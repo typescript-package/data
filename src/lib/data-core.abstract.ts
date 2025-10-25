@@ -1,5 +1,7 @@
 // Abstract.
 import { Immutability } from './immutability.abstract';
+// Interface.
+import { DataShape } from '@typedly/data';
 /**
  * @description The base abstraction with immutability for handling data-related classes.
  * @export
@@ -8,7 +10,7 @@ import { Immutability } from './immutability.abstract';
  * @template Type Represents the type of data value.
  * @extends {Immutability}
  */
-export abstract class DataCore<Type> extends Immutability {
+export abstract class DataCore<Type> extends Immutability implements DataShape<Type> {
   /**
    * @description Returns the `string` tag representation of the `DataCore` class when used in `Object.prototype.toString.call(instance)`.
    * @public
