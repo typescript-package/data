@@ -8,8 +8,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "devDependencies": {},
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@typedly/data": "^1.0.0"
+  },
   "scripts": {
     "prepublishOnly": "npm run pkg && npm run clean",
     "pkg": "npm pkg delete dependencies",
