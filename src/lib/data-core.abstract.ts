@@ -161,20 +161,20 @@ export abstract class DataCore<T>
    * @description Sets the callback function invoked when the data value changes.
    * @public
    * @abstract
-   * @param {(value: T, oldValue: T) => T} callbackfn The callback function to invoke.
+   * @param {?(value: T, oldValue: T) => T} callbackfn The callback function to invoke.
    * @returns {this} The `this` current instance.
    */
-  public onChange(callbackfn: (value: T, oldValue: T) => T): this {
+  public onChange(callbackfn?: (value: T, oldValue: T) => T): this {
     return this.#onChangeCallback = callbackfn, this;
   }
 
   /**
    * @description Sets the callback function to be invoked when destroying the data instance.
    * @public
-   * @param {() => void} callbackfn 
+   * @param {?() => void} callbackfn 
    * @returns {this} 
    */
-  public onDestroy(callbackfn: () => void): this {
+  public onDestroy(callbackfn?: () => void): this {
     return this.#onDestroyCallback = callbackfn, this;
   }
 
@@ -182,10 +182,10 @@ export abstract class DataCore<T>
    * @description Sets the callback function to be invoked when setting the data value.
    * @public
    * @abstract
-   * @param {(value: T) => T} callbackfn The callback function to invoke.
+   * @param {?(value: T) => T} callbackfn The callback function to invoke.
    * @returns {this} The `this` current instance.
    */
-  public onSet(callbackfn: (value: T) => T): this {
+  public onSet(callbackfn?: (value: T) => T): this {
     return this.#onSetCallback = callbackfn, this;
   }
 
