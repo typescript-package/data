@@ -131,8 +131,11 @@ export abstract class DataBase<
    * @returns {this} The `this` current instance.
    */
   public destroy(): this {
-    return this.onDestroyCallback?.(),
-      this.#value = null as unknown as T,
+    return this.#value = undefined as unknown as T,
+      this.onDestroyCallback?.(),
+      this.onChange(undefined),
+      this.onDestroy(undefined),
+      this.onSet(undefined),
       this;
   }
 
