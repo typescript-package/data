@@ -190,11 +190,30 @@ export abstract class DataCore<T>
   }
 
   /**
+   * @description Sets the value of `T` in arbitrary parameter array.
+   * @public
+   * @abstract
+   * @template {unknown[]} V The type of the values array.
+   * @param {...V} values The arbitrary values array of type `V`.
+   * @returns {this} 
+   */
+  public abstract set<V extends unknown[]>(...values: V): this;
+
+  /**
+   * @description Sets the value of `T` in arbitrary parameter.
+   * @public
+   * @abstract
+   * @param {...T[]} value Arbitrary number of values of type `T`.
+   * @returns {this} 
+   */
+  public abstract set(...value: T[]): this;
+
+  /**
    * @description Sets the data value. Ensure `super.validate()` is called before invoking this method.
    * @public
    * @abstract
    * @param {T} value The data value of `T` to set.
    * @returns {this} Returns `this` current instance.
-   */  
+   */
   public abstract set(value: T): this;
 }
