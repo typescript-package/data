@@ -1,15 +1,15 @@
 // Abstract.
 import { DataCore } from './data-core.abstract';
 /**
- * @description The `Data` class is a concrete class that wraps a value and provides methods for setting, retrieving, and destroying the value.
+ * @description The `DataBase` class is a base abstraction class that extends core adding functionality for managing data value.
  * @export
- * @class Data
+ * @class DataBase
  * @template T Type of the data value.
  * @extends {DataCore<T>}
  */
 export abstract class DataBase<T> extends DataCore<T> {
   /**
-   * @description Returns the `string` tag representation of the `Data` class when used in `Object.prototype.toString.call(instance)`.
+   * @description Returns the `string` tag representation of the `DataBase` class when used in `Object.prototype.toString.call(instance)`.
    * @public
    * @readonly
    * @type {string}
@@ -60,7 +60,7 @@ export abstract class DataBase<T> extends DataCore<T> {
   }
 
   /**
-   * @description Destroys the `Value` object by setting it to `null`.
+   * @description Destroys the value by setting it to `null`.
    * @public
    * @returns {this} The `this` current instance.
    */
