@@ -4,19 +4,37 @@ import { DataCore } from './data-core.abstract';
  * @description The `WeakData` class is a concrete class that stores data in a static `WeakMap`.
  * @export
  * @class WeakData
- * @template Type 
- * @extends {DataCore<Type>}
+ * @template T The type of the data value.
+ * @extends {DataCore<T>}
  */
-export class WeakData<Type> extends DataCore<Type> {
+export class WeakData<T> extends DataCore<T> {
+  /**
+   * @inheritdoc
+   * @public
+   * @readonly
+   * @type {string}
+   */
+  public static override toStringTag: string = 'WeakData';
+
+  /**
+   * @inheritdoc
+   * @public
+   * @readonly
+   * @type {string}
+   */
+  public override get [Symbol.toStringTag](): string {
+    return WeakData.toStringTag;
+  }
+
   /**
    * @description Returns a new `WeakData` instance with a given value.
    * @public
    * @static
-   * @template Type 
-   * @param {Type} value The value of `Type`.
-   * @returns {WeakData<Type>} Returns a new `WeakData` instance.
+   * @template T 
+   * @param {T} value The value of `T`.
+   * @returns {WeakData<T>} Returns a new `WeakData` instance.
    */
-  public static create<Type>(value: Type): WeakData<Type> {
+  public static create<T>(value: T): WeakData<T> {
     return new WeakData(value);
   }
 
@@ -24,70 +42,72 @@ export class WeakData<Type> extends DataCore<Type> {
    * @description Gets the data value from another instance.
    * @public
    * @static
-   * @template Type 
-   * @param {WeakData<Type>} instance Another instance from which to get the data.
-   * @returns {Type} The value of the data stored in the given instance.
+   * @template T 
+   * @param {WeakData<T>} instance Another instance from which to get the data.
+   * @returns {T | undefined} The value of the data stored in the given instance.
    */
-  public static get<Type>(instance: WeakData<Type>): Type {
-    return WeakData.#value.get(instance);
+  public static get<T>(instance: WeakData<T>): T  | undefined {
+    return WeakData.#valueOf<T>().get(instance);
   }
 
   /**
    * @description Checks whether the instance exists in the data.
    * @public
    * @static
-   * @template Type 
-   * @param {WeakData<Type>} instance The instance to check.
+   * @template T The type of the data value.
+   * @param {WeakData<T>} instance The instance to check.
    * @returns {boolean} "a boolean indicating whether an element with the specified key exists or not."
    */
-  public static has<Type>(instance: WeakData<Type>): boolean {
-    return WeakData.#value.has(instance);
+  public static has<T>(instance: WeakData<T>): boolean {
+    return WeakData.#valueOf<T>().has(instance);
   }
 
-  /**
-   * @description Returns the `string` tag representation of the `WeakData` class when used in `Object.prototype.toString.call(instance)`.
-   * @public
-   * @readonly
-   * @type {string}
-   */
-  public override get [Symbol.toStringTag](): string {
-    return WeakData.name;
-  }
-  
   /**
    * @description A static, privately stored `WeakMap` used for associating each instance with its value.
+   * @static
    * @readonly
-   * @type {WeakMap}
+   * @type {WeakMap<object, unknown>}
    */
-  static readonly #value: WeakMap<object, any> = new WeakMap();
+  static readonly #value: WeakMap<object, unknown> = new WeakMap<object, unknown>();
 
   /**
-   * @description Returns the readonly value of `Type` from static `WeakMap`.
+   * @description Returns the static `WeakMap` for storing values.
+   * @private
+   * @static
+   * @template T The type of the data value.
+   * @returns {WeakMap<WeakData<T>, T>} 
+   */
+  static #valueOf<T>(): WeakMap<WeakData<T>, T> {
+    return WeakData.#value as WeakMap<WeakData<T>, T>;
+  }
+
+  /**
+   * @description Returns the readonly value of `T` from static `WeakMap`.
    * @public
    * @readonly
-   * @type {Type} 
+   * @type {T} The value type.
    */
-  public get value(): Readonly<Type> {
-    return WeakData.#value.get(this);
+  public get value(): Readonly<T> {
+    return WeakData.#valueOf<T>().get(this) as Readonly<T>;
   }
 
   /**
    * Creates an instance of `WeakData`.
    * @constructor
-   * @param {Type} value Initial data value of `Type`.
+   * @param {T} value Initial data value of `T`.
    */  
-  constructor(value: Type) {
+  constructor(value: T) {
     super();
-    WeakData.#value.set(this, value);
+    WeakData.#valueOf<T>().set(this, value);
   }
 
   /**
    * @description
    * @public
-   * @returns {Type} 
+   * @returns {T} 
    */
-  public [Symbol.for('value')](): Readonly<Type> {
-    return this.value;
+  public [DataCore.valueSymbol](): WeakMap<WeakData<T>, T> {
+    return WeakData.#valueOf<T>();
   }
 
   /**
@@ -96,8 +116,7 @@ export class WeakData<Type> extends DataCore<Type> {
    * @returns {this} The `this` current instance.
    */
   public clear(): this {
-    WeakData.#value.set(this, null as unknown as Type);
-    return this;
+    return WeakData.#valueOf<T>().set(this, null as unknown as T), this;
   }
 
   /**
@@ -106,8 +125,7 @@ export class WeakData<Type> extends DataCore<Type> {
    * @returns {this} The `this` current instance.
    */
   public delete(): this {
-    WeakData.#value.delete(this);
-    return this;
+    return WeakData.#valueOf<T>().delete(this), this;
   }
 
   /**
@@ -116,29 +134,32 @@ export class WeakData<Type> extends DataCore<Type> {
    * @returns {this} The `this` current instance.
    */
   public destroy(): this {
-    this.clear().delete();
-    return this;
+    return this.clear().delete(), this;
   }
 
   /**
    * @description Sets the data value in a static `WeakMap`.
    * @public
-   * @param {Type} value The data of `Type` to set.
+   * @param {T} value The data of `T` to set.
    * @returns {this} The `this` current instance.
    */ 
-  public set(value: Type): this {
-    super.validate();
-    WeakData.#value.set(this, value);
-    return this;
+  public set(value: T): this {
+    let newValue: T;
+    return super.validate(),
+      (newValue = super.onSetCallback ? super.onSetCallback(value) : value),
+      // Invokes the onChange callback if `newValue` and `this.value` has changed.
+      (this.onChangeCallback && DataCore.hasChanged(this.value, newValue) ? this.onChangeCallback(newValue, this.value) : newValue),
+      WeakData.#valueOf<T>().set(this, newValue),
+      this;
   }
 
   /**
    * @description Applies the callback to the current value and updates it.
    * @public
-   * @param {(value: Type) => Type} callbackFn The callback to apply to the value.
+   * @param {(value: T) => T} callbackFn The callback to apply to the value.
    * @returns {this} The `this` current instance.
    */
-  public update(callbackFn: (value: Type) => Type): this {
+  public update(callbackFn: (value: T) => T): this {
     if (typeof callbackFn === 'function') {
       this.set(callbackFn(this.value));
     } else {
@@ -148,12 +169,12 @@ export class WeakData<Type> extends DataCore<Type> {
   }
 
   /**
-   * @description Creates a new instance with a new value of `Type`.
+   * @description Creates a new instance with a new value of `T`.
    * @public
-   * @param {Type} value The value of `Type`.
-   * @returns {WeakData<Type>} Returns a `WeakData` instance with value of `Type`.
+   * @param {T} value The value of `T`.
+   * @returns {WeakData<T>} Returns a `WeakData` instance with value of `T`.
    */
-  public with(value: Type): WeakData<Type> {
+  public with(value: T): WeakData<T> {
     return WeakData.create(value);
   }
 }
