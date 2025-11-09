@@ -1,13 +1,21 @@
 // Class.
 import { Data } from './data.class';
 /**
- * @description 
+ * @description The `ReadonlyData` class is a concrete class that wraps a read-only value and provides methods for retrieving the value.
  * @export
  * @class ReadonlyData
- * @template Type 
- * @extends {Data<Readonly<Type>>}
+ * @template T The value type.
+ * @extends {Data<Readonly<T>>}
  */
-export class ReadonlyData<Type> extends Data<Readonly<Type>> {
+export class ReadonlyData<T> extends Data<Readonly<T>> {
+  /**
+   * @inheritdoc
+   * @public
+   * @readonly
+   * @type {string}
+   */
+  public static override toStringTag: string = 'ReadonlyData';
+
   /**
    * @inheritdoc
    * @public
@@ -15,6 +23,6 @@ export class ReadonlyData<Type> extends Data<Readonly<Type>> {
    * @type {string}
    */
   public override get [Symbol.toStringTag](): string {
-    return ReadonlyData.name;
+    return ReadonlyData.toStringTag;
   }
 }
