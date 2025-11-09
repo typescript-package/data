@@ -7,36 +7,44 @@ import { ReadonlyData } from './readonly-data.class';
  * The value is frozen at runtime and marked as `readonly` at type level.
  * @export
  * @class ImmutableData
- * @template Type The original input type.
- * @extends {ReadonlyData<Type>}
+ * @template T The original input type.
+ * @extends {ReadonlyData<T>}
  */
-export class ImmutableData<Type> extends ReadonlyData<Type> {
+export class ImmutableData<T> extends ReadonlyData<T> {
   /**
-   * @description Returns the `string` tag representation of the `ImmutableData` class when used in `Object.prototype.toString.call(instance)`.
+   * @inheritdoc
+   * @public
+   * @readonly
+   * @type {string}
+   */
+  public static override toStringTag: string = 'ImmutableData';
+
+  /**
+   * @inheritdoc
    * @public
    * @readonly
    * @type {string}
    */
   public override get [Symbol.toStringTag](): string {
-    return ImmutableData.name;
+    return ImmutableData.toStringTag;
   }
 
   /**
    * Creates an instance of `ImmutableData`.
    * @constructor
-   * @param {Type} value Initial value to store.
+   * @param {T} value Initial value to store.
    */
-  constructor(value: Type) {
+  constructor(value: T) {
     super(Immutability.deepFreeze(value));
   }
 
   /**
    * @description Sets the data value.
    * @public
-   * @param {Type} value The data value of `Type` to set.
+   * @param {T} value The data value of `Type` to set.
    * @returns {this} The `this` current instance.
    */
-  public override set(value: Type): this {
+  public override set(value: T): this {
     return super.set(Immutability.deepFreeze(value));
   }
 }
