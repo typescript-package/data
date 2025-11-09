@@ -4,7 +4,7 @@ import { DataBase } from './data-base.abstract';
  * @description The `Data` class is a concrete class that wraps a value and provides methods for setting, retrieving, and destroying the value.
  * @export
  * @class Data
- * @template T 
+ * @template T The type of the data value.
  * @extends {DataCore<T>}
  */
 export class Data<T> extends DataBase<T> {
