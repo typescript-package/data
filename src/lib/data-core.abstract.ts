@@ -1,5 +1,5 @@
 // Abstract.
-import { Immutability } from './immutability.abstract';
+import { HooksBase } from './hooks-base.abstract';
 // Interface.
 import { DataShape } from '@typedly/data';
 /**
@@ -8,12 +8,12 @@ import { DataShape } from '@typedly/data';
  * @abstract
  * @class DataCore
  * @template T Represents the type of data value.
- * @extends {Immutability}
+ * @extends {HooksBase<T>}
  * @implements {DataShape<T>}
  */
 export abstract class DataCore<T>
-  // For immutability features.
-  extends Immutability
+  // For immutability and hooks features.
+  extends HooksBase<T>
   // For data shape contract, to use instead of `DataCore`.
   implements DataShape<T> {
   /**
@@ -82,53 +82,7 @@ export abstract class DataCore<T>
    */
   public abstract get value(): T;
 
-  /**
-   * @description Returns the onChange callback function.
-   * @protected
-   * @readonly
-   * @type {((value: T, oldValue: T) => T) | undefined}
-   */
-  protected get onChangeCallback(): ((value: T, oldValue: T) => T) | undefined {
-    return this.#onChangeCallback;
-  }
 
-  /**
-   * @description Returns the onDestroy callback function.
-   * @protected
-   * @readonly
-   * @type {(() => void) | undefined}
-   */
-  protected get onDestroyCallback(): (() => void) | undefined {
-    return this.#onDestroyCallback;
-  }
-
-  /**
-   * @description Returns the onSet callback function.
-   * @protected
-   * @readonly
-   * @type {((value: T) => T) | undefined}
-   */
-  protected get onSetCallback(): ((value: T) => T) | undefined {
-    return this.#onSetCallback;
-  }
-
-  /**
-   * @description Privately stored onChange callback function, defaults `undefined`.
-   * @type {?(value: T, oldValue: T) => T}
-   */
-  #onChangeCallback?: (value: T, oldValue: T) => T;
-
-  /**
-   * @description Privately stored onDestroy callback function, defaults `undefined`.
-   * @type {?() => void}
-   */
-  #onDestroyCallback?: () => void;
-
-  /**
-   * @description Privately stored onSet callback function, defaults `undefined`.
-   * @type {?(value: T) => T}
-   */
-  #onSetCallback?: (value: T) => T;
 
   /**
    * @description Clears the value by setting to `undefined` or `null`.
@@ -152,41 +106,9 @@ export abstract class DataCore<T>
    * @returns {this} 
    */
   public override lock(): this {
-    return Immutability.deepFreeze(this.value),
+    return HooksBase.deepFreeze(this.value),
       super.lock(),
       this;
-  }
-
-  /**
-   * @description Sets the callback function invoked when the data value changes.
-   * @public
-   * @abstract
-   * @param {?(value: T, oldValue: T) => T} callbackfn The callback function to invoke.
-   * @returns {this} The `this` current instance.
-   */
-  public onChange(callbackfn?: (value: T, oldValue: T) => T): this {
-    return this.#onChangeCallback = callbackfn, this;
-  }
-
-  /**
-   * @description Sets the callback function to be invoked when destroying the data instance.
-   * @public
-   * @param {?() => void} callbackfn 
-   * @returns {this} 
-   */
-  public onDestroy(callbackfn?: () => void): this {
-    return this.#onDestroyCallback = callbackfn, this;
-  }
-
-  /**
-   * @description Sets the callback function to be invoked when setting the data value.
-   * @public
-   * @abstract
-   * @param {?(value: T) => T} callbackfn The callback function to invoke.
-   * @returns {this} The `this` current instance.
-   */
-  public onSet(callbackfn?: (value: T) => T): this {
-    return this.#onSetCallback = callbackfn, this;
   }
 
   /**

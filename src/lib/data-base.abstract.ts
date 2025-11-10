@@ -52,11 +52,12 @@ export abstract class DataBase<T> extends DataCore<T> {
   public clear(): this {
     const oldValue = this.value;
     const newValue = null as unknown as T;
-    return this.#value = null as unknown as T,
-      // Invokes the onChange callback if `newValue` and `this.value` has changed.
-      (typeof this.onChangeCallback === 'function' && DataBase.hasChanged(oldValue, newValue)
-        ? this.onChangeCallback(newValue, this.value) : newValue),
-      this;
+    this.#value = null as unknown as T;
+    // Invokes the onChange callback if `newValue` and `this.value` has changed.
+    if (typeof this.onChangeCallback === 'function' && DataBase.hasChanged(oldValue, newValue)) {
+      this.onChangeCallback(newValue, oldValue);
+    }
+    return this;
   }
 
   /**
@@ -80,17 +81,19 @@ export abstract class DataBase<T> extends DataCore<T> {
    * @returns {this} The `this` current instance.
    */
   public set(value: T): this {
+    super.validate();
     const oldValue = this.value;
-    let newValue: T;
-    return super.validate(),
-      // Assigns the new value.
-      (newValue = typeof super.onSetCallback === 'function' ? super.onSetCallback(value) : value),
-      // Assigns the new value to the private value.
-      (this.#value = newValue),
-      // Invokes the onChange callback if `newValue` and `this.value` has changed.
-      (typeof this.onChangeCallback === 'function' && DataBase.hasChanged(oldValue, newValue)
-        ? this.onChangeCallback(newValue, this.value) : newValue),
-      // Returns this instance.
-      this;
+    // Invoke onSet callback before setting the value.
+    if (typeof super.onSetCallback === 'function') {
+      super.onSetCallback(value);
+    }
+    // Assign the new value to the private value.
+    this.#value = value;
+    // Invokes the onChange callback if the value has changed.
+    if (typeof this.onChangeCallback === 'function' && DataBase.hasChanged(oldValue, value)) {
+      this.onChangeCallback(value, oldValue);
+    }
+    // Returns this instance.
+    return this;
   }
 }
