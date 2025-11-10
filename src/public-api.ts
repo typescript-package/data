@@ -4,6 +4,8 @@
 export {
   // Abstract.
   DataCore,
+  HooksBase,
+  HooksCore,
   Immutability,
 
   // Class.

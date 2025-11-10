@@ -144,13 +144,19 @@ export class WeakData<T> extends DataCore<T> {
    * @returns {this} The `this` current instance.
    */ 
   public set(value: T): this {
-    let newValue: T;
-    return super.validate(),
-      (newValue = super.onSetCallback ? super.onSetCallback(value) : value),
-      // Invokes the onChange callback if `newValue` and `this.value` has changed.
-      (this.onChangeCallback && DataCore.hasChanged(this.value, newValue) ? this.onChangeCallback(newValue, this.value) : newValue),
-      WeakData.#valueOf<T>().set(this, newValue),
-      this;
+    super.validate();
+    const oldValue = this.value;
+    // Invoke onSet callback before setting the value.
+    if (super.onSetCallback) {
+      super.onSetCallback(value);
+    }
+    // Set the new value.
+    WeakData.#valueOf<T>().set(this, value);
+    // Invokes the onChange callback if the value has changed.
+    if (this.onChangeCallback && DataCore.hasChanged(oldValue, value)) {
+      this.onChangeCallback(value, oldValue);
+    }
+    return this;
   }
 
   /**

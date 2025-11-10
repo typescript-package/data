@@ -1,5 +1,7 @@
 // Abstract class.
 export { DataCore } from './data-core.abstract';
+export { HooksBase } from './hooks-base.abstract';
+export { HooksCore } from './hooks-core.abstract';
 export { Immutability } from './immutability.abstract';
 // Class.
 export { Data } from './data.class';
