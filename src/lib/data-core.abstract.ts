@@ -1,5 +1,6 @@
 // Abstract.
 import { HooksBase } from './hooks-base.abstract';
+import { Immutability } from './immutability.abstract';
 // Interface.
 import { DataShape } from '@typedly/data';
 /**
@@ -106,7 +107,7 @@ export abstract class DataCore<T>
    * @returns {this} 
    */
   public override lock(): this {
-    return HooksBase.deepFreeze(this.value),
+    return Immutability.deepFreeze(this.value),
       super.lock(),
       this;
   }
