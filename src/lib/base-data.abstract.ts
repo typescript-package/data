@@ -21,7 +21,7 @@ export abstract class BaseData<
   A extends DataAdapter<T, R> = DataAdapter<T, R>,
 > extends DataCore<T, R> {
   /**
-   * @description Returns the `string` tag representation of the `Data` class when used in `Object.prototype.toString.call(instance)`.
+   * @description Returns the `string` tag representation of the `BaseData` class when used in `Object.prototype.toString.call(instance)`.
    * @public
    * @readonly
    * @type {string}
@@ -57,7 +57,7 @@ export abstract class BaseData<
   #adapter?: A;
 
   /**
-   * @description Privately stored value of class `T`.
+   * @description Privately stored value of type `T`.
    * @type {T}
    */
   #value?: T;
@@ -78,7 +78,7 @@ export abstract class BaseData<
   }
 
   /**
-   * @description Clears the value to `null`.
+   * @description Clears the value to `undefined`.
    * @public
    * @returns {AsyncReturn<R, this>} The `this` current instance.
    */
