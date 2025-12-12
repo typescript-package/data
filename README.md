@@ -6,7 +6,7 @@
   />
 </a>
 
-## typescript-package/data
+## @typescript-package/data
 
 <!-- npm badge -->
 [![npm version][typescript-package-npm-badge-svg]][typescript-package-npm-badge]
@@ -20,16 +20,11 @@ A lightweight **TypeScript** library for basic data management.
 - [Installation](#installation)
 - [Api](#api)
   - Abstract
-    - [`Immutability`](#immutability)
+    - [`BaseData`](#basedata)
     - [`DataCore`](#datacore)
+    - [`Immutability`](#immutability)
   - Base
     - [`Data`](#data)
-    - [`Value`](#value)
-    - [`ImmutableData`](#immutabledata)
-    - [`ReadonlyData`](#readonlydata)
-  - WeakData
-    - [`IndexedWeakData`](#indexedweakdata)
-    - [`WeakData`](#weakdata)
 - [Immutability](#immutability)
   - [Sealed](#sealed)
   - [Frozen](#frozen)
@@ -41,13 +36,6 @@ A lightweight **TypeScript** library for basic data management.
   - [Commit](#commit)
   - [Versioning](#versioning)
 - [License](#license)
-
-## 📦 Related Packages
-
-| Package                   | Description                                       |
-|---------------------------|---------------------------------------------------|
-| [`@typescript-package/map`](https://github.com/typescript-package/map) | A lightweight **TypeScript** library for enhanced `map` management. |
-| [`@typescript-package/set`](https://github.com/typescript-package/set) | A lightweight **TypeScript** library for enhanced `set` management. |
 
 ## Installation
 
@@ -62,50 +50,31 @@ Base.
 ```typescript
 import {
   // Abstract.
+  BaseData,
   DataCore,
   Immutability,
-
   // Class.
   Data,
-  ImmutableData,
-  ReadonlyData,
-  Value,
-
-  // `WeakData`.
-  NamedWeakData,
-  // Indexed.
-  IndexedWeakData,
-  // Basic.
-  WeakData,
-} from '@typescript-package/data';
-```
-
-Constant
-
-```typescript
-// Constant.
-import { SymbolValue  } from '@typescript-package/data';
-```
-
-Interface
-
-```typescript
-// Interface.
-import {
-  DataConstructor,
-} from '@typescript-package/data';
-```
-
-Type
-
-```typescript
-// Type.
-import {
-  DataConstructorInput,
 } from '@typescript-package/data';
 ```
 
 ### Abstract
+
+### `BaseData`
+
+The `BaseData` class is an abstract class that extends core adding functionality for managing data value, also by adapter.
+
+```typescript
+import { BaseData } from '@typescript-package/data';
+```
+
+### `DataCore`
+
+The **core** abstraction with immutability for handling data-related classes.
+
+```typescript
+import { DataCore } from '@typescript-package/data';
+```
 
 ### `Immutability`
 
@@ -113,14 +82,6 @@ Manages the immutability states of `this` current instance.
 
 ```typescript
 import { Immutability } from '@typescript-package/data';
-```
-
-### `DataCore`
-
-The base abstraction with immutability for handling data-related classes.
-
-```typescript
-import { DataCore } from '@typescript-package/data';
 ```
 
 ### Base
@@ -153,108 +114,6 @@ data.destroy();
 console.log(data.value); // Throws error or undefined (based on how it's handled)
 ```
 
-### `Value`
-
-The class to manage the value of generic type variable `Type`.
-
-```typescript
-import { Value } from '@typescript-package/data';
-
-// Create a Value instance to hold a number
-const numValue = new Value<number>(10);
-
-console.log(numValue.value); // ➝ 10
-console.log(numValue.tag);   // ➝ "Value"
-
-// Update the stored number
-numValue.set(42);
-
-console.log(numValue.value); // ➝ 42
-```
-
-### `ImmutableData`
-
-```typescript
-import { ImmutableData } from '@typescript-package/data';
-
-const immutableData = new ImmutableData(['string', 27, false]);
-
-// immutableData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
-try {
-  (immutableData.value[0] as any) = 'new string' // Cannot assign to read only property '0' of object '[object Array]'
-} catch(e) {}
-
-console.debug(`immutableData.value: `, immutableData.value); // ➝ ['string', 27, false]
-```
-
-### `ReadonlyData`
-
-```typescript
-import { ReadonlyData } from '@typescript-package/data';
-
-let readonlyData = new ReadonlyData(['string', 27, false]);
-
-console.log(`readonlyData: `, readonlyData);
-
-// readonlyData.value[0] = 'new string'; // Cannot assign to '0' because it is a read-only property.
-(readonlyData.value[0] as any) = 'new string' // Can assign with using `any`.
-
-console.log(`readonlyData.value: `, readonlyData.value); // ➝ ['new string', 27, false]
-```
-
-### WeakData
-
-### `IndexedWeakData`
-
-```typescript
-import { IndexedWeakData } from '@typescript-package/data';
-
-// Create an interface.
-export interface Profile {
-  id: number,
-  age: number;
-  score: number;
-}
-
-// Initialize multiple instances of `IndexedWeakData`.
-export const profileData1 = new IndexedWeakData({ id: 1, age: 27, score: 1100 } as Profile, 'id');
-export const profileData2 = new IndexedWeakData({ id: 2, age: 127, score: 1200 } as Profile, 'id');
-export const profileData3 = new IndexedWeakData({ id: 3, age: 227, score: 1300 } as Profile, 'id');
-export const profileData4 = new IndexedWeakData({ id: 4, age: 327, score: 1400 } as Profile, 'id');
-
-// Get the value by using index.
-console.log(`profileData1: `, profileData1.getByIndex(1)); // ➝ {id: 1, age: 27, score: 1100}
-console.log(`profileData3: `, profileData3.getByIndex(3)); // ➝ {id: 3, age: 227, score: 1300}
-```
-
-### `WeakData`
-
-The `WeakData` class is a concrete class that stores data in a static `WeakMap`.
-
-```typescript
-import { WeakData } from '@typescript-package/data';
-
-// Example subclass of WeakData
-export class StringWeakData extends WeakData<string> {
-  constructor(value: string) {
-    super(value);
-  }
-}
-
-// Create a new instance of StringWeakData
-export const data = new StringWeakData("Hello, world!");
-
-// Access the current value
-console.log(data.value); // ➝ Hello, world!
-
-// Update the value
-data.set("New value");
-console.log(data.value); // ➝ New value
-
-// Destroy the value
-data.destroy();
-```
-
 ## Immutability
 
 ### Sealed
@@ -284,6 +143,17 @@ Support via:
 
 - [Stripe](https://donate.stripe.com/dR614hfDZcJE3wAcMM)
 - [Revolut](https://checkout.revolut.com/pay/048b10a3-0e10-42c8-a917-e3e9cb4c8e29)
+- [GitHub](https://github.com/sponsors/angular-package/sponsorships?sponsor=sciborrudnicki&tier_id=83618)
+- [DonorBox](https://donorbox.org/become-a-sponsor-to-the-angular-package?default_interval=o)
+- [Patreon](https://www.patreon.com/checkout/angularpackage?rid=0&fan_landing=true&view_as=public)
+
+or via Trust Wallet
+
+- [XLM](https://link.trustwallet.com/send?coin=148&address=GAFFFB7H3LG42O6JA63FJDRK4PP4JCNEOPHLGLLFH625X2KFYQ4UYVM4)
+- [USDT (BEP20)](https://link.trustwallet.com/send?coin=20000714&address=0xA0c22A2bc7E37C1d5992dFDFFeD5E6f9298E1b94&token_id=0x55d398326f99059fF775485246999027B3197955)
+- [ETH](https://link.trustwallet.com/send?coin=60&address=0xA0c22A2bc7E37C1d5992dFDFFeD5E6f9298E1b94)
+- [BTC](https://link.trustwallet.com/send?coin=0&address=bc1qnf709336tfl57ta5mfkf4t9fndhx7agxvv9svn)
+- [BNB](https://link.trustwallet.com/send?coin=20000714&address=0xA0c22A2bc7E37C1d5992dFDFFeD5E6f9298E1b94)
 
 Thanks for your support!
 
@@ -323,6 +193,15 @@ How do I know when to release 1.0.0?
 ## License
 
 MIT © typescript-package ([license][typescript-package-license])
+
+## 📦 Related Packages
+
+| Package                   | Description                                       |
+|---------------------------|---------------------------------------------------|
+| [`@typescript-package/async-data`](https://github.com/typescript-package/async-data) | A lightweight **TypeScript** library for basic asynchronous data management. |
+| [`@typescript-package/map`](https://github.com/typescript-package/map) | A lightweight **TypeScript** library for enhanced `map` management. |
+| [`@typescript-package/set`](https://github.com/typescript-package/set) | A lightweight **TypeScript** library for enhanced `set` management. |
+| [`@typescript-package/weak-data`](https://github.com/typescript-package/weak-data) | A lightweight **TypeScript** library for basic weak data management. |
 
 ## Packages
 
