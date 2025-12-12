@@ -199,6 +199,7 @@ MIT © typescript-package ([license][typescript-package-license])
 | Package                   | Description                                       |
 |---------------------------|---------------------------------------------------|
 | [`@typescript-package/async-data`](https://github.com/typescript-package/async-data) | A lightweight **TypeScript** library for basic asynchronous data management. |
+| [`@typescript-package/immutable-data`](https://github.com/typescript-package/immutable-data) | A lightweight **TypeScript** library for immutable data management. |
 | [`@typescript-package/map`](https://github.com/typescript-package/map) | A lightweight **TypeScript** library for enhanced `map` management. |
 | [`@typescript-package/set`](https://github.com/typescript-package/set) | A lightweight **TypeScript** library for enhanced `set` management. |
 | [`@typescript-package/weak-data`](https://github.com/typescript-package/weak-data) | A lightweight **TypeScript** library for basic weak data management. |
