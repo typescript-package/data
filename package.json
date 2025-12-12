@@ -1,6 +1,6 @@
 {
   "name": "@typescript-package/data",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "author": "wwwdev.io <dev@wwwdev.io>",
   "description": "A lightweight TypeScript library for basic data management.",
   "license": "MIT",
@@ -8,8 +8,19 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "devDependencies": {},
-  "peerDependencies": {},
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "jiti": "^2.6.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.3"
+  },
+  "peerDependencies": {
+    "@typedly/data": "^3.0.0"
+  },
   "scripts": {
     "prepublishOnly": "npm run pkg && npm run clean",
     "pkg": "npm pkg delete dependencies",
@@ -25,11 +36,14 @@
   "keywords": [
     "@typescript-package",
     "@typescript-package/data",
+    "Data management",
+    "TypeScript",
+    "Library",
+    "Package",
+    "BaseData",
+    "DataCore",
     "Data",
-    "Immutability",
-    "IndexedWeakData",
-    "Value",
-    "WeakData"
+    "Immutability"
   ],
   "funding": [
     {

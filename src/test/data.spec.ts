@@ -1,13 +1,29 @@
+import { ValueShape } from "@typedly/data";
 import { Data } from "../lib";
 
+export class ProfileFullName<T extends string> extends String implements ValueShape<T> {
+  value: T = 'Mark Twain' as T;
+  constructor(value: T) {
+    super(value);
+  }
+  set(value: T): this {
+    return this.validate(value) && (this.value = value), this;
+  }
+  validate(value: T): boolean {
+    return typeof value === 'string' && value.length > 0 && value.includes(' ');
+  }
+}
+
+
 // Example subclass of Data
-export class StringData extends Data<string> {
-  constructor(value: string) {
+export class StringData<Value extends string> extends Data<Value> {
+  constructor(value: Value) {
     super(value);
   }
 }
 
-export const data = new StringData("Hello, world!");
+export const data = new StringData("Hello, world!" as string);
+
 
 console.group(`Value`);
 
@@ -27,7 +43,7 @@ console.log(data.value); // Output: New value
 // Destroy the value
 data.destroy();
 try {
-  data.value; // Throws error or undefined (based on how it's handled)
+  console.log(data.value); // Throws error or undefined (based on how it's handled)
 } catch(e) {
   console.log(e);
 }
@@ -36,10 +52,10 @@ console.groupEnd();
 
 
 describe('Data', () => {
-  let instance: Data<any>;
+  let instance: Data<object>;
 
   beforeEach(() => {
-    instance = new Data({ test: 'initial' });
+    instance = new Data({ test: 'initial' } as object);
   });
 
   it('should have correct toStringTag', () => {
@@ -56,15 +72,18 @@ describe('Data', () => {
     expect(instance.value).toEqual(newValue);
   });
 
-  it('should clear the value (set to null)', () => {
+  it('should clear the value (set to undefined)', () => {
     instance.clear();
-    expect(instance.value).toBeNull();
+    expect(instance.value).toBeUndefined();
   });
 
   it('should destroy the internal value reference', () => {
     instance.destroy();
     // After destroy, instance.value will likely throw or be undefined.
-    expect(() => instance.value).toThrowError();
+    console.log(instance);
+    expect(instance.value).toBeNull();
+    instance.set({ updated: true });
+    console.log(instance.set);
   });
 
   it('should return itself after set, clear, destroy', () => {
@@ -74,7 +93,6 @@ describe('Data', () => {
     expect(instance.destroy()).toBe(instance);
   });
 });
-
 
 // Array.
 // const t: readonly [number] = [27];

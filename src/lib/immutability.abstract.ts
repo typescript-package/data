@@ -13,7 +13,7 @@ export abstract class Immutability {
    */
   public static deepFreeze<Type>(object: Type): Readonly<Type> {
     if (object && typeof object === "object" && !Object.isFrozen(object)) {
-      Object.getOwnPropertyNames(object).forEach(prop => Immutability.deepFreeze((object as any)[prop]));
+      Object.getOwnPropertyNames(object).forEach(prop => Immutability.deepFreeze((object as { [key: string]: unknown })[prop]));
       Object.freeze(object);
     }
     return object;
@@ -134,9 +134,9 @@ export abstract class Immutability {
    * @returns {this} Returns current instance.
    */
   public lock(): this {
-    Immutability.deepFreeze(this);
-    this.#locked = true;
-    return this;
+    return Immutability.deepFreeze(this),
+      this.#locked = true,
+      this;
   }
 
   /**
@@ -148,8 +148,7 @@ export abstract class Immutability {
     if (this.isLocked()) {
       throw new Error('Cannot seal a locked object.');
     }
-    Object.seal(this);
-    return this;
+    return Object.seal(this), this;
   }
 
   /**
