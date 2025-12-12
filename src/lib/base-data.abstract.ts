@@ -7,12 +7,12 @@ import {
   DataAdapter
 } from '@typedly/data';
 /**
- * @description The `Data` class is a concrete class that extends core adding functionality for managing data value.
+ * @description The `BaseData` class is an abstract class that extends core adding functionality for managing data value, also by adapter.
  * @export
- * @class Data
+ * @class BaseData
  * @template T Type of the data value.
  * @template R Indicates if the data operations are asynchronous.
- * @template A Adapter type extending `DataAdapter` for handling the data value.
+ * @template A Adapter type extending `DataAdapter` for handling the data value with it.
  * @extends {DataCore<T>}
  */
 export abstract class BaseData<
