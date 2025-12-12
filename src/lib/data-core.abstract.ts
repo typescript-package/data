@@ -3,6 +3,7 @@ import { Immutability } from './immutability.abstract';
 import {
   // Type.
   AsyncReturn,
+  IterValue,
   // Interface.
   DataShape
 } from '@typedly/data';
@@ -35,19 +36,15 @@ export abstract class DataCore<T, Async extends boolean = false>
    * @static
    * @type {string}
    */
-  public static toStringTag = 'Data';
+  public static toStringTag = 'DataCore';
 
   /**
    * @description Checks whether the provided value implements the iterable interface.
    * @param {unknown} value The value to inspect.
    * @returns {value is Iterable<unknown>} True when value exposes an iterator function.
    */
-  private static isIterable(value: unknown): value is Iterable<unknown> {
-    if (value == null) {
-      return false;
-    }
-
-    return typeof (value as { [Symbol.iterator]?: unknown })[Symbol.iterator] === 'function';
+  public static isIterable(value: unknown): value is Iterable<unknown> {
+    return value != null && typeof (value as { [Symbol.iterator]?: unknown })[Symbol.iterator] === 'function';
   }
 
   /**
@@ -139,12 +136,10 @@ export abstract class DataCore<T, Async extends boolean = false>
    * @public
    * @returns {IterableIterator<T>} 
    */
-  *[Symbol.iterator](): IterableIterator<T extends Iterable<infer U> ? U : T> {
+  *[Symbol.iterator](): IterableIterator<IterValue<T>> {
     const value = this.value;
-    if (DataCore.isIterable(value)) {
-      yield* value as Iterable<T extends Iterable<infer U> ? U : T>;
-    } else {
-      yield value as T extends Iterable<infer U> ? U : T;
-    }
+    DataCore.isIterable(value)
+      ? yield* value as Iterable<IterValue<T>>
+      : yield value as IterValue<T>;
   }
 }
