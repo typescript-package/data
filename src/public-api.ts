@@ -3,6 +3,7 @@
  */
 export {
   // Abstract.
+  AdapterData,
   BaseData,
   DataCore,
   Immutability,
