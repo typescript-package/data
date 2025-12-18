@@ -84,6 +84,9 @@ import { AdapterData } from '@typescript-package/data';
 
 The `BaseData` class is an abstract class that extends core adding functionality for managing data value, also by adapter.
 
+- It represents a data structure that can hold a value of type `T` and provides methods to manipulate and access that value.
+- The class supports the use of adapters for custom data handling and can operate in both synchronous and asynchronous modes based on the generic parameters provided.
+
 ```typescript
 import { BaseData } from '@typescript-package/data';
 ```
