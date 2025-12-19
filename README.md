@@ -56,8 +56,6 @@ npm install @typescript-package/data --save-peer
 
 ## Api
 
-Base.
-
 ```typescript
 import {
   // Abstract.
@@ -65,7 +63,7 @@ import {
   BaseData,
   DataCore,
   Immutability,
-  // Class.
+  // Concrete.
   Data,
 } from '@typescript-package/data';
 ```
@@ -74,21 +72,149 @@ import {
 
 ### `AdapterData`
 
-The abstract `AdapterData` class extends `DataCore` adding functionality for managing data value by adapter with arguments. Designed to create data containers of `T` type managed by adapters that require constructor arguments.
+The abstract `AdapterData` class extends `DataCore` adding functionality for managing data value by adapter with arbitrary arguments.
+Designed to create data containers managed by adapters that require constructor arguments.
 
 ```typescript
 import { AdapterData } from '@typescript-package/data';
+import { DataAdapter } from "@typedly/data";
+
+// Create example classes extending AdapterData
+export class AnyCollectionData<
+  T,
+  E = unknown,
+  R extends boolean = false,
+  A extends DataAdapter<T, R> | undefined = DataAdapter<T, R>,
+> extends AdapterData<T, E[], R, A> {
+  constructor(async: R, adapter: {new (...args: E[]): A},  ...elements: E[]) {
+    super(async, adapter, ...elements);
+  }
+}
+
+// Create the adapter implementation of `DataAdapter` interface.
+export class AnyCollectionAdapter<T> implements DataAdapter<Set<T>> {
+  #value: Set<T>;
+  constructor(...elements: T[]) {
+    this.#value = new Set(elements) as Set<T>;
+  }
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  set(value: Set<T>): this { this.#value = value; return this; }
+  get value(): Set<T> {
+    return this.#value;
+  }
+}
+
+// Create an instance of `AnyCollectionData`.
+// const anyCollectionData: AnyCollectionData<unknown, number, false, AnyCollectionAdapter<number>>
+const anyCollectionData = new AnyCollectionData(false, AnyCollectionAdapter, 1, 2, 3);
+
+anyCollectionData.adapter;
+
+// Another example class extending `AdapterData` but of specific `Set` type.
+export class SetCollectionData<
+  T,
+  G extends T[] = T[],
+  R extends boolean = false,
+  A extends DataAdapter<Set<T>, R> | undefined = DataAdapter<Set<T>, R>,
+> extends AdapterData<Set<T>, G, R, A> {
+  constructor(async: R, adapter: {new (...args: G): A},  ...elements: G) {
+    super(async, adapter, ...elements);
+  }
+}
+
+// Create the adapter implementation of `DataAdapter` interface for `Set` type.
+export class SetCollectionAdapter<T> implements DataAdapter<Set<T>> {
+  #value: Set<T>;
+  constructor(...elements: T[]) {
+    this.#value = new Set(elements) as Set<T>;
+  }
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  set(value: Set<T>): this { this.#value = value; return this; }
+  get value(): Set<T> {
+    return this.#value;
+  }
+}
+
+// Create a new instance of `SetCollectionData`.
+// const collectionData: CollectionData<unknown, [number, number, number], false, SetCollectionAdapter<number>>
+const setCollectionData = new SetCollectionData(false, SetCollectionAdapter, 1, 2, 3);
+
+// SetCollectionAdapter<number> | undefined
+setCollectionData.adapter;
+
 ```
 
 ### `BaseData`
 
-The `BaseData` class is an abstract class that extends core adding functionality for managing data value, also by adapter.
+The `BaseData` is an abstract class that extends core features, adding functionality for managing the data value directly or through the adapter.
 
 - It represents a data structure that can hold a value of type `T` and provides methods to manipulate and access that value.
 - The class supports the use of adapters for custom data handling and can operate in both synchronous and asynchronous modes based on the generic parameters provided.
 
 ```typescript
 import { BaseData } from '@typescript-package/data';
+import { DataAdapter } from "@typedly/data";
+
+// Create example classes extending `BaseData`.
+export class TestBaseData<
+  T,
+  G extends unknown[] = unknown[],
+  R extends boolean = false,
+  A extends DataAdapter<T, R> | undefined = undefined,
+  // C extends {new (...args: G): DataAdapter<T, R>} = {new (...args: G): DataAdapter<T, R>},
+> extends BaseData<
+  T,
+  G,
+  R,
+  A
+  // InstanceType<C>
+> {
+  constructor(
+    async: R,
+    value: T,
+    // adapter: C,
+    adapter: {new (value: T, ...args: G): A} | undefined,
+    ...args: G
+  ) {
+    super(
+      async,
+      value,
+      // adapter as unknown as new (value: T, ...args: G) => InstanceType<C>,
+      adapter,
+      ...args
+    );
+  }
+}
+
+// Create the adapter implementation of `DataAdapter` interface.
+export class SetAdapter<E, T extends Set<E>> implements DataAdapter<T, false> {
+  #value: T;
+  constructor(value?: Iterable<E>) {
+    this.#value = new Set(value) as T;
+  }
+  newMethod() {}
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  set(value: T): this { this.#value = value; return this; }
+  get value(): T {
+    return this.#value;
+  }
+}
+
+// const setData: TestBaseData<Set<string>, [], false, DataAdapter<Set<string>, false> | undefined>
+const setData = new TestBaseData(false, new Set('a'), SetAdapter);
+
+// Call new method.
+setData.adapter?.newMethod();
+
+// SetAdapter<unknown, Set<unknown>> | undefined
+setData.adapter
+
 ```
 
 ### `DataCore`
@@ -111,7 +237,7 @@ import { Immutability } from '@typescript-package/data';
 
 ### `Data`
 
-The `Data` class is a concrete class that extends the `BaseData` abstract class.
+The `Data` class is a concrete implementation that extends the `BaseData` abstract class, providing instantiable base functionality.
 
 ```typescript
 import { Data } from '@typescript-package/data';
