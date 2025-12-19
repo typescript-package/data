@@ -7,7 +7,7 @@ import {
 } from '@typedly/data';
 import { AdapterData } from './adapter-data.abstract';
 /**
- * @description The `BaseData` class is an abstract class that extends adapter to manage value of `T`, optionally wrapped by `adapter`.
+ * @description The `BaseData` is an abstract class that extends core features, adding functionality for managing the data value directly or through the adapter.
  * @export
  * @abstract
  * @class BaseData
