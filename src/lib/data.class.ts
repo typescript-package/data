@@ -3,7 +3,7 @@ import { BaseData } from './base-data.abstract';
 // Interface.
 import { DataAdapter } from '@typedly/data';
 /**
- * @description The `Data` class is a concrete class that extends the `BaseData` abstract class.
+ * @description The `Data` class is a concrete class that extends the `BaseData` abstract class for instantiate base functionality.
  * @public
  * @export
  * @class Data
