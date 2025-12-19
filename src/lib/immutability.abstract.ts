@@ -71,11 +71,8 @@ export abstract class Immutability {
    * @returns {this} Returns current instance.
    */
   public deepFreeze(): this {
-    if (this.isLocked()) {
-      throw new Error('Cannot freeze a locked object.');
-    }
-    Immutability.deepFreeze(this);
-    return this;
+    if (this.isLocked()) throw new Error('Cannot freeze a locked object.');
+    return Immutability.deepFreeze(this), this;
   }
 
   /**
@@ -87,8 +84,7 @@ export abstract class Immutability {
     if (this.isLocked()) {
       throw new Error('Cannot freeze a locked object.');
     }
-    Object.freeze(this);
-    return this;
+    return Object.freeze(this), this;
   }
 
   /**
@@ -145,9 +141,7 @@ export abstract class Immutability {
    * @returns {this} Returns current instance.
    */
   public seal(): this {
-    if (this.isLocked()) {
-      throw new Error('Cannot seal a locked object.');
-    }
+    if (this.isLocked()) throw new Error('Cannot seal a locked object.');
     return Object.seal(this), this;
   }
 
@@ -157,9 +151,7 @@ export abstract class Immutability {
    * @returns {this} Returns current instance.
    */
   protected validate(): this {
-    if (this.isLocked()) {
-      throw new Error('Cannot set when data is locked.');
-    }
+    if (this.isLocked()) throw new Error('Cannot set when data is locked.');
     return this;
   }
 }

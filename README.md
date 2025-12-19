@@ -15,15 +15,26 @@
 
 A lightweight **TypeScript** library for basic data management.
 
+## Features
+
+- **Shape:** The shape of all data objects as `interface`.
+- **Immutability:** Instance methods to freeze, seal, and lock to enforce the data immutability, or determine the state.
+- **Asynchronous:** Synchronous by default, supports switching to asynchronous via the generic variable `R` switchable by `async` param.
+- **Core:** The core abstract implementation build on shape providing standard mutation methods `clear`, `destroy`, and `set`.
+- **Adapter:** Extensible adapter abstraction for the pluggable adapters to customize data logic, hooks and side effects.
+- **Base:** The base abstraction layer combining adapter with direct value handling.
+- **Concrete**: Final concrete implementation to instantiate base functionality.
+
 ## Table of contents
 
 - [Installation](#installation)
 - [Api](#api)
   - Abstract
+    - [`AdapterData`](#adapterdata)
     - [`BaseData`](#basedata)
     - [`DataCore`](#datacore)
     - [`Immutability`](#immutability)
-  - Base
+  - Concrete
     - [`Data`](#data)
 - [Immutability](#immutability)
   - [Sealed](#sealed)
@@ -45,27 +56,165 @@ npm install @typescript-package/data --save-peer
 
 ## Api
 
-Base.
-
 ```typescript
 import {
   // Abstract.
+  AdapterData,
   BaseData,
   DataCore,
   Immutability,
-  // Class.
+  // Concrete.
   Data,
 } from '@typescript-package/data';
 ```
 
 ### Abstract
 
+### `AdapterData`
+
+The abstract `AdapterData` class extends `DataCore` adding functionality for managing data value by adapter with arbitrary arguments.
+Designed to create data containers managed by adapters that require constructor arguments.
+
+```typescript
+import { AdapterData } from '@typescript-package/data';
+import { DataAdapter } from "@typedly/data";
+
+// Create example classes extending AdapterData
+export class AnyCollectionData<
+  T,
+  E = unknown,
+  R extends boolean = false,
+  A extends DataAdapter<T, R> | undefined = DataAdapter<T, R>,
+> extends AdapterData<T, E[], R, A> {
+  constructor(async: R, adapter: {new (...args: E[]): A},  ...elements: E[]) {
+    super(async, adapter, ...elements);
+  }
+}
+
+// Create the adapter implementation of `DataAdapter` interface.
+export class AnyCollectionAdapter<T> implements DataAdapter<Set<T>> {
+  #value: Set<T>;
+  constructor(...elements: T[]) {
+    this.#value = new Set(elements) as Set<T>;
+  }
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  set(value: Set<T>): this { this.#value = value; return this; }
+  get value(): Set<T> {
+    return this.#value;
+  }
+}
+
+// Create an instance of `AnyCollectionData`.
+// const anyCollectionData: AnyCollectionData<unknown, number, false, AnyCollectionAdapter<number>>
+const anyCollectionData = new AnyCollectionData(false, AnyCollectionAdapter, 1, 2, 3);
+
+anyCollectionData.adapter;
+
+// Another example class extending `AdapterData` but of specific `Set` type.
+export class SetCollectionData<
+  T,
+  G extends T[] = T[],
+  R extends boolean = false,
+  A extends DataAdapter<Set<T>, R> | undefined = DataAdapter<Set<T>, R>,
+> extends AdapterData<Set<T>, G, R, A> {
+  constructor(async: R, adapter: {new (...args: G): A},  ...elements: G) {
+    super(async, adapter, ...elements);
+  }
+}
+
+// Create the adapter implementation of `DataAdapter` interface for `Set` type.
+export class SetCollectionAdapter<T> implements DataAdapter<Set<T>> {
+  #value: Set<T>;
+  constructor(...elements: T[]) {
+    this.#value = new Set(elements) as Set<T>;
+  }
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  set(value: Set<T>): this { this.#value = value; return this; }
+  get value(): Set<T> {
+    return this.#value;
+  }
+}
+
+// Create a new instance of `SetCollectionData`.
+// const collectionData: CollectionData<unknown, [number, number, number], false, SetCollectionAdapter<number>>
+const setCollectionData = new SetCollectionData(false, SetCollectionAdapter, 1, 2, 3);
+
+// SetCollectionAdapter<number> | undefined
+setCollectionData.adapter;
+
+```
+
 ### `BaseData`
 
-The `BaseData` class is an abstract class that extends core adding functionality for managing data value, also by adapter.
+The `BaseData` is an abstract class that extends core features, adding functionality for managing the data value directly or through the adapter.
+
+- It represents a data structure that can hold a value of type `T` and provides methods to manipulate and access that value.
+- The class supports the use of adapters for custom data handling and can operate in both synchronous and asynchronous modes based on the generic parameters provided.
 
 ```typescript
 import { BaseData } from '@typescript-package/data';
+import { DataAdapter } from "@typedly/data";
+
+// Create example classes extending `BaseData`.
+export class TestBaseData<
+  T,
+  G extends unknown[] = unknown[],
+  R extends boolean = false,
+  A extends DataAdapter<T, R> | undefined = undefined,
+  // C extends {new (...args: G): DataAdapter<T, R>} = {new (...args: G): DataAdapter<T, R>},
+> extends BaseData<
+  T,
+  G,
+  R,
+  A
+  // InstanceType<C>
+> {
+  constructor(
+    async: R,
+    value: T,
+    // adapter: C,
+    adapter: {new (value: T, ...args: G): A} | undefined,
+    ...args: G
+  ) {
+    super(
+      async,
+      value,
+      // adapter as unknown as new (value: T, ...args: G) => InstanceType<C>,
+      adapter,
+      ...args
+    );
+  }
+}
+
+// Create the adapter implementation of `DataAdapter` interface.
+export class SetAdapter<E, T extends Set<E>> implements DataAdapter<T, false> {
+  #value: T;
+  constructor(value?: Iterable<E>) {
+    this.#value = new Set(value) as T;
+  }
+  newMethod() {}
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  set(value: T): this { this.#value = value; return this; }
+  get value(): T {
+    return this.#value;
+  }
+}
+
+// const setData: TestBaseData<Set<string>, [], false, DataAdapter<Set<string>, false> | undefined>
+const setData = new TestBaseData(false, new Set('a'), SetAdapter);
+
+// Call new method.
+setData.adapter?.newMethod();
+
+// SetAdapter<unknown, Set<unknown>> | undefined
+setData.adapter
+
 ```
 
 ### `DataCore`
@@ -84,11 +233,11 @@ Manages the immutability states of `this` current instance.
 import { Immutability } from '@typescript-package/data';
 ```
 
-### Base
+### Concrete
 
 ### `Data`
 
-The `Data` class is a concrete class that wraps a value and provides methods for setting, retrieving, and destroying the value.
+The `Data` class is a concrete implementation that extends the `BaseData` abstract class, providing instantiable base functionality.
 
 ```typescript
 import { Data } from '@typescript-package/data';
@@ -96,22 +245,92 @@ import { Data } from '@typescript-package/data';
 // Example subclass of Data
 class StringData extends Data<string> {
   constructor(value: string) {
-    super(value);
+    super(false, value);
   }
 }
 
-const data = new StringData("Hello, world!");
+const stringData = new StringData("Hello, world!");
 
 // Access the current value
-console.log(data.value); // ➝ Hello, world!
+console.log(stringData.value); // ➝ Hello, world!
 
 // Update the value
-data.set("New value");
-console.log(data.value); // ➝ New value
+stringData.set("New value");
+console.log(stringData.value); // ➝ New value
 
 // Destroy the value
-data.destroy();
-console.log(data.value); // Throws error or undefined (based on how it's handled)
+stringData.destroy();
+console.log(stringData.value); // Throws error or undefined (based on how it's handled)
+```
+
+Example with adapter to handle the value with `onSet` hook.
+
+```typescript
+import { Data } from '@typescript-package/data';
+import { DataAdapter } from '@typedly/data';
+
+// Create the adapter implementation of `DataAdapter` interface.
+export class RxDataAdapter<
+  T = string,
+  G extends unknown[] = unknown[]
+> implements DataAdapter<T, false> {
+  #onSet: (value: T) => T = (value: T) => value;
+  #value: T;
+  constructor(value: T, ...args: G) {
+    this.#value = value || '' as T;
+    console.log(args);
+  }
+  // New method specific to this reactive adapter.
+  onSet(callbackfn: (value: T) => T): this { this.#onSet = callbackfn; return this; }
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  set(value: T): this { this.#value = this.#onSet(value); return this; }
+  get value(): T {
+    return this.#value;
+  }
+}
+
+// const data: Data<string, [], false, TestAdapter<string, []>>
+const data = new Data(false, 'Initial value' as string, RxDataAdapter);
+
+data.adapter?.onSet(value => `Reactive: ${value}`);
+data.set('New value'); // logs: 'Reactive: New value'
+```
+
+Example with asynchronous adapter.
+
+```typescript
+import { Data } from '@typescript-package/data';
+import { DataAdapter } from '@typedly/data';
+
+// Create the Async adapter implementation of `DataAdapter` interface.
+export class AsyncAdapter<
+  T = string,
+  G extends unknown[] = unknown[]
+> implements DataAdapter<T, true> {
+  #value: T;
+  constructor(value: T, ...args: G) {
+    this.#value = value || '' as T;
+    console.log(args);
+  }
+  async ready(): Promise<T> { return Promise.resolve(this.#value); }
+  async clear(): Promise<this> { return this; }
+  async destroy(): Promise<this> { return this; }
+  lock(): this { return this; }
+  async set(value: T): Promise<this> { this.#value = value; return this; }
+  get value(): T {
+    return this.#value;
+  }
+}
+
+// const asyncData: Data<string, [], true, AsyncAdapter<string, []>>
+const asyncData = new Data(true, 'Initial async value' as string, AsyncAdapter);
+
+asyncData.adapter?.ready().then(value => {
+  console.log('Async value:', value);
+});
+
 ```
 
 ## Immutability
