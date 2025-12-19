@@ -18,7 +18,7 @@ export class ProfileFullName<T extends string> extends String implements ValueSh
 // Example subclass of Data
 export class StringData<Value extends string> extends Data<Value> {
   constructor(value: Value) {
-    super(value);
+    super(false, value);
   }
 }
 
@@ -55,7 +55,7 @@ describe('Data', () => {
   let instance: Data<object>;
 
   beforeEach(() => {
-    instance = new Data({ test: 'initial' } as object);
+    instance = new Data(false, { test: 'initial' } as object);
   });
 
   it('should have correct toStringTag', () => {
