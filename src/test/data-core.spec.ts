@@ -25,7 +25,11 @@ class TestDataCore<T extends object> extends DataCore<T> implements DataShape<T>
     return this;
   }
 
-  public override set(value: T): this {
+  public getValue(): T {
+    return this.#value;
+  }
+
+  public setValue(value: T): this {
     super.validate(); // inherited method from Immutability
     this.#value = value;
     return this;
@@ -49,7 +53,7 @@ describe('DataCore', () => {
 
   it('should set a new value', () => {
     const newValue = { bar: 'baz' };
-    instance.set(newValue);
+    instance.setValue(newValue);
     expect(instance.value).toEqual(newValue);
   });
 
@@ -95,8 +99,12 @@ export class Selector<T> extends DataCore<T> {
     return this;
   }
 
+  public getValue(): T {
+    return this.#value;
+  }
+
   // Implement the overload
-  public set(...value: T[]): this {
+  public setValue(...value: T[]): this {
     this.#value = value[0];
     return this;
 
@@ -104,6 +112,5 @@ export class Selector<T> extends DataCore<T> {
 }
 
 const selector = new Selector('1', '2', '3');
-
-selector.set('2', '4', '5');
+selector.setValue('2', '4', '5');
 

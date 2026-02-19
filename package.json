@@ -19,7 +19,7 @@
     "typescript-eslint": "^8.46.3"
   },
   "peerDependencies": {
-    "@typedly/data": "^3.0.0"
+    "@typedly/data": "^4.0.0"
   },
   "scripts": {
     "prepublishOnly": "npm run pkg && npm run clean",

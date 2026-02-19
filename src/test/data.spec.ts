@@ -18,7 +18,7 @@ export class ProfileFullName<T extends string> extends String implements ValueSh
 // Example subclass of Data
 export class StringData<Value extends string> extends Data<Value> {
   constructor(value: Value) {
-    super(value);
+    super(false, value);
   }
 }
 
@@ -37,7 +37,7 @@ console.debug(`data.value: `, data.value); // Output: Hello, world!
 console.debug(`data.tag:`, data.tag); // Output: Data
 
 // Update the value
-data.set("New value");
+data.setValue("New value");
 console.log(data.value); // Output: New value
 
 // Destroy the value
@@ -55,7 +55,7 @@ describe('Data', () => {
   let instance: Data<object>;
 
   beforeEach(() => {
-    instance = new Data({ test: 'initial' } as object);
+    instance = new Data(false, { test: 'initial' } as object);
   });
 
   it('should have correct toStringTag', () => {
@@ -68,7 +68,7 @@ describe('Data', () => {
 
   it('should set a new value', () => {
     const newValue = { updated: true };
-    instance.set(newValue);
+    instance.setValue(newValue);
     expect(instance.value).toEqual(newValue);
   });
 
@@ -82,13 +82,13 @@ describe('Data', () => {
     // After destroy, instance.value will likely throw or be undefined.
     console.log(instance);
     expect(instance.value).toBeNull();
-    instance.set({ updated: true });
-    console.log(instance.set);
+    instance.setValue({ updated: true });
+    console.log(instance.setValue);
   });
 
   it('should return itself after set, clear, destroy', () => {
     const newValue = { x: 1 };
-    expect(instance.set(newValue)).toBe(instance);
+    expect(instance.setValue(newValue)).toBe(instance);
     expect(instance.clear()).toBe(instance);
     expect(instance.destroy()).toBe(instance);
   });
@@ -96,7 +96,7 @@ describe('Data', () => {
 
 // Array.
 // const t: readonly [number] = [27];
-// new Data([22]).set(t).value; // The `Readonly` in the `set` method param `value` allows to set.
+// new Data([22]).setValue(t).value; // The `Readonly` in the `setValue` method param `value` allows to set.
 
 // Readonly<Type> constructor
 // new Data([22]) // readonly [number]

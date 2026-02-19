@@ -14,7 +14,7 @@ const stringData = new StringData("Hello, world!");
 console.log(stringData.value); // ➝ Hello, world!
 
 // Update the value
-stringData.set("New value");
+stringData.setValue("New value");
 console.log(stringData.value); // ➝ New value
 
 // Destroy the value
@@ -38,7 +38,8 @@ export class RxDataAdapter<
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: T): this { this.#value = this.#onSet(value); return this; }
+  setValue(value: T): this { this.#value = this.#onSet(value); return this; }
+  getValue(): T { return this.#value; }
   get value(): T {
     return this.#value;
   }
@@ -48,7 +49,7 @@ export class RxDataAdapter<
 const data = new Data(false, 'Initial value' as string, RxDataAdapter);
 
 data.adapter?.onSet(value => `Reactive: ${value}`);
-data.set('New value'); // logs: 'Reactive: New value'
+data.setValue('New value'); // logs: 'Reactive: New value'
 
 export class SetAdapter<
   E = string | number,
@@ -64,7 +65,8 @@ export class SetAdapter<
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: T): this { this.#value = value; return this; }
+  setValue(value: T): this { this.#value = value; return this; }
+  getValue(): T { return this.#value; }
   get value(): T {
     return this.#value;
   }
@@ -89,7 +91,8 @@ export class AsyncAdapter<
   async clear(): Promise<this> { return this; }
   async destroy(): Promise<this> { return this; }
   lock(): this { return this; }
-  async set(value: T): Promise<this> { this.#value = value; return this; }
+  async setValue(value: T): Promise<this> { this.#value = value; return this; }
+  async getValue(): Promise<T> { return this.#value; }
   get value(): T {
     return this.#value;
   }

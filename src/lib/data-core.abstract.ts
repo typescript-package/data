@@ -93,6 +93,14 @@ export abstract class DataCore<T, Async extends boolean = false>
   public abstract destroy(): AsyncReturn<Async, this>;
 
   /**
+   * @description Gets the value either asynchronously or synchronously based on the `Async` generic type variable.
+   * @public
+   * @abstract
+   * @returns {AsyncReturn<Async, T>} 
+   */
+  public abstract getValue(): AsyncReturn<Async, T>;
+
+  /**
    * @inheritdoc
    * @public
    * @returns {this} 
@@ -111,7 +119,7 @@ export abstract class DataCore<T, Async extends boolean = false>
    * @param {...V} values The arbitrary values array of type `V`.
    * @returns {this} 
    */
-  public abstract set<V extends unknown[]>(...values: V): AsyncReturn<Async, this>;
+  public abstract setValue<V extends unknown[]>(...values: V): AsyncReturn<Async, this>;
 
   /**
    * @description Sets the value of `T` in arbitrary parameter.
@@ -120,7 +128,7 @@ export abstract class DataCore<T, Async extends boolean = false>
    * @param {...T[]} value Arbitrary number of values of type `T`.
    * @returns {this} 
    */
-  public abstract set(...value: T[]): AsyncReturn<Async, this>;
+  public abstract setValue(...value: T[]): AsyncReturn<Async, this>;
 
   /**
    * @description Sets the data value. Ensure `super.validate()` is called before invoking this method.
@@ -129,7 +137,7 @@ export abstract class DataCore<T, Async extends boolean = false>
    * @param {T} value The data value of `T` to set.
    * @returns {this} Returns `this` current instance.
    */
-  public abstract set(value: T): AsyncReturn<Async, this>;
+  public abstract setValue(value: T): AsyncReturn<Async, this>;
 
   /**
    * @description Returns an iterator for the data value.

@@ -51,7 +51,9 @@ export abstract class AdapterData<
    * @type {T}
    */
   public get value(): T {
-    return this.#adapter ? this.#adapter.value : undefined as T;
+    return this.#adapter
+      ? this.#adapter.value
+      : undefined as T;
   }
 
   /**
@@ -59,6 +61,12 @@ export abstract class AdapterData<
    * @type {?A}
    */
   #adapter?: A;
+
+  /**
+   * @description Indicates if the adapter operations are asynchronous.
+   * @type {R}
+   */
+  #async: R;
   
   /**
    * Creates an instance of `AdapterData`.
@@ -74,6 +82,7 @@ export abstract class AdapterData<
   ) {
     super();
     adapter && (this.#adapter = new adapter(...args));
+    this.#async = async ?? false as R;
   }
 
   /**
@@ -82,7 +91,11 @@ export abstract class AdapterData<
    * @returns {AsyncReturn<R, this>} The `this` current instance.
    */
   public clear(): AsyncReturn<R, this> {
-    return this.#returnThis((this.#adapter ? this.#adapter.clear() : this) as AsyncReturn<R, this>);
+    return this.returnThis(
+      this.#adapter
+        ? this.#adapter.clear() as AsyncReturn<R, A>
+        : this
+    );
   }
 
   /**
@@ -91,7 +104,24 @@ export abstract class AdapterData<
    * @returns {AsyncReturn<R, this>} The `this` current instance.
    */
   public destroy(): AsyncReturn<R, this> {
-    return this.#returnThis((this.#adapter ? this.#adapter.destroy() : this) as AsyncReturn<R, this>);
+    return this.returnThis(this.#adapter
+        ? this.#adapter.destroy() as AsyncReturn<R, A>
+        : this
+      );
+  }
+
+  /**
+   * @description Gets the value either asynchronously or synchronously based on the `R` generic type variable.
+   * @public
+   * @returns {AsyncReturn<R, T>} 
+   */
+  public getValue(): AsyncReturn<R, T> {
+    return this.#adapter
+      ? this.#adapter.getValue()
+      : (this.#async
+        ? Promise.resolve(this.value)
+        : this.value
+      ) as AsyncReturn<R, T>;
   }
 
   /**
@@ -100,17 +130,24 @@ export abstract class AdapterData<
    * @param {T} value The data value of `T` to set.
    * @returns {AsyncReturn<R, this>} The `this` current instance.
    */
-  public set(value: T): AsyncReturn<R, this> {
+  public setValue(value: T): AsyncReturn<R, this> {
     return super.validate(),
-      this.#returnThis((this.#adapter ? this.#adapter.set(value) : this) as AsyncReturn<R, this>);
+      this.returnThis(
+        this.#adapter
+          ? this.#adapter.setValue(value) as AsyncReturn<R, A>
+          : this
+      );
   }
 
   /**
    * @description The helper method to return conditional `this` based on async type `R`, and returned `result` of adapter.
-   * @param {AsyncReturn<R, this>} result The result of the adapter operation if provided, or `this`.
+   * @param {AsyncReturn<R, A> | this} result The result of the adapter operation if provided, or `this`.
    * @returns {AsyncReturn<R, this>} The `this` current instance.
    */
-  #returnThis(result: AsyncReturn<R, this>): AsyncReturn<R, this> {
-    return (result instanceof Promise ? result.then(() => this) : this) as AsyncReturn<R, this>;
+  protected returnThis(result: AsyncReturn<R, A> | this): AsyncReturn<R, this> {
+    return (result instanceof Promise
+        ? result.then(() => this)
+        : this.#async ? Promise.resolve(this) : this
+      ) as AsyncReturn<R, this>;
   }
 }

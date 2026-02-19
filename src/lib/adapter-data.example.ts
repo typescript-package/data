@@ -22,7 +22,8 @@ export class AnyCollectionAdapter<T> implements DataAdapter<Set<T>> {
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: Set<T>): this { this.#value = value; return this; }
+  setValue(value: Set<T>): this { this.#value = value; return this; }
+  getValue(): Set<T> { return this.#value; }
   get value(): Set<T> {
     return this.#value;
   }
@@ -55,7 +56,8 @@ export class SetCollectionAdapter<T> implements DataAdapter<Set<T>> {
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: Set<T>): this { this.#value = value; return this; }
+  setValue(value: Set<T>): this { this.#value = value; return this; }
+  getValue(): Set<T> { return this.#value; }
   get value(): Set<T> {
     return this.#value;
   }

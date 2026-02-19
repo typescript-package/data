@@ -42,7 +42,8 @@ export class SetAdapter<E, T extends Set<E>> implements DataAdapter<T, false> {
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: T): this { this.#value = value; return this; }
+  getValue(): T { return this.#value; }
+  setValue(value: T): this { this.#value = value; return this; }
   get value(): T {
     return this.#value;
   }
@@ -66,7 +67,8 @@ export class CollectionAdapter<E, T = Set<E>, G extends E[] = E[]> implements Da
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: T): this { this.#value = value; return this; }
+  getValue(): T { return this.#value; }
+  setValue(value: T): this { this.#value = value; return this; }
   get value(): T {
     return this.#value;
   }
