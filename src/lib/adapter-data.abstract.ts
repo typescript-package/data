@@ -45,6 +45,16 @@ export abstract class AdapterData<
   }
 
   /**
+   * @description Indicates if the adapter operations are asynchronous.
+   * @public
+   * @readonly
+   * @type {R}
+   */
+  public get async(): R {
+    return this.#async;
+  }
+
+  /**
    * @description Returns the privately stored value of generic type variable `T`.
    * @public
    * @readonly
