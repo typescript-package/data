@@ -74,9 +74,8 @@ export abstract class BaseData<
    */
   public override clear(): AsyncReturn<R, this> {
     return super.adapter
-      ? super.adapter.clear()
-      : (this.#value = undefined as unknown as T),
-      this as AsyncReturn<R, this>;
+      ? super.clear()
+      : ((this.#value = undefined as unknown as T), super.returnThis(this)) ;
   }
 
   /**
@@ -86,9 +85,8 @@ export abstract class BaseData<
    */
   public override destroy(): AsyncReturn<R, this> {
     return super.adapter
-      ? super.adapter.destroy()
-      : (this.#value = null as unknown as T),
-      this as AsyncReturn<R, this>;
+      ? super.destroy()
+      : ((this.#value = null as unknown as T), super.returnThis(this));
   }
 
   /**
@@ -97,11 +95,9 @@ export abstract class BaseData<
    * @param {T} value The data value of `T` to set.
    * @returns {AsyncReturn<R, this>} The `this` current instance.
    */
-  public override set(value: T): AsyncReturn<R, this> {
-    return super.validate(),
-      super.adapter
-        ? super.adapter.set(value)
-        : (this.#value = value),
-        this as AsyncReturn<R, this>;
+  public override setValue(value: T): AsyncReturn<R, this> {
+    return super.adapter
+        ? super.setValue(value)
+        : (super.validate(), (this.#value = value), super.returnThis(this));
   }
 }
