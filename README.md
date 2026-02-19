@@ -100,7 +100,8 @@ export class AnyCollectionAdapter<T> implements DataAdapter<Set<T>> {
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: Set<T>): this { this.#value = value; return this; }
+  setValue(value: Set<T>): this { this.#value = value; return this; }
+  getValue(): Set<T> { return this.#value; }
   get value(): Set<T> {
     return this.#value;
   }
@@ -133,7 +134,8 @@ export class SetCollectionAdapter<T> implements DataAdapter<Set<T>> {
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: Set<T>): this { this.#value = value; return this; }
+  setValue(value: Set<T>): this { this.#value = value; return this; }
+  getValue(): Set<T> { return this.#value; }
   get value(): Set<T> {
     return this.#value;
   }
@@ -145,7 +147,6 @@ const setCollectionData = new SetCollectionData(false, SetCollectionAdapter, 1, 
 
 // SetCollectionAdapter<number> | undefined
 setCollectionData.adapter;
-
 ```
 
 ### `BaseData`
@@ -200,7 +201,8 @@ export class SetAdapter<E, T extends Set<E>> implements DataAdapter<T, false> {
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: T): this { this.#value = value; return this; }
+  getValue(): T { return this.#value; }
+  setValue(value: T): this { this.#value = value; return this; }
   get value(): T {
     return this.#value;
   }
@@ -215,6 +217,33 @@ setData.adapter?.newMethod();
 // SetAdapter<unknown, Set<unknown>> | undefined
 setData.adapter
 
+// Create another adapter implementation of `DataAdapter` interface.
+export class CollectionAdapter<E, T = Set<E>, G extends E[] = E[]> implements DataAdapter<T> {
+  #value: T;
+  constructor(...elements: G) {
+    this.#value = new Set(elements) as T;
+  }
+  clear(): this { return this; }
+  destroy(): this { return this; }
+  lock(): this { return this; }
+  getValue(): T { return this.#value; }
+  setValue(value: T): this { this.#value = value; return this; }
+  get value(): T {
+    return this.#value;
+  }
+}
+
+// Create a new instance of `CollectionAdapter`.
+const collectionData = new TestBaseData(
+  false,
+  new Set([1, 2, 3]),
+  CollectionAdapter,
+  1, 2, 3
+);
+
+
+// DataAdapter<Set<number>, false> | undefined
+collectionData.adapter
 ```
 
 ### `DataCore`
@@ -255,7 +284,7 @@ const stringData = new StringData("Hello, world!");
 console.log(stringData.value); // ➝ Hello, world!
 
 // Update the value
-stringData.set("New value");
+stringData.setValue("New value");
 console.log(stringData.value); // ➝ New value
 
 // Destroy the value
@@ -285,7 +314,8 @@ export class RxDataAdapter<
   clear(): this { return this; }
   destroy(): this { return this; }
   lock(): this { return this; }
-  set(value: T): this { this.#value = this.#onSet(value); return this; }
+  setValue(value: T): this { this.#value = this.#onSet(value); return this; }
+  getValue(): T { return this.#value; }
   get value(): T {
     return this.#value;
   }
@@ -295,7 +325,7 @@ export class RxDataAdapter<
 const data = new Data(false, 'Initial value' as string, RxDataAdapter);
 
 data.adapter?.onSet(value => `Reactive: ${value}`);
-data.set('New value'); // logs: 'Reactive: New value'
+data.setValue('New value'); // logs: 'Reactive: New value'
 ```
 
 Example with asynchronous adapter.
@@ -318,7 +348,8 @@ export class AsyncAdapter<
   async clear(): Promise<this> { return this; }
   async destroy(): Promise<this> { return this; }
   lock(): this { return this; }
-  async set(value: T): Promise<this> { this.#value = value; return this; }
+  async setValue(value: T): Promise<this> { this.#value = value; return this; }
+  async getValue(): Promise<T> { return this.#value; }
   get value(): T {
     return this.#value;
   }
@@ -330,7 +361,6 @@ const asyncData = new Data(true, 'Initial async value' as string, AsyncAdapter);
 asyncData.adapter?.ready().then(value => {
   console.log('Async value:', value);
 });
-
 ```
 
 ## Immutability
