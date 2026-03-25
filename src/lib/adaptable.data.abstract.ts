@@ -1,5 +1,5 @@
 // Abstract.
-import { CachedData } from './cached.data.abstract';
+import { CacheableData } from './cacheable.data.abstract';
 // Interface & Type.
 import type {
   // Type.
@@ -21,7 +21,7 @@ import type { DataAdapterShape, DataAdapterConstructor } from '@typedly/data-ada
  * @template {unknown[]} [G=unknown[]] Arguments type for the adapter constructor.
  * @template {boolean} [R=false] Indicates if the adapter operations are asynchronous.
  * @template {DataAdapterShape<C, T, R> | undefined} [A=undefined] The adapter type.
- * @extends {CachedData<C, T, R>}
+ * @extends {CacheableData<C, T, R>}
  */
 export abstract class AdaptableData<
   const C extends DataSettings<R>,
@@ -29,7 +29,7 @@ export abstract class AdaptableData<
   G extends unknown[] = unknown[],
   R extends boolean = InferAsync<C>,
   A extends DataAdapterShape<C, T, R> | undefined = undefined,
-> extends CachedData<C, T, R> {
+> extends CacheableData<C, T, R> {
   /**
    * @description Returns the `string` tag representation of the `AdapterData` class when used in `Object.prototype.toString.call(instance)`.
    * @public
