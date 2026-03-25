@@ -8,29 +8,29 @@ import type {
 } from '@typedly/data';
 import { ConfigurableData } from './configurable.data.abstract';
 /**
- * @description The abstract `CachedData` class extends `ConfigurableData` adding functionality for managing cached data values.
+ * @description The abstract `CacheableData` class extends `ConfigurableData` adding functionality for managing asynchronous data values.
  * Designed to create data containers of `T` type managed by caching mechanisms that may require constructor arguments.
  * @export
  * @abstract
- * @class CachedData
+ * @class CacheableData
  * @template {DataSettings<R>} C The type of data settings.
  * @template T The type of data.
  * @template {boolean} [R=InferAsync<C>] Indicates if the adapter operations are asynchronous.
  * @extends {ConfigurableData<C, T, R>}
  */
-export abstract class CachedData<
+export abstract class CacheableData<
   const C extends DataSettings<R>,
   T,
   R extends boolean = InferAsync<C>,
 > extends ConfigurableData<C, T, R> {
   /**
-   * @description Returns the `string` tag representation of the `CachedData` class when used in `Object.prototype.toString.call(instance)`.
+   * @description Returns the `string` tag representation of the `CacheableData` class when used in `Object.prototype.toString.call(instance)`.
    * @public
    * @readonly
    * @type {string}
    */
   public override get [Symbol.toStringTag](): string {
-    return super.configuration.tag ?? 'CachedData';
+    return super.configuration.tag ?? 'CacheableData';
   }
 
   /**
@@ -50,7 +50,7 @@ export abstract class CachedData<
   #value?: T;
 
   /**
-   * Creates an instance of `CachedData`.
+   * Creates an instance of `CacheableData`.
    * @constructor
    * @param {C} settings Configurable data settings.
    * @param {?T} [value] Optional initial data value of generic type variable `T`.
