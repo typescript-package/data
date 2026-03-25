@@ -4,7 +4,7 @@
 export {
   // Abstract.
   AdaptableData,
-  CachedData,
+  CacheableData,
   ConfigurableData,
   DataCore,
   Immutability,
