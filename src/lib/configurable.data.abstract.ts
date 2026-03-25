@@ -1,7 +1,7 @@
 // Abstract.
-import { DataCore } from '.';
-// Abstract.
-import type { DataConfig, DataSettings } from '@typedly/data';
+import { DataCore } from './data.core';
+// Interface & Type.
+import type { DataConfig, DataSettings, InferAsync } from '@typedly/data';
 /**
  * @description The abstract `ConfigurableData` class extends `DataCore` adding functionality for managing value with configuration.
  * @export
@@ -9,13 +9,13 @@ import type { DataConfig, DataSettings } from '@typedly/data';
  * @class ConfigurableData
  * @template {DataSettings<R>} C The type of data settings.
  * @template T The type of data.
- * @template {boolean} [R=false] Indicates if the adapter operations are asynchronous.
+ * @template {boolean} [R=InferAsync<C>] Indicates if the adapter operations are asynchronous.
  * @extends {DataCore<T, R>}
  */
 export abstract class ConfigurableData<
   const C extends DataSettings<R>,
   T,
-  R extends boolean = false,
+  R extends boolean = InferAsync<C>,
 > extends DataCore<T, R> {
   /**
    * @description Returns the `string` tag representation of the `ConfigurableData` class when used in `Object.prototype.toString.call(instance)`.
@@ -48,8 +48,8 @@ export abstract class ConfigurableData<
   }
 
   /**
-   * @description Optional tag for the data instance, which can be used for categorization or debugging.
-   * @type {?C}
+   * @description Privately stored data configuration of type `DataConfig<C, R>`, which includes the original settings and any additional configuration derived from them.
+   * @type {DataConfig<C, R>}
    */
   #configuration: DataConfig<C, R>;
 
