@@ -1,25 +1,20 @@
 // Abstract.
-import type {
-  // Type.
-  AsyncReturn,
-  InferAsync,
-  // Interface.
-  DataSettings,
-} from '@typedly/data';
 import { ConfigurableData } from './configurable.data.abstract';
+// Interface & Type.
+import type { AsyncReturn, InferAsync } from '@typedly/data';
+import type { CacheableDataSettings } from '../type';
 /**
- * @description The abstract `CacheableData` class extends `ConfigurableData` adding functionality for managing asynchronous data values.
+ * @description The concrete `CacheableData` class extends `ConfigurableData` adding functionality for managing asynchronous data values.
  * Designed to create data containers of `T` type managed by caching mechanisms that may require constructor arguments.
  * @export
- * @abstract
  * @class CacheableData
- * @template {DataSettings<R>} C The type of data settings.
+ * @template {CacheableDataSettings<T, R>} C The type of data settings.
  * @template T The type of data.
  * @template {boolean} [R=InferAsync<C>] Indicates if the adapter operations are asynchronous.
  * @extends {ConfigurableData<C, T, R>}
  */
-export abstract class CacheableData<
-  const C extends DataSettings<R>,
+export class CacheableData<
+  const C extends CacheableDataSettings<T, R>,
   T,
   R extends boolean = InferAsync<C>,
 > extends ConfigurableData<C, T, R> {
