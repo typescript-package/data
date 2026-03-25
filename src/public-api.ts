@@ -3,10 +3,12 @@
  */
 export {
   // Abstract.
-  AdapterData,
-  BaseData,
+  AdaptableData,
+  CachedData,
+  ConfigurableData,
   DataCore,
   Immutability,
   // Class.
   Data,
+  SyncData,
 } from './lib';
