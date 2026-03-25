@@ -1,22 +1,21 @@
 // Abstract.
-import { CacheableData } from './cacheable.data.abstract';
+import { CacheableData } from './cacheable.data.class';
 // Interface & Type.
 import type {
   // Type.
   AsyncReturn,
   // Interface.
-  DataSettings,
   InferAsync
 } from '@typedly/data';
 import type { DataAdapterShape, DataAdapterConstructor } from '@typedly/data-adapter';
-
+import type { CacheableDataSettings } from '../type';
 /**
- * @description The abstract `AdapterData` class extends `CachedData` adding functionality for managing data value by adapter with arguments.
+ * @description The abstract `AdaptableData` class extends `CacheableData` adding functionality for managing data value by adapter with arguments.
  * Designed to create data containers of `T` type managed by adapters that require constructor arguments.
  * @export
  * @abstract
- * @class AdapterData
- * @template {DataSettings<R>} C The type of data settings.
+ * @class AdaptableData
+ * @template {CacheableDataSettings<T, R>} C The type of data settings.
  * @template T The type of data.
  * @template {unknown[]} [G=unknown[]] Arguments type for the adapter constructor.
  * @template {boolean} [R=false] Indicates if the adapter operations are asynchronous.
@@ -24,14 +23,14 @@ import type { DataAdapterShape, DataAdapterConstructor } from '@typedly/data-ada
  * @extends {CacheableData<C, T, R>}
  */
 export abstract class AdaptableData<
-  const C extends DataSettings<R>,
+  const C extends CacheableDataSettings<T, R>,
   T,
   G extends unknown[] = unknown[],
   R extends boolean = InferAsync<C>,
   A extends DataAdapterShape<C, T, R> | undefined = undefined,
 > extends CacheableData<C, T, R> {
   /**
-   * @description Returns the `string` tag representation of the `AdapterData` class when used in `Object.prototype.toString.call(instance)`.
+   * @description Returns the `string` tag representation of the `AdaptableData` class when used in `Object.prototype.toString.call(instance)`.
    * @public
    * @readonly
    * @type {string}
