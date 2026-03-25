@@ -54,7 +54,7 @@ export abstract class DataCore<T, R extends boolean = false>
    * @type {string}
    */
   public get [Symbol.toStringTag](): string {
-    return DataCore.name;
+    return DataCore.toStringTag;
   }
 
   /**
