@@ -26,7 +26,7 @@ import type { AdaptableDataShape } from '@typedly/adaptable-data';
  * @extends {CacheableData<C, T, R>}
  */
 export abstract class AdaptableData<
-  C extends DataSettings<R> & CacheableSettings<T>,
+  const C extends DataSettings<R> & CacheableSettings<T>,
   T,
   G extends unknown[] = unknown[],
   R extends boolean = InferAsync<C>,
