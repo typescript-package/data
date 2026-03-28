@@ -4,18 +4,21 @@ import { CacheableData } from './cacheable.data.class';
 import type {
   // Type.
   AsyncReturn,
+  CacheableSettings,
+  DataConfig,
+  DataSettings,
   // Interface.
   InferAsync
 } from '@typedly/data';
 import type { DataAdapterShape, DataAdapterConstructor } from '@typedly/data-adapter';
-import type { CacheableDataSettings } from '../type';
+import type { AdaptableDataShape } from '@typedly/adaptable-data';
 /**
  * @description The abstract `AdaptableData` class extends `CacheableData` adding functionality for managing data value by adapter with arguments.
  * Designed to create data containers of `T` type managed by adapters that require constructor arguments.
  * @export
  * @abstract
  * @class AdaptableData
- * @template {CacheableDataSettings<T, R>} C The type of data settings.
+ * @template {DataSettings<R> & CacheableSettings<T>} C The type of data settings.
  * @template T The type of data.
  * @template {unknown[]} [G=unknown[]] Arguments type for the adapter constructor.
  * @template {boolean} [R=false] Indicates if the adapter operations are asynchronous.
@@ -23,12 +26,13 @@ import type { CacheableDataSettings } from '../type';
  * @extends {CacheableData<C, T, R>}
  */
 export abstract class AdaptableData<
-  const C extends CacheableDataSettings<T, R>,
+  C extends DataSettings<R> & CacheableSettings<T>,
   T,
   G extends unknown[] = unknown[],
   R extends boolean = InferAsync<C>,
   A extends DataAdapterShape<C, T, R> | undefined = undefined,
-> extends CacheableData<C, T, R> {
+> extends CacheableData<C, T, R>
+  implements AdaptableDataShape<A, C, T, R> {
   /**
    * @description Returns the `string` tag representation of the `AdaptableData` class when used in `Object.prototype.toString.call(instance)`.
    * @public
@@ -36,7 +40,7 @@ export abstract class AdaptableData<
    * @type {string}
    */
   public override get [Symbol.toStringTag](): string {
-    return this.configuration.tag ?? 'AdaptableData';
+    return this.configuration?.tag ?? AdaptableData.toStringTag;
   }
 
   /**
@@ -61,6 +65,10 @@ export abstract class AdaptableData<
       : super.async;
   }
 
+  public override get configuration(): DataConfig<C, R> | undefined {
+    return this.#adapter?.configuration ?? super.configuration;
+  }
+  
   /**
    * @description Returns the privately stored value of generic type variable `T`.
    * @public
@@ -93,7 +101,7 @@ export abstract class AdaptableData<
     adapter?: DataAdapterConstructor<A, C, T, R, G>,
     ...args: G
   ) {
-    super(settings, value);
+    super(adapter ? undefined : settings, value);
     adapter && (this.#adapter = new adapter(settings, value, ...args))
   }
 
