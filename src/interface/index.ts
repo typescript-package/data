@@ -1,1 +1,0 @@
-export type { CacheableSettings } from './cacheable.settings';
