@@ -19,8 +19,10 @@
     "typescript-eslint": "^8.46.3"
   },
   "peerDependencies": {
-    "@typedly/data": "^6.0.0",
-    "@typedly/data-adapter": "^4.1.0",
+    "@typedly/adaptable-data": "^5.0.1",
+    "@typedly/configurable-data": "^4.2.1",
+    "@typedly/data": "^6.1.0",
+    "@typedly/data-adapter": "^4.2.0",
     "@typedly/data-traits": "^2.0.0"
   },
   "scripts": {
