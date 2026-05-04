@@ -13,22 +13,22 @@ import {
  * @abstract
  * @class DataCore
  * @template T Represents the type of data value.
- * @template R Indicates whether the operations are asynchronous.
+ * @template S Indicates whether the operations are asynchronous.
  * @extends {Immutability}
- * @implements {DataShape<T, R>}
+ * @implements {DataShape<T, S>}
  */
-export abstract class DataCore<T, R extends boolean = false>
+export abstract class DataCore<T, S extends boolean = false>
   // For immutability features.
   extends Immutability
   // For data shape contract, to use instead of `DataCore`.
-  implements DataShape<T, R> {
+  implements DataShape<T, S> {
   /**
    * @description Symbol key for accessing the value of the data instance.
    * @public
    * @static 
    * @type {*}
    */
-  public static valueSymbol = Symbol.for('value');
+  static valueSymbol = Symbol.for('value');
 
   /**
    * @description The `string` tag representation of the `DataCore` class when used in `Object.prototype.toString.call(instance)`.
@@ -36,14 +36,14 @@ export abstract class DataCore<T, R extends boolean = false>
    * @static
    * @type {string}
    */
-  public static toStringTag = 'DataCore';
+  static toStringTag = 'DataCore';
 
   /**
    * @description Checks whether the provided value implements the iterable interface.
    * @param {unknown} value The value to inspect.
    * @returns {value is Iterable<unknown>} True when value exposes an iterator function.
    */
-  public static isIterable(value: unknown): value is Iterable<unknown> {
+  static isIterable(value: unknown): value is Iterable<unknown> {
     return value != null && typeof (value as { [Symbol.iterator]?: unknown })[Symbol.iterator] === 'function';
   }
 
@@ -53,7 +53,7 @@ export abstract class DataCore<T, R extends boolean = false>
    * @readonly
    * @type {string}
    */
-  public get [Symbol.toStringTag](): string {
+  get [Symbol.toStringTag](): string {
     return DataCore.toStringTag;
   }
 
@@ -62,18 +62,18 @@ export abstract class DataCore<T, R extends boolean = false>
    * @public
    * @abstract
    * @readonly
-   * @type {R}
+   * @type {S}
    */
-  public abstract get async(): R;
+  abstract readonly async: S;
 
   /**
    * @description Returns the string tag of the current instance defined by the `Symbol.toStringTag`.
    * @public
-   * @returns {string | undefined} The extracted class name, such as `'DataCore'`, or `undefined` if extraction fails.
+   * @returns {string} The extracted class name, such as `'DataCore'`, or an empty string if extraction fails.
    */
-  public get tag(): string | undefined {
+  get tag(): string {
     const tag = Object.prototype.toString.call(this).slice(8, -1);
-    return tag !== 'Object' ? tag : undefined;
+    return tag !== 'Object' ? tag : '';
   }
 
   /**
@@ -83,7 +83,7 @@ export abstract class DataCore<T, R extends boolean = false>
    * @readonly
    * @type {T}
    */
-  public abstract get value(): T;
+  abstract readonly value: T;
 
   /**
    * @description Clears the value by setting to `undefined` or `null`.
@@ -91,7 +91,7 @@ export abstract class DataCore<T, R extends boolean = false>
    * @abstract
    * @returns {this} Returns `this` current instance.
    */
-  public abstract clear(): AsyncReturn<R, this>;
+  abstract clear(): AsyncReturn<S, this>;
 
   /**
    * @description Abstract method to clear or remove the stored data value.
@@ -99,54 +99,35 @@ export abstract class DataCore<T, R extends boolean = false>
    * @abstract
    * @returns {this} Returns `this` current instance.
    */
-  public abstract destroy(): AsyncReturn<R, this>;
+  abstract destroy(): AsyncReturn<S, this>;
 
   /**
    * @description Gets the value either asynchronously or synchronously based on the `Async` generic type variable.
    * @public
    * @abstract
-   * @returns {AsyncReturn<R, T>} 
+   * @returns {AsyncReturn<S, T>} 
    */
-  public abstract getValue(): AsyncReturn<R, T>;
+  abstract getValue(): AsyncReturn<S, T>;
 
   /**
    * @inheritdoc
    * @public
    * @returns {this} 
    */
-  public override lock(): this {
+  override lock(): this {
     return Immutability.deepFreeze(this.value),
       super.lock(),
       this;
   }
 
   /**
-   * @description Sets the value of `T` in arbitrary parameter array.
-   * @public
-   * @abstract
-   * @template {unknown[]} V The type of the values array.
-   * @param {...V} values The arbitrary values array of type `V`.
-   * @returns {AsyncReturn<R, this>} 
-   */
-  public abstract setValue<V extends unknown[]>(...values: V): AsyncReturn<R, this>;
-
-  /**
-   * @description Sets the value of `T` in arbitrary parameter.
-   * @public
-   * @abstract
-   * @param {...T[]} value Arbitrary number of values of type `T`.
-   * @returns {AsyncReturn<R, this>} 
-   */
-  public abstract setValue(...value: T[]): AsyncReturn<R, this>;
-
-  /**
    * @description Sets the data value. Ensure `super.validate()` is called before invoking this method.
    * @public
    * @abstract
    * @param {T} value The data value of `T` to set.
-   * @returns {AsyncReturn<R, this>} Returns `this` current instance.
+   * @returns {AsyncReturn<S, this>} Returns `this` current instance.
    */
-  public abstract setValue(value: T): AsyncReturn<R, this>;
+  abstract setValue(value: T): AsyncReturn<S, this>;
 
   /**
    * @description Returns an iterator for the data value.
@@ -162,16 +143,16 @@ export abstract class DataCore<T, R extends boolean = false>
 
   /**
    * @description The helper method to return conditional `this` based on async type `R`, and returned `result` of adapter.
-   * @param {AsyncReturn<R, A>} result The result of the adapter operation.
-   * @returns {AsyncReturn<R, this>} The `this` current instance.
+   * @param {AsyncReturn<S, A>} result The result of the adapter operation.
+   * @returns {AsyncReturn<S, this>} The `this` current instance.
    */
-  protected returnThis<A>(result: AsyncReturn<R, A>): AsyncReturn<R, this> {
+  protected returnThis<A>(result: AsyncReturn<S, A>): AsyncReturn<S, this> {
     if (this.async) {
       return (result instanceof Promise
         ? result.then(() => this)
-        : this
-      ) as AsyncReturn<R, this>;
+        : Promise.resolve(this)
+      ) as AsyncReturn<S, this>;
     }
-    return this as AsyncReturn<R, this>;
+    return this as AsyncReturn<S, this>;
   }
 }
