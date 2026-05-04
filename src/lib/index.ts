@@ -1,7 +1,7 @@
 // Abstract class
-export { AdapterData } from './adapter-data.abstract';
-export { BaseData } from './base-data.abstract';
-export { DataCore } from './data-core.abstract';
+export { CacheableData } from './cacheable.data.abstract';
+export { DataCore } from './data.core';
 export { Immutability } from './immutability.abstract';
 // Class.
 export { Data } from './data.class';
+export { SyncData } from './sync.data.class';

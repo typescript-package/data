@@ -1,39 +1,65 @@
 // Abstract.
-import { BaseData } from './base-data.abstract';
-// Interface.
-import { DataAdapter } from '@typedly/data';
+import { DataCore } from './data.core';
+// Type.
+import { AsyncReturn } from '@typedly/data';
 /**
- * @description The `Data` class is a concrete class that extends the `BaseData` abstract class for instantiate base functionality.
- * @public
+ * @description The `Data` class is a concrete implementation of the `DataCore` abstract class, providing basic synchronous data handling functionality.
  * @export
  * @class Data
- * @template T Type of the data value.
- * @template {unknown[]} [G=unknown[]] Arguments passed to the adapter class constructor, after the `value` parameter.
- * @template {boolean} [R=false] Indicates whether the data operations are asynchronous.
- * @template {DataAdapter<T, R> | undefined} [A=DataAdapter<T, R>] Adapter type extending `DataAdapter` for handling the data value.
- * @extends {BaseData<T, G, R, A>}
+ * @template T The type of the data value.
+ * @template {boolean} [S=false] Indicates whether the data operations are asynchronous.
+ * @extends {DataCore<T, S>}
  */
 export class Data<
   T,
-  G extends unknown[] = unknown[],
-  R extends boolean = false,
-  A extends DataAdapter<T, R> | undefined = DataAdapter<T, R>,
-> extends BaseData<T, G, R, A> {
-  /**
-   * @inheritdoc
-   * @public
-   * @readonly
-   * @type {string}
-   */
+  S extends boolean = false,
+> extends DataCore<T, S> {
   public static override toStringTag: string = 'Data';
 
-  /**
-   * @inheritdoc
-   * @public
-   * @readonly
-   * @type {string}
-   */
-  public override get [Symbol.toStringTag](): string {
+  public get async(): S {
+    return false as S;
+  }
+
+  public get value(): T {
+    return this.#value;
+  }
+
+  override get [Symbol.toStringTag](): string {
     return Data.toStringTag;
+  }
+
+  /**
+   * @description The current value of the data.
+   * @type {T}
+   */
+  #value: T;
+
+  constructor(value?: T) {
+    super();
+    this.#value = value as T;
+  }
+
+  clear(): AsyncReturn<S, this> {
+    this.#value = undefined as T;
+    return this as AsyncReturn<S, this>;
+  }
+
+  destroy(): AsyncReturn<S, this> {
+    this.#value = null as T;
+    return this as AsyncReturn<S, this>;
+  }
+
+  override lock(): this {
+    super.lock();
+    return this;
+  }
+
+  getValue(): AsyncReturn<S, T> {
+    return this.#value as AsyncReturn<S, T>;
+  }
+
+  setValue(value: T): AsyncReturn<S, this> {
+    this.#value = value;
+    return this as AsyncReturn<S, this>;
   }
 }

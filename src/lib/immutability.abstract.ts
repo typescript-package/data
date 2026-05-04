@@ -81,9 +81,7 @@ export abstract class Immutability {
    * @returns {this} Returns current instance.
    */
   public freeze(): this {
-    if (this.isLocked()) {
-      throw new Error('Cannot freeze a locked object.');
-    }
+    if (this.isLocked()) throw new Error('Cannot freeze a locked object.');
     return Object.freeze(this), this;
   }
 

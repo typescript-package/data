@@ -1,12 +1,14 @@
 /*
  * Public API Surface of data
  */
+export * from './adaptable';
+export * from './configurable';
 export {
   // Abstract.
-  AdapterData,
-  BaseData,
+  CacheableData,
   DataCore,
   Immutability,
   // Class.
   Data,
+  SyncData,
 } from './lib';

@@ -3,6 +3,10 @@ import { DataCore } from "../lib";
 
 // Test class.
 class TestDataCore<T extends object> extends DataCore<T> implements DataShape<T>  {
+  public get async(): false {
+    return false;
+  }
+
   #value: T;
 
   constructor(value: T) {
@@ -79,6 +83,10 @@ describe('DataCore', () => {
 */
 export class Selector<T> extends DataCore<T> {
   // ... existing code ...
+
+  public get async(): false {
+    return false;
+  }
 
   public get value(): T {
     return this.#value;
