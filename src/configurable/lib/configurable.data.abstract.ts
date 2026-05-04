@@ -4,14 +4,14 @@ import { Data } from '../../lib/data.class';
 import type { ConfigurableDataShape } from '@typedly/configurable-data';
 import type { DataConfig, DataSettings, InferAsync } from '@typedly/data';
 /**
- * @description The abstract `ConfigurableData` class extends `DataCore` adding functionality for managing value with configuration.
+ * @description The abstract `ConfigurableData` class extends `Data` adding functionality for managing value with configuration.
  * @export
  * @abstract
  * @class ConfigurableData
  * @template {DataSettings<S>} C The type of data settings.
  * @template T The type of data.
  * @template {boolean} [S=InferAsync<C>] Indicates if the adapter operations are asynchronous.
- * @extends {DataCore<T, S>}
+ * @extends {Data<T, S>}
  */
 export abstract class ConfigurableData<
   const C extends DataSettings<S> | undefined,
@@ -19,6 +19,8 @@ export abstract class ConfigurableData<
   S extends boolean = InferAsync<C>,
 > extends Data<T, S>
   implements ConfigurableDataShape<C, T, S> {
+  public static override toStringTag: string = 'ConfigurableData';
+
   /**
    * @description Returns the `string` tag representation of the `ConfigurableData` class when used in `Object.prototype.toString.call(instance)`.
    * @public

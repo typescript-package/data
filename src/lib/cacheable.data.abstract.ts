@@ -6,6 +6,7 @@ import type { AsyncReturn, CacheableSettings, DataSettings, InferAsync } from '@
  * @description The abstract `CacheableData` class extends `ConfigurableData` adding functionality for managing asynchronous data values.
  * Designed to create data containers of `T` type managed by caching mechanisms that may require constructor arguments.
  * @export
+ * @abstract
  * @class CacheableData
  * @template {DataSettings<S> & CacheableSettings<T>} C The type of data settings.
  * @template T The type of data.

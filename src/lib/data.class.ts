@@ -1,28 +1,19 @@
 // Abstract.
-import { AsyncReturn } from '@typedly/data';
 import { DataCore } from './data.core';
+// Type.
+import { AsyncReturn } from '@typedly/data';
 /**
- * @description The `Data` class is a concrete class that extends the `AdaptableData` abstract class for instantiate base functionality.
- * @public
+ * @description The `Data` class is a concrete implementation of the `DataCore` abstract class, providing basic synchronous data handling functionality.
  * @export
  * @class Data
- * @template {DataSettings<S> & CacheableSettings<T>} C The type of data settings.
- * @template T Type of the data value.
- * @template {unknown[]} [G=unknown[]] Arguments passed to the adapter class constructor, after the `value` parameter.
+ * @template T The type of the data value.
  * @template {boolean} [S=false] Indicates whether the data operations are asynchronous.
- * @template {DataAdapterShape<C, T, S> | undefined} [A=undefined] Adapter type extending `DataAdapter` for handling the data value.
- * @extends {AdaptableData<C, T, G, S, A>}
+ * @extends {DataCore<T, S>}
  */
 export class Data<
   T,
   S extends boolean = false,
 > extends DataCore<T, S> {
-  /**
-   * @inheritdoc
-   * @public
-   * @readonly
-   * @type {string}
-   */
   public static override toStringTag: string = 'Data';
 
   public get async(): S {
@@ -33,6 +24,14 @@ export class Data<
     return this.#value;
   }
 
+  override get [Symbol.toStringTag](): string {
+    return Data.toStringTag;
+  }
+
+  /**
+   * @description The current value of the data.
+   * @type {T}
+   */
   #value: T;
 
   constructor(value?: T) {
@@ -41,16 +40,12 @@ export class Data<
   }
 
   clear(): AsyncReturn<S, this> {
-    if (this.async === false) {
-      this.#value = undefined as T;
-    }
+    this.#value = undefined as T;
     return this as AsyncReturn<S, this>;
   }
 
   destroy(): AsyncReturn<S, this> {
-    if (this.async === false) {
-      this.#value = null as T;
-    }
+    this.#value = null as T;
     return this as AsyncReturn<S, this>;
   }
 
@@ -64,9 +59,7 @@ export class Data<
   }
 
   setValue(value: T): AsyncReturn<S, this> {
-    if (this.async === false) {
-      this.#value = value;
-    }
+    this.#value = value;
     return this as AsyncReturn<S, this>;
   }
 }
