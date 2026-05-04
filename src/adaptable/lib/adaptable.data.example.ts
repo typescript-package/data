@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { DataAdapterShape } from "@typedly/data-adapter";
 import { Data } from "../../lib";
 import { AdaptableData } from "./adaptable.data.class";
+// Type.
+import { DataAdapterShape } from "@typedly/data-adapter";
 
 export class DataAdapter<T = any, S extends boolean = false, V extends string = '1.0.0'>
   extends Data<T, S>

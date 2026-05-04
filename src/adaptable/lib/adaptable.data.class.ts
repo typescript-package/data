@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InferAsync } from "@typedly/data";
-import { DataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
 import { AdaptableDataBase } from "./adaptable.data.base";
-
+// Type & Interface.
+import { DataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
+import { InferAsync } from "@typedly/data";
 export class AdaptableData<
   A extends DataAdapterShape<T, S> | undefined = undefined,
   T = unknown,

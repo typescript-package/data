@@ -25,6 +25,10 @@ export abstract class AdaptableDataBase<
   G extends readonly any[] = [],
   AC extends new (...args: any[]) => any = DataAdapterConstructor<A, T, S, G>
 > extends AdaptableDataCore<A, T, S> {
+  static override toStringTag: string = 'AdaptableData';
+  override get [Symbol.toStringTag](): string {
+    return AdaptableDataBase.toStringTag;
+  }
   override get async(): S {
     return AdaptableBehavior.async(this.#adapter, super.async);
   }

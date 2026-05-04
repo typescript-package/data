@@ -1,7 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { DataAdapterShape } from "@typedly/data-adapter";
-
+// Abstract.
+import { ConfigurableData } from "../../../configurable";
+import { AdaptableBehavior } from "../../lib";
+// Type & Interface.
+import { AdaptableConfigurableDataShape } from "@typedly/adaptable-data";
+import { AsyncReturn, CacheableSettings, DataSettings, InferAsyncOf } from "@typedly/data";
+import { ConfigurableDataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
+/**
+ * @description
+ * @export
+ * @abstract
+ * @class AdaptableConfigurableDataBase
+ * @template {DataAdapterShape<T, S> | undefined} [A=undefined] 
+ * @template {(DataSettings<S> & CacheableSettings<T> ) | undefined} [C=undefined] 
+ * @template [T=unknown] 
+ * @template {boolean} [S=InferAsyncOf<[C, A]>] 
+ * @template {readonly any[]} [G=[]] 
+ * @template {new (...args: any[]) => any} [AC=ConfigurableDataAdapterConstructor<A, C, T, S, G>] 
+ * @extends {ConfigurableData<C, T, S>}
+ * @implements {AdaptableConfigurableDataShape<A, C, T, S>}
+ */
 export abstract class AdaptableConfigurableDataBase<
   A extends DataAdapterShape<T, S> | undefined = undefined,
   C extends (DataSettings<S> & CacheableSettings<T> ) | undefined = undefined,
