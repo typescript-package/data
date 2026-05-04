@@ -3,7 +3,7 @@
 import { AsyncReturn } from "@typedly/data";
 import { DataAdapterShape } from "@typedly/data-adapter";
 /**
- * @description
+ * @description The `AdaptableBehavior` class provides static methods to manage adaptable behavior for data, allowing for flexible handling of data operations based on the presence of a data adapter.
  * @export
  * @class AdaptableBehavior
  */

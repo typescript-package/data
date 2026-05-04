@@ -4,7 +4,7 @@ import { Data } from '../../lib/data.class';
 import type { ConfigurableDataShape } from '@typedly/configurable-data';
 import type { DataConfig, DataSettings, InferAsync } from '@typedly/data';
 /**
- * @description The abstract `ConfigurableData` class extends `Data` adding functionality for managing value with configuration.
+ * @description The base abstraction `ConfigurableData` class extends `Data` adding functionality for managing value with configuration.
  * @export
  * @abstract
  * @class ConfigurableData

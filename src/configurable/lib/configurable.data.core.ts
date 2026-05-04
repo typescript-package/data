@@ -4,7 +4,7 @@ import { DataCore } from "../../lib/data.core";
 import { DataConfig, DataSettings, InferAsync } from "@typedly/data";
 import { ConfigurableDataShape } from "@typedly/configurable-data";
 /**
- * @description
+ * @description The core abstract implementation of the `ConfigurableData` class, providing the basic structure and functionality for managing data with configuration.
  * @export
  * @abstract
  * @class ConfigurableDataCore

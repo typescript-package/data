@@ -6,11 +6,10 @@ import { DataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter"
 import { AdaptableBehavior } from "./adaptable.behavior";
 import { AdaptableDataCore } from "./adaptable.data.core";
 /**
- * @description
+ * @description The base abstraction `AdaptableData` class extends `AdaptableDataCore` adding functionality for managing data with adaptable behavior.
  * @export
  * @abstract
  * @class AdaptableData
- * @typedef {AdaptableData}
  * @template {DataAdapterShape<T, S> | undefined} [A=undefined] 
  * @template [T=unknown] 
  * @template {boolean} [S=InferAsync<A>] 

@@ -7,7 +7,7 @@ import { AdaptableConfigurableDataShape } from "@typedly/adaptable-data";
 import { AsyncReturn, CacheableSettings, DataSettings, InferAsyncOf } from "@typedly/data";
 import { ConfigurableDataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
 /**
- * @description
+ * @description The base abstraction `AdaptableConfigurableData` class extends `ConfigurableData` adding functionality for managing data with adaptable behavior.
  * @export
  * @abstract
  * @class AdaptableConfigurableDataBase

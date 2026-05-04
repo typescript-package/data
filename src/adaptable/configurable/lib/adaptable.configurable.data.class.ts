@@ -4,7 +4,7 @@ import { AdaptableConfigurableDataBase } from "./adaptable.configurable.data.bas
 import { CacheableSettings, DataSettings, InferAsyncOf } from "@typedly/data";
 import { ConfigurableDataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
 /**
- * @description
+ * @description The concrete implementation of the `AdaptableConfigurableData` class, providing a flexible data management solution that can adapt its behavior based on the presence of a data adapter.
  * @export
  * @class AdaptableConfigurableData
  * @template {DataAdapterShape<T, S> | undefined} [A=undefined] 

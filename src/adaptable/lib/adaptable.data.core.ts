@@ -4,7 +4,19 @@ import { Data } from "../../lib/data.class";
 import { InferAsync } from "@typedly/data";
 import { DataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
 import { AdaptableDataShape } from "@typedly/adaptable-data";
-
+/**
+ * @description The core abstract implementation of the `AdaptableData` class, providing the basic structure and functionality for managing data with adaptable behavior.
+ * @export
+ * @abstract
+ * @class AdaptableDataCore
+ * @template {DataAdapterShape<T, S> | undefined} [A=undefined] 
+ * @template [T=unknown] 
+ * @template {boolean} [S=InferAsync<A>] 
+ * @template {readonly unknown[]} [G=[]] 
+ * @template {new (...args: any[]) => A} [AC=DataAdapterConstructor<A, T, S, G>] 
+ * @extends {Data<T, S>}
+ * @implements {AdaptableDataShape<A, T, S>}
+ */
 export abstract class AdaptableDataCore<
   A extends DataAdapterShape<T, S> | undefined = undefined,
   T = unknown,
