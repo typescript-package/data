@@ -1,23 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AsyncReturn, DataSettings } from "@typedly/data";
 import { ConfigurableData } from "../../../configurable";
 import { AdaptableConfigurableData } from "../lib";
+
+import { AsyncReturn, DataSettings } from "@typedly/data";
 import { ConfigurableDataAdapterShape } from "@typedly/data-adapter";
 
 export class ConfigurableDataAdapter<
   const C extends DataSettings<S> | undefined,
-  T = any, S extends boolean = false,
+  T = any,
+  S extends boolean = false,
   V extends string = '1.0.0',
-  G extends readonly [V, ...any[]] = [V, ...any[]]
+  G extends readonly any[] = []
 > extends ConfigurableData<C, T, S>
   implements ConfigurableDataAdapterShape<C, T, S> {
-  version: V;
-
+  
+  static _adapter = true;
+  
+  version?: V;
   args: G;
   
   constructor(settings?: C, value?: T, ...args: G) {
     super(settings, value);
-    this.version = args ? args[0] : '1.0.0' as V;
+    this.version = args && args.length > 0 ? args[0] : '1.0.0' as V;
     this.args = args;
   }
 
@@ -27,9 +31,19 @@ export class ConfigurableDataAdapter<
   }
 }
 
+// let adaptableConfigurableData1 = new AdaptableConfigurableData(
+//   {},
+//   new Set(['a']),
+//   ConfigurableDataAdapter,
+//   ...['1', '2', '1.0.0', { 'config': true }]
+// );
+
 // let adaptableConfigurableData: AdaptableConfigurableData<ConfigurableDataAdapter<{}, Set<string>, false, "1.0.0">, {}, Set<string>, boolean, []>
 let adaptableConfigurableData = new AdaptableConfigurableData(
-  {}, new Set('a'), ConfigurableDataAdapter, '1.0.0', { 'config': true }
+  {},
+  new Set(['a']),
+  ConfigurableDataAdapter,
+  '1.0.0', { 'config': true }
 );
 
 describe('AdaptableConfigurableData', () => {
