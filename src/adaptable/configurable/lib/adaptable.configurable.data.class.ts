@@ -2,7 +2,7 @@
 import { AdaptableConfigurableDataBase } from "./adaptable.configurable.data.base";
 // Type & Interface.
 import { CacheableSettings, DataSettings, InferAsyncOf } from "@typedly/data";
-import { ConfigurableDataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
+import { ConfigurableDataAdapterConstructor, ConfigurableDataAdapterShape } from "@typedly/data-adapter";
 /**
  * @description The concrete implementation of the `AdaptableConfigurableData` class, providing a flexible data management solution that can adapt its behavior based on the presence of a data adapter.
  * @export
@@ -15,14 +15,14 @@ import { ConfigurableDataAdapterConstructor, DataAdapterShape } from "@typedly/d
  * @extends {AdaptableConfigurableDataBase<A, C, T, S, G, ConfigurableDataAdapterConstructor<A, C, T, S, G>>}
  */
 export class AdaptableConfigurableData<
-  A extends DataAdapterShape<T, S> | undefined = undefined,
-  C extends (DataSettings<S> & CacheableSettings<T> ) | undefined = undefined,
+  A extends ConfigurableDataAdapterShape<C, T, S> | undefined = undefined,
+  const C extends (DataSettings<S> & CacheableSettings<T> ) | undefined = undefined,
   T = unknown,
   S extends boolean = InferAsyncOf<[C, A]>,
   G extends readonly any[] = [],
 > extends AdaptableConfigurableDataBase<A, C, T, S, G, ConfigurableDataAdapterConstructor<A, C, T, S, G>> {
   constructor(
-    settings?: C,
+    settings?: C,  
     value?: T,
     adapter?: ConfigurableDataAdapterConstructor<A, C, T, S, G>,
     ...args: G
