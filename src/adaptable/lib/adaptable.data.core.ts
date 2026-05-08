@@ -26,6 +26,8 @@ export abstract class AdaptableDataCore<
   AC extends new (...args: any[]) => A = DataAdapterConstructor<A, T, S, G>
 > extends Data<T, S>
   implements AdaptableDataShape<A, T, S> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static adapter?: DataAdapterConstructor<any, any, any, any>;
   abstract get adapter(): A;
   protected abstract instantiateAdapter(adapter: AC, value?: T, ...args: G): A;
 }
