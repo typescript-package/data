@@ -5,13 +5,13 @@ import { AdaptableBehavior } from "../../lib";
 // Type & Interface.
 import { AdaptableConfigurableDataShape } from "@typedly/adaptable-data";
 import { AsyncReturn, CacheableSettings, DataSettings, InferAsyncOf } from "@typedly/data";
-import { ConfigurableDataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
+import { ConfigurableDataAdapterConstructor, ConfigurableDataAdapterShape } from "@typedly/data-adapter";
 /**
  * @description The base abstraction `AdaptableConfigurableData` class extends `ConfigurableData` adding functionality for managing data with adaptable behavior.
  * @export
  * @abstract
  * @class AdaptableConfigurableDataBase
- * @template {DataAdapterShape<T, S> | undefined} [A=undefined] 
+ * @template {ConfigurableDataAdapterShape<C, T, S> | undefined} [A=undefined] 
  * @template {(DataSettings<S> & CacheableSettings<T> ) | undefined} [C=undefined] 
  * @template [T=unknown] 
  * @template {boolean} [S=InferAsyncOf<[C, A]>] 
@@ -21,8 +21,8 @@ import { ConfigurableDataAdapterConstructor, DataAdapterShape } from "@typedly/d
  * @implements {AdaptableConfigurableDataShape<A, C, T, S>}
  */
 export abstract class AdaptableConfigurableDataBase<
-  A extends DataAdapterShape<T, S> | undefined = undefined,
-  C extends (DataSettings<S> & CacheableSettings<T> ) | undefined = undefined,
+  A extends ConfigurableDataAdapterShape<C, T, S> | undefined = undefined,
+  const C extends (DataSettings<S> & CacheableSettings<T> ) | undefined = undefined,
   T = unknown,
   S extends boolean = InferAsyncOf<[C, A]>,
   G extends readonly any[] = [],
@@ -41,16 +41,13 @@ export abstract class AdaptableConfigurableDataBase<
   }
 
   #adapter: A;
-
-  constructor(
-    settings?: C,
-    value?: T,
-    adapter?: AC,
-    ...args: G
-  ) {
+  constructor(settings?: C, value?: T, adapterOrArg?: AC, ...args: G)
+  constructor(settings?: C, value?: T, ...args: G)
+  constructor(settings?: C, value?: T, adapterOrArg?: any, ...args: G){
     super(settings, value);
-    this.#adapter = adapter
-      ? this.instantiateAdapter(adapter, settings, value!, ...args)
+    const isAdapter = typeof adapterOrArg === 'function' && '_adapter' in adapterOrArg;
+    this.#adapter = isAdapter
+      ? this.instantiateAdapter(adapterOrArg, settings, value!, ...args)
       : undefined as any;
   }
 
