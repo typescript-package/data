@@ -8,6 +8,7 @@ import { DataAdapterShape } from "@typedly/data-adapter";
 export class DataAdapter<T = any, S extends boolean = false, V extends string = '1.0.0'>
   extends Data<T, S>
   implements DataAdapterShape<T, S> {
+  static _adapter = true;
   version: V;
   
   constructor(value?: T, version?: V) {
@@ -22,7 +23,7 @@ export class DataAdapter<T = any, S extends boolean = false, V extends string = 
 }
 
 // const adaptableData: AdaptableData<DataAdapter<Set<string>, false, "1.0.0">, Set<string>, false, []>
-let adaptableData = new AdaptableData(new Set('a'), DataAdapter);
+let adaptableData = new AdaptableData(new Set(['a']), DataAdapter);
 
 describe('AdaptableData', () => {
   beforeEach(() => {
@@ -41,7 +42,7 @@ describe('AdaptableData', () => {
     expect(adaptableData.async).toBe(false);
   });
   it('should have the correct version', () => {
-    expect(adaptableData.adapter.version).toBe('1.0.0');
+    expect(adaptableData?.adapter?.version).toBe('1.0.0');
   });
   it('should set a new value', () => {
     adaptableData.setValue(new Set('b'));
