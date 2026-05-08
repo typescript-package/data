@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Type & Interface.
-import { AsyncReturn, InferAsync } from "@typedly/data";
-import { DataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
 // Abstract.
 import { AdaptableBehavior } from "./adaptable.behavior";
 import { AdaptableDataCore } from "./adaptable.data.core";
+// Type & Interface.
+import { AsyncReturn, InferAsync } from "@typedly/data";
+import { DataAdapterConstructor, DataAdapterShape } from "@typedly/data-adapter";
 /**
  * @description The base abstraction `AdaptableData` class extends `AdaptableDataCore` adding functionality for managing data with adaptable behavior.
  * @export
@@ -14,16 +14,16 @@ import { AdaptableDataCore } from "./adaptable.data.core";
  * @template [T=unknown] 
  * @template {boolean} [S=InferAsync<A>] 
  * @template {readonly any[]} [G=[]] 
- * @template {new (...args: any[]) => any} [AC=DataAdapterConstructor<A, T, S, G>] 
- * @extends {AdaptableDataCore<A, T, S>}
+ * @template {new (...args: any[]) => A} [AC=DataAdapterConstructor<A, T, S, G>] 
+ * @extends {AdaptableDataCore<A, T, S, G, AC>}
  */
 export abstract class AdaptableDataBase<
   A extends DataAdapterShape<T, S> | undefined = undefined,
   T = unknown,
   S extends boolean = InferAsync<A>,
   G extends readonly any[] = [],
-  AC extends new (...args: any[]) => any = DataAdapterConstructor<A, T, S, G>
-> extends AdaptableDataCore<A, T, S> {
+  AC extends new (...args: any[]) => A = DataAdapterConstructor<A, T, S, G>
+> extends AdaptableDataCore<A, T, S, G, AC> {
   static override toStringTag: string = 'AdaptableData';
   override get [Symbol.toStringTag](): string {
     return AdaptableDataBase.toStringTag;
@@ -39,14 +39,13 @@ export abstract class AdaptableDataBase<
   }
 
   #adapter: A;
-  constructor(
-    value?: T,
-    adapter?: AC,
-    ...args: G
-  ) {
+  constructor(value?: T, adapterCtor?: AC, ...args: G)
+  constructor(value?: T, ...args: G)
+  constructor(value?: T, ...adapterOrArgs: any[]) {
     super();
-    this.#adapter = adapter
-      ? this.instantiateAdapter(adapter, value, ...args)
+    const adapter = this.resolveAdapter(adapterOrArgs[0]);
+    this.#adapter = this.isAdapter(adapter)
+      ? this.instantiateAdapter(adapter, value, ...this.resolveArgs(adapterOrArgs))
       : undefined as any;
   }
 
@@ -66,6 +65,19 @@ export abstract class AdaptableDataBase<
     return AdaptableBehavior.setValue(this.#adapter, value, () => super.setValue(value), result => super.returnThis(result));
   }
 
+  protected resolveAdapter(adapterOrFirstArg: any,): AC | undefined {
+    return this.isAdapter(adapterOrFirstArg) ? adapterOrFirstArg as AC : (this.constructor as typeof AdaptableDataBase).adapter as AC ?? undefined;
+  }
+  protected resolveArgs(adapterOrArgs: any[]): G {
+    return (this.isAdapter(adapterOrArgs[0]) ? adapterOrArgs.slice(1) : adapterOrArgs) as unknown as G;
+  }
+  protected isAdapter(adapter: any): adapter is AC {
+    return (
+      typeof adapter === 'function' &&
+        ('_adapter' in adapter ||
+        adapter.prototype?._adapter !== undefined)
+    );
+  }
   protected instantiateAdapter(adapter: AC, value?: T, ...args: G): A {
     return new adapter(value!, ...args) as A;
   }
