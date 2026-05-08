@@ -7,6 +7,7 @@ import { DataAdapterShape } from "@typedly/data-adapter";
 export class DataAdapter<T = any, S extends boolean = false, V extends string = '1.0.0'>
   extends Data<T, S>
   implements DataAdapterShape<T, S> {
+  static _adapter = true;
   version: V;
   
   constructor(value?: T, version?: V) {
@@ -17,3 +18,5 @@ export class DataAdapter<T = any, S extends boolean = false, V extends string = 
 
 
 const adaptableData = new AdaptableData(new Set('a'), DataAdapter);
+
+adaptableData.value;
