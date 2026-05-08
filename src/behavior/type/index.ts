@@ -1,0 +1,1 @@
+export type { BehaviorFactory } from './behavior-factory.type';
